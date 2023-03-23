@@ -25,7 +25,7 @@ class LavacarService {
       String? telefone2,
       String? email,
       bool? ativo) async {
-    await dio.post('http://localhost:8080/api/v1/clientes', data: {
+    await dio.post('http://localhost:8080/api/v1/lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
       'logradouro': logradouro,
@@ -55,7 +55,7 @@ class LavacarService {
       String? telefone2,
       String? email,
       bool? ativo) async {
-    await dio.put('http://localhost:8080/api/v1/clientes/$id', data: {
+    await dio.put('http://localhost:8080/api/v1/lavacar/$id', data: {
       'cnpj': cnpj,
       'nome': nome,
       'logradouro': logradouro,
@@ -72,6 +72,6 @@ class LavacarService {
   }
 
   Future<void> deleteLavacar(int? id) async {
-    await dio.delete('http://localhost:8080/api/v1/clientes/$id');
+    await dio.delete('http://localhost:8080/api/v1/lavacar/$id');
   }
 }

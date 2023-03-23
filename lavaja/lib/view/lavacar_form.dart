@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lavaja/models/lavacar.dart';
+import 'package:lavaja/provider/lavacar_provider.dart';
+import 'package:provider/provider.dart';
 
 class LavacarForm extends StatefulWidget {
   @override
@@ -8,7 +11,7 @@ class LavacarForm extends StatefulWidget {
 class _LavacarFormState extends State<LavacarForm> {
   final _form = GlobalKey<FormState>();
 
-  final Map<String, String> _formData = {};
+  final Map<String, dynamic> _formData = {};
 
   @override
   initState() {
@@ -33,10 +36,8 @@ class _LavacarFormState extends State<LavacarForm> {
                   width: 100,
                   height: 100,
                   child: Image.network(
-                    'https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?w=740&t=st=1679449312~exp=1679449912~hmac=ee1fc64f18337be42c14e1f416549d65b7c0674f7d4a074b156ac936e5a54283'),
-                    
+                      'https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?w=740&t=st=1679449312~exp=1679449912~hmac=ee1fc64f18337be42c14e1f416549d65b7c0674f7d4a074b156ac936e5a54283'),
                 ),
-                
                 TextFormField(
                   initialValue: _formData['CNPJ'],
                   decoration: InputDecoration(labelText: 'CNPJ'),
@@ -163,8 +164,42 @@ class _LavacarFormState extends State<LavacarForm> {
                   },
                   onChanged: (value) => _formData['email'] = value,
                 ),
+                CheckboxListTile(
+              title: Text("Ativo"),
+              value: _formData['ativo'] ?? false,
+              onChanged: (bool? value) {
+                setState(() {
+                  _formData['ativo'] = value;
+                });
+              },
+            ),
                 SizedBox(height: 16.0),
-                ElevatedButton(onPressed: () {}, child: Text('Salvar'))
+                ElevatedButton(
+                    onPressed: () {
+                      final isValid = _form.currentState?.validate();
+
+                      if (isValid!) {
+                        _form.currentState!.save();
+
+                        Provider.of<LavacarProvider>(context, listen: false)
+                            .createLavacat(
+                          _formData['cnpj'] ?? '',
+                          _formData['nome'] ?? '',
+                          _formData['logradouro'] ?? '',
+                          _formData['numero'] ?? '',
+                          _formData['complemento'] ?? '',
+                          _formData['bairro'] ?? '',
+                          _formData['cidade'] ?? '',
+                          _formData['cep'] ?? '',
+                          _formData['telefone1'] ?? '',
+                          _formData['telefone2'] ?? '',
+                          _formData['email'] ?? '',
+                          _formData['ativo'] ?? false,
+                        );
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: Text('Salvar'))
               ],
             )),
       ),

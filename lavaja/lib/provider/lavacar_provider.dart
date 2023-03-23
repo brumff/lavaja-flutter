@@ -44,7 +44,8 @@ class LavacarProvider with ChangeNotifier {
       String telefone1,
       String telefone2,
       String email,
-      bool ativo) async {
+      bool ativo
+      ) async {
     final lavacar = await service.createLavacar(cnpj, nome, logradouro, numero,
         complemento, bairro, cidade, cep, telefone1, telefone2, email, ativo);
     await loadLavacar();
@@ -65,7 +66,8 @@ class LavacarProvider with ChangeNotifier {
       String telefone1,
       String telefone2,
       String email,
-      bool ativo) async {
+      bool ativo
+      )async {
     /*await service.updateUser(user.id, name, obs);
     user.name = name;
     user.obs = obs;*/
