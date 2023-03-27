@@ -32,7 +32,7 @@ class LavacarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createLavacat(
+  void createLavacar(
       String cnpj,
       String nome,
       String logradouro,

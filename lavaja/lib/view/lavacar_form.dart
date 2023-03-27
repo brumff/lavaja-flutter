@@ -3,6 +3,8 @@ import 'package:lavaja/models/lavacar.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../components/disponibilidade_component.dart';
+
 class LavacarForm extends StatefulWidget {
   @override
   State<LavacarForm> createState() => _LavacarFormState();
@@ -10,6 +12,9 @@ class LavacarForm extends StatefulWidget {
 
 class _LavacarFormState extends State<LavacarForm> {
   final _form = GlobalKey<FormState>();
+  bool _isAtivo = false;
+  TimeOfDay _horaInicio = TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _horaFim = TimeOfDay(hour: 0, minute: 0);
 
   final Map<String, dynamic> _formData = {};
 
@@ -165,15 +170,20 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => _formData['email'] = value,
                 ),
                 CheckboxListTile(
-              title: Text("Ativo"),
-              value: _formData['ativo'] ?? false,
-              onChanged: (bool? value) {
-                setState(() {
-                  _formData['ativo'] = value;
-                });
-              },
-            ),
-                SizedBox(height: 16.0),
+                  title: Text("Ativo"),
+                  value: _formData['ativo'] ?? false,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _formData['ativo'] = value;
+                    });
+                  },
+                ),
+                Text(
+                  'Horário de funcionamento',
+                  style: TextStyle(fontSize: 18),
+                ),
+                DisponibilidadeComponent(),
                 ElevatedButton(
                     onPressed: () {
                       final isValid = _form.currentState?.validate();
@@ -182,7 +192,7 @@ class _LavacarFormState extends State<LavacarForm> {
                         _form.currentState!.save();
 
                         Provider.of<LavacarProvider>(context, listen: false)
-                            .createLavacat(
+                            .createLavacar(
                           _formData['cnpj'] ?? '',
                           _formData['nome'] ?? '',
                           _formData['logradouro'] ?? '',
@@ -199,7 +209,7 @@ class _LavacarFormState extends State<LavacarForm> {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: Text('Salvar'))
+                    child: Text('Salvar')),
               ],
             )),
       ),
