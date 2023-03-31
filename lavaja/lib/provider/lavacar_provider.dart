@@ -5,6 +5,8 @@ import '../models/lavacar.dart';
 
 class LavacarProvider with ChangeNotifier {
   final LavacarService service;
+  String id = "1";
+  Lavacar? lavacar;
 
   LavacarProvider({required this.service}) {
     loadLavacar();
@@ -78,6 +80,11 @@ class LavacarProvider with ChangeNotifier {
     await service.deleteLavacar(lavacar.id);
     //carregar lista depois que excluir o usuário
     await loadLavacar();
+    notifyListeners();
+  }
+
+  Future<void> getLavacar() async {
+    lavacar =  await service.getLavacarById(id);
     notifyListeners();
   }
 }

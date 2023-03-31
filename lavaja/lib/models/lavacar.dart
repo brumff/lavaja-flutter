@@ -1,22 +1,22 @@
 import 'dart:convert';
 
 class Lavacar {
-  final int? id;
+  int? id;
   //imagem
-  final String? cnpj;
-  final String? nome;
-  final String? logradouro;
-  final String? numero;
-  final String? complemento;
-  final String? bairro;
-  final String? cidade;
-  final String? cep;
-  final String? telefone1;
-  final String? telefone2;
-  final String? email;
-  final bool? ativo;
+  String? cnpj;
+  String? nome;
+  String? logradouro;
+  String? numero;
+  String? complemento;
+  String? bairro;
+  String? cidade;
+  String? cep;
+  String? telefone1;
+  String? telefone2;
+  String? email;
+  bool? ativo;
 // ver como fazer a parte da disponibilidade
-  const Lavacar(
+  Lavacar(
       {this.id,
       this.cnpj,
       this.nome,

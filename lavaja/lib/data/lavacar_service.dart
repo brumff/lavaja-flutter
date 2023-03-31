@@ -11,6 +11,12 @@ class LavacarService {
     return data.map((json) => Lavacar.fromMap(json)).toList();
   }
 
+  Future<Lavacar> getLavacarById(String id) async {
+    final response = await dio.get('http://localhost:8080/api/v1/lavacar/$id');
+    final data = response.data;
+    return Lavacar.fromMap(data);
+  }
+
   //Verificar com o felipe se está correto dessa forma e como chamar a parte dos horarios
   Future<void> createLavacar(
       String? cnpj,
