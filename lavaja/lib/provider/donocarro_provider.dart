@@ -5,8 +5,7 @@ import '../models/donocarro.dart';
 
 class DonoCarroProvider with ChangeNotifier {
   final DonoCarroService service;
-  //String id = "1";
-  DonoCarro? donoCarro;
+
 
   DonoCarroProvider({required this.service}) {
     loadDonoCarro();
