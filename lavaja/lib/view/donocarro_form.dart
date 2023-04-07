@@ -151,8 +151,8 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                             .createDonoCarro(
                           _formData['nome'] ?? '',
                           _formData['telefone'] ?? '',
-                          _formData['genero'] ?? '',
                           _formData['email'] ?? '',
+                          _formData['genero'] ?? '',
                           _formData['senha'] ?? '',
                           _formData['confSenha'] ?? '',
                         );

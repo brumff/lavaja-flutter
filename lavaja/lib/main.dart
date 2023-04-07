@@ -4,7 +4,10 @@ import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/view/donocarro_form.dart';
+import 'package:lavaja/view/home.dart';
 import 'package:lavaja/view/lavacar_form.dart';
+import 'package:lavaja/view/login_form.dart';
+
 import 'package:provider/provider.dart';
 
 import 'data/donocarro_service.dart';
@@ -26,10 +29,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(primaryColor: Colors.blue),
-        home: DonoCarroForm(),
+        home: LoginForm(),
         routes: {
           AppRoutes.LAVACAR: (_) => LavacarForm(),
           AppRoutes.DONOCARRO: (_) => DonoCarroForm(),
+          AppRoutes.LOGIN: (_) => LoginForm(),
+           AppRoutes.HOME: (_) => Home(),
         },
       ),
     );
