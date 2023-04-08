@@ -30,6 +30,8 @@ class LavacarService {
       String? telefone1,
       String? telefone2,
       String? email,
+      String? senha,
+      String? confSenha,
       bool? ativo) async {
     await dio.post('http://localhost:8080/api/v1/lavacar', data: {
       'cnpj': cnpj,
@@ -43,6 +45,8 @@ class LavacarService {
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,
+      'senha': senha,
+      'confSenha': confSenha, 
       'ativo': ativo
     });
   }
@@ -60,6 +64,8 @@ class LavacarService {
       String? telefone1,
       String? telefone2,
       String? email,
+      String? senha,
+      String? confSenha,
       bool? ativo) async {
     await dio.put('http://localhost:8080/api/v1/lavacar/$id', data: {
       'cnpj': cnpj,
@@ -73,6 +79,8 @@ class LavacarService {
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,
+      'senha': senha,
+      'confSenha': confSenha, 
       'ativo': ativo
     });
   }

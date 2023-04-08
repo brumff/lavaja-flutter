@@ -15,16 +15,19 @@ import 'data/donocarro_service.dart';
 void main() {
   runApp(MyApp());
 }
+
 //verificar com o felipe como usar varios providers
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<LavacarProvider>(
+          create: (ctx) => LavacarProvider(service: LavacarService()),
+        ),
+        ChangeNotifierProvider<DonoCarroProvider>(
           create: (ctx) => DonoCarroProvider(service: DonoCarroService()),
-          
-        )
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -34,7 +37,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.LAVACAR: (_) => LavacarForm(),
           AppRoutes.DONOCARRO: (_) => DonoCarroForm(),
           AppRoutes.LOGIN: (_) => LoginForm(),
-           AppRoutes.HOME: (_) => Home(),
+          AppRoutes.HOME: (_) => Home(),
         },
       ),
     );

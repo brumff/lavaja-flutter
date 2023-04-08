@@ -4,6 +4,7 @@ import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../components/disponibilidade_component.dart';
+import '../textinputformatter.dart';
 
 class LavacarForm extends StatefulWidget {
   @override
@@ -15,10 +16,13 @@ class _LavacarFormState extends State<LavacarForm> {
   bool _isAtivo = false;
   TimeOfDay _horaInicio = TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _horaFim = TimeOfDay(hour: 0, minute: 0);
+  final TextEditingController _senhaController = TextEditingController();
+  String? _ConfSenha;
+  
 
   // final Map<String, dynamic> _formData = {};
-  bool isLoading = true;
-  bool isEditing = true;
+  //bool isLoading = true;
+  //bool isEditing = true;
   Lavacar? lavacar;
   @override
   initState() {
@@ -28,7 +32,7 @@ class _LavacarFormState extends State<LavacarForm> {
         .whenComplete(() {
       lavacar = Provider.of<LavacarProvider>(context, listen: false).lavacar;
       setState(() {
-        isLoading = false;
+        // isLoading = false;
       });
     });
   }
@@ -51,30 +55,30 @@ class _LavacarFormState extends State<LavacarForm> {
         lavacar?.telefone1 ?? '',
         lavacar?.telefone2 ?? '',
         lavacar?.email ?? '',
+        lavacar?.senha ?? '',
+        lavacar?.confSenha ?? '',
         lavacar?.ativo ?? false,
       );
       Navigator.of(context).pop();
     }
   }
 
-  void edit(){
-
-  }
+  void edit() {}
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    /* if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
-    }
+    }*/
     return Scaffold(
       appBar: AppBar(
         title: Text('Lava car'),
         //para realizar updaload da imagem/logo
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(16.0),
         child: Form(
             key: _form,
             child: Column(
@@ -86,9 +90,10 @@ class _LavacarFormState extends State<LavacarForm> {
                       'https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?w=740&t=st=1679449312~exp=1679449912~hmac=ee1fc64f18337be42c14e1f416549d65b7c0674f7d4a074b156ac936e5a54283'),
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.cnpj,
                   decoration: InputDecoration(labelText: 'CNPJ'),
+                  inputFormatters: [cnpjMaskFormatter],
                   //fazer validação CNPJ, formatação CNPJ
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -99,7 +104,7 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.cnpj = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.nome,
                   decoration: InputDecoration(labelText: 'Nome'),
                   //fazer validação CNPJ, formatação CNPJ
@@ -112,7 +117,7 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.nome = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.logradouro,
                   decoration: InputDecoration(labelText: 'Logradouro'),
                   //fazer validação CNPJ, formatação CNPJ
@@ -125,7 +130,7 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.logradouro = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.numero,
                   decoration: InputDecoration(labelText: 'Nº'),
                   //fazer validação CNPJ, formatação CNPJ
@@ -138,14 +143,14 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.numero = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.complemento,
                   decoration: InputDecoration(labelText: 'Complemento'),
                   //fazer validação CNPJ, formatação CNPJ
                   onChanged: (value) => lavacar?.complemento = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.bairro,
                   decoration: InputDecoration(labelText: 'Bairro'),
                   //fazer validação CNPJ, formatação CNPJ
@@ -158,7 +163,7 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.bairro = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.cidade,
                   decoration: InputDecoration(labelText: 'Cidade'),
                   //fazer validação CNPJ, formatação CNPJ
@@ -171,9 +176,10 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.cidade = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.cep,
-                  decoration: InputDecoration(labelText: 'Cep'),
+                  decoration: InputDecoration(labelText: 'CEP'),
+                  inputFormatters: [cepMaskFormatter],
                   //fazer validação CNPJ, formatação CNPJ
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -184,9 +190,10 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.cep = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.telefone1,
                   decoration: InputDecoration(labelText: 'Telefone'),
+                  inputFormatters: [phoneMaskFormatter],
                   //fazer validação CNPJ, formatação CNPJ
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -197,9 +204,10 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.telefone1 = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.telefone2,
                   decoration: InputDecoration(labelText: 'Telefone Opcional'),
+                  inputFormatters: [phoneMaskFormatter],
                   //fazer validação CNPJ, formatação CNPJ
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -210,7 +218,7 @@ class _LavacarFormState extends State<LavacarForm> {
                   onChanged: (value) => lavacar?.telefone2 = value,
                 ),
                 TextFormField(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   initialValue: lavacar?.email,
                   decoration: InputDecoration(labelText: 'Email'),
                   //fazer validação CNPJ, formatação CNPJ
@@ -222,8 +230,39 @@ class _LavacarFormState extends State<LavacarForm> {
                   },
                   onChanged: (value) => lavacar?.email = value,
                 ),
+                TextFormField(
+                    //  initialValue: _formData['Senha'],
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Senha'),
+                    onChanged: (value) => lavacar?.senha = value,
+                    controller: _senhaController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      if (_ConfSenha != null && value != _ConfSenha) {
+                        return 'As senhas não coincidem';
+                      }
+                      return null;
+                    }),
+                TextFormField(
+                    //initialValue: _formData['confSenha'],
+                    obscureText: true,
+                    decoration:
+                        InputDecoration(labelText: 'Confirmação da senha'),
+                    onChanged: (value) => lavacar?.confSenha = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      if (_senhaController.text != value) {
+                        return 'As senhas não coincidem';
+                      }
+                      return null;
+                    }),
+                SizedBox(height: 16.0),
                 CheckboxListTile(
-                  enabled: !isEditing,
+                  //enabled: !isEditing,
                   title: Text("Ativo"),
                   value: lavacar?.ativo ?? false,
                   controlAffinity: ListTileControlAffinity.leading,
@@ -238,14 +277,18 @@ class _LavacarFormState extends State<LavacarForm> {
                   style: TextStyle(fontSize: 18),
                 ),
                 DisponibilidadeComponent(),
-                ElevatedButton(onPressed: () {
-                  setState(() {
+                ElevatedButton(
+                    onPressed: () {
+                      /* setState(() {
                     isEditing = false;
-                  });
-                  if(isEditing == false){
+                  });*/
+                  //if(isEditing == false){
                     save();
-                  }
-                }, child: Text(isEditing? 'Editar' : 'Salvar')),
+                  //}
+                  
+                    },
+                    child: Text(
+                        'Salvar')), //Text(isEditing? 'Editar' : 'Salvar')),
               ],
             )),
       ),

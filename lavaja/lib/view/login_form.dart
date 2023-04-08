@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+import '../data/auth_service.dart';
 import '../routes/app_routes.dart';
 
 class LoginForm extends StatefulWidget {
@@ -16,16 +17,44 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   Perfil? _perfil = Perfil.donoCarro;
+  AuthService _authService = AuthService();
 
   void _login() async {
     setState(() {
       _isLoading = true;
       print('Entrou');
     });
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final perfil = _perfil == Perfil.donoCarro ? 'donoCarro' : 'lavaCar';
 
-    setState(() {
-      _isLoading = false;
-    });
+    try {
+      if (perfil == 'donoCarro') {
+        await _authService.loginDonoCarro(email, password);
+      } else if (perfil == 'lavaCar') {
+        await _authService.loginLavaCar(email, password);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login realizado com sucesso'),
+          backgroundColor: Colors.green, // alterado para verde
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pushNamed(AppRoutes.HOME, arguments: null);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao realizar login'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -138,7 +167,10 @@ class _LoginFormState extends State<LoginForm> {
               ),
               SizedBox(height: 15),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.DONOCARRO, arguments: null);
+                },
                 child: Text('Cadastre-se dono do carro',
                     style: TextStyle(
                         decoration: TextDecoration.underline,
@@ -146,7 +178,10 @@ class _LoginFormState extends State<LoginForm> {
               ),
               SizedBox(height: 15),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(AppRoutes.LAVACAR, arguments: null);
+                },
                 child: Text('Cadastre-se lava car',
                     style: TextStyle(
                         decoration: TextDecoration.underline,
@@ -159,8 +194,7 @@ class _LoginFormState extends State<LoginForm> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _login();
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.HOME, arguments: null);
+                          //Navigator.of(context).pushNamed(AppRoutes.HOME, arguments: null);
                         }
                       },
                       child: Text("Entrar"),

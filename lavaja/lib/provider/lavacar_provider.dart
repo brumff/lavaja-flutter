@@ -46,10 +46,12 @@ class LavacarProvider with ChangeNotifier {
       String telefone1,
       String telefone2,
       String email,
+      String senha,
+      String confSenha,
       bool ativo
       ) async {
     final lavacar = await service.createLavacar(cnpj, nome, logradouro, numero,
-        complemento, bairro, cidade, cep, telefone1, telefone2, email, ativo);
+        complemento, bairro, cidade, cep, telefone1, telefone2, email, senha, confSenha, ativo);
     await loadLavacar();
     notifyListeners();
   }
@@ -68,6 +70,8 @@ class LavacarProvider with ChangeNotifier {
       String telefone1,
       String telefone2,
       String email,
+      String senha,
+      String confSenha,
       bool ativo
       )async {
     /*await service.updateUser(user.id, name, obs);

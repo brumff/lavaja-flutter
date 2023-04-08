@@ -39,7 +39,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
         title: Text('Dono do carro'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(16),
         child: Form(
             key: _form,
             child: Column(
@@ -49,16 +49,15 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   height: 100,
                 ),
                 TextFormField(
-                  initialValue: _formData['nome'],
-                  decoration: InputDecoration(labelText: 'Nome'),
-                  onChanged: (value) => _formData['nome'] = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    return null;
-                    }
-                ),
+                    initialValue: _formData['nome'],
+                    decoration: InputDecoration(labelText: 'Nome'),
+                    onChanged: (value) => _formData['nome'] = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    }),
                 DropdownButtonFormField<String>(
                   value: _selectedOption,
                   items: _genero.map((String value) {
@@ -109,37 +108,35 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   },
                 ),
                 TextFormField(
-                  initialValue: _formData['Senha'],
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: 'Senha'),
-                  onChanged: (value) => _formData['senha'] = value,
-                   controller: _senhaController ,
-                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    if (_ConfSenha != null && value != _ConfSenha) {
-                    return 'As senhas não coincidem';
-                  }
-                    return null;
-                    }
-                ),
+                    initialValue: _formData['Senha'],
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Senha'),
+                    onChanged: (value) => _formData['senha'] = value,
+                    controller: _senhaController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      if (_ConfSenha != null && value != _ConfSenha) {
+                        return 'As senhas não coincidem';
+                      }
+                      return null;
+                    }),
                 TextFormField(
-                  initialValue: _formData['confSenha'],
-                  obscureText: true,
-                  decoration:
-                      InputDecoration(labelText: 'Confirmação da senha'),
-                  onChanged: (value) => _formData['confSenha'] = value,
-                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    if (_senhaController.text != value) {
-                    return 'As senhas não coincidem';
-                  }
-                    return null;
-                    }
-                ),
+                    initialValue: _formData['confSenha'],
+                    obscureText: true,
+                    decoration:
+                        InputDecoration(labelText: 'Confirmação da senha'),
+                    onChanged: (value) => _formData['confSenha'] = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      if (_senhaController.text != value) {
+                        return 'As senhas não coincidem';
+                      }
+                      return null;
+                    }),
                 SizedBox(height: 16.0),
                 ElevatedButton(
                     onPressed: () {
@@ -158,6 +155,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                         );
                         Navigator.of(context).pop();
                       }
+                      _cadastroRealizado(context);
                     },
                     child: Text('Cadastrar'))
               ],
@@ -165,4 +163,16 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
       ),
     );
   }
+}
+
+void _cadastroRealizado(BuildContext context) {
+  // Aqui você pode salvar o cadastro e exibir o snackbar
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Cadastro realizado com sucesso!'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
+      //contentTextStyle: TextStyle(color: Colors.white),
+    ),
+  );
 }

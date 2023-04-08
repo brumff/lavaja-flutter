@@ -14,6 +14,8 @@ class Lavacar {
   String? telefone1;
   String? telefone2;
   String? email;
+  String? senha;
+  String? confSenha;
   bool? ativo;
 // ver como fazer a parte da disponibilidade
   Lavacar(
@@ -29,6 +31,8 @@ class Lavacar {
       this.telefone1,
       this.telefone2,
       this.email,
+      this.senha,
+      this.confSenha,
       this.ativo});
 
   factory Lavacar.fromMap(Map<String, dynamic> map) {
@@ -45,6 +49,8 @@ class Lavacar {
       telefone1: map['telefone1'],
       telefone2: map['telefone2'],
       email: map['email'],
+      senha: map['senha'],
+      confSenha: map['confSenha'],
       ativo: map['ativo'],
     );
   }
@@ -61,6 +67,8 @@ class Lavacar {
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,
+      'senha': senha,
+      'confSenha': confSenha,
       'ativo': ativo,
     };
   }

@@ -6,3 +6,13 @@ var phoneMaskFormatter = MaskTextInputFormatter(
   mask: '(##) #####-####',
   filter: {"#": RegExp(r'[0-9]')},
 );
+
+var cnpjMaskFormatter = MaskTextInputFormatter(
+  mask: '##.###.###/####-##',
+  filter: {'#': RegExp(r'[0-9]')},
+);
+
+var cepMaskFormatter = MaskTextInputFormatter(
+  mask: '#####-###',
+  filter: {'#': RegExp(r'[0-9]')},
+);
