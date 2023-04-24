@@ -26,8 +26,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: const Center(
-      ),
+      body: const Center(),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,

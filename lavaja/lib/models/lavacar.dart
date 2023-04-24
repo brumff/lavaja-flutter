@@ -17,6 +17,7 @@ class Lavacar {
   String? senha;
   String? confSenha;
   bool? ativo;
+
 // ver como fazer a parte da disponibilidade
   Lavacar(
       {this.id,

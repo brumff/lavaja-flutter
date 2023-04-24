@@ -8,6 +8,7 @@ class DonoCarro {
   String? genero;
   String? senha;
   String? confSenha;
+  String? perfis;
 
   DonoCarro(
       {this.id,
@@ -16,7 +17,8 @@ class DonoCarro {
       this.email,
       this.genero,
       this.senha,
-      this.confSenha});
+      this.confSenha, 
+      this.perfis});
 
   factory DonoCarro.fromMap(Map<String, dynamic> map) {
     return DonoCarro(
@@ -27,6 +29,7 @@ class DonoCarro {
       genero: map['genero'],
       senha: map['senha'],
       confSenha: map['confSenha'],
+      perfis: map['perfis']
     );
   }
 
@@ -39,6 +42,7 @@ class DonoCarro {
       'genero': genero,
       'senha': senha,
       'confSenha': confSenha,
+      'perfis': perfis
     };
   }
 

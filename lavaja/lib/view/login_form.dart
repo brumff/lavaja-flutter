@@ -22,7 +22,6 @@ class _LoginFormState extends State<LoginForm> {
   void _login() async {
     setState(() {
       _isLoading = true;
-      print('Entrou');
     });
     final email = _emailController.text;
     final password = _passwordController.text;
@@ -30,12 +29,13 @@ class _LoginFormState extends State<LoginForm> {
 
     try {
       if (perfil == 'donoCarro') {
-        await _authService.loginDonoCarro(email, password);
+        await _authService.login(email, password);
       } else if (perfil == 'lavaCar') {
-        await _authService.loginLavaCar(email, password);
+        await _authService.login(email, password);
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          //não ta apresentando mensagem de sucesso
           content: Text('Login realizado com sucesso'),
           backgroundColor: Colors.green, // alterado para verde
         ),
@@ -47,7 +47,7 @@ class _LoginFormState extends State<LoginForm> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erro ao realizar login'),
+          content: Text('Erro ao realizar login'),    
           backgroundColor: Colors.red,
         ),
       );
