@@ -44,10 +44,6 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
             key: _form,
             child: Column(
               children: <Widget>[
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                ),
                 TextFormField(
                     initialValue: _formData['nome'],
                     decoration: InputDecoration(labelText: 'Nome'),
