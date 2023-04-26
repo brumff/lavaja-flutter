@@ -7,6 +7,7 @@ import 'package:lavaja/view/donocarro_form.dart';
 import 'package:lavaja/view/home_donocarro.dart';
 import 'package:lavaja/view/lavacar_form.dart';
 import 'package:lavaja/view/login_form.dart';
+import 'package:lavaja/view/servico_form.dart';
 
 import 'package:provider/provider.dart';
 
