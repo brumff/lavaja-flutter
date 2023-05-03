@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/servico_service.dart';
 import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +87,7 @@ class MyHomePage extends StatelessWidget {
               title: const Text('Editar perfil'),
               trailing: Icon(Icons.arrow_forward_ios_sharp),
               onTap: () {
-                Navigator.pop(context);
+                Modular.to.navigate('/dono-carro/:id');
               },
             ),
             ListTile(

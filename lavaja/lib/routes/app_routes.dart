@@ -4,4 +4,6 @@ class AppRoutes{
   static const DONOCARRO = '/dono-carro';
   static const LOGIN = '/login';
   static const SERVICO = '/servico';
+  static const EDITDONOCARRO = '/dono-carro/:id';
+  
 }

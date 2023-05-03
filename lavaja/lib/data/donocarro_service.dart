@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lavaja/data/auth_service.dart';
 import 'package:lavaja/models/donocarro.dart';
 
 class DonoCarroService {
@@ -10,15 +11,16 @@ class DonoCarroService {
     return data.map((json) => DonoCarro.fromMap(json)).toList();
   }
 
-  Future<DonoCarro> getDonoCarroById(String id) async {
+  Future<DonoCarro> getDonoCarroByToken() async {
+     dio.options.headers = {'authorization': AuthService.token};
     final response =
-        await dio.get('http://localhost:8080/api/v1/donocarro/$id');
+        await dio.get('http://localhost:8080/api/v1/donocarro/');
     final data = response.data;
     return DonoCarro.fromMap(data);
   }
 
-  Future<void> createDonoCarro(String? nome, String? telefone,
-      String? email, String? genero, String? senha, String? confSenha) async {
+  Future<void> createDonoCarro(String? nome, String? telefone, String? email,
+      String? genero, String? senha, String? confSenha) async {
     await dio.post('http://localhost:8080/api/v1/donocarro', data: {
       'nome': nome,
       'telefone': telefone,
@@ -29,21 +31,19 @@ class DonoCarroService {
     });
   }
 
-  Future<void> updateDonoCarro(String? id, String? nome, String? telefone,
-      String? email, String? genero, String? senha, String? confSenha) async {
-    await dio.post('http://localhost:8080/api/v1/donocarro/$id', data: {
-      'id': id,
-      'nome': nome,
-      'telefone': telefone,
-      'email': email,
-      'genero': genero,
-      'senha': senha,
-      'confSenha': confSenha
-    });
+  Future<void> updateDonoCarro(String? nome, String? telefone, String? genero) async {
+    dio.options.headers = {'authorization': AuthService.token};
+    await dio.put(
+      'http://localhost:8080/api/v1/donocarro/',
+      data: {
+        'nome': nome,
+        'telefone': telefone,
+        'genero': genero,
+      },
+    );
   }
 
   Future<void> deleteDonoCarro(int? id) async {
     await dio.delete('http://localhost:8080/api/v1/donocarro/$id');
   }
-
 }

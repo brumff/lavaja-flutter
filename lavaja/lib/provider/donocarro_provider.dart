@@ -5,15 +5,17 @@ import '../models/donocarro.dart';
 
 class DonoCarroProvider with ChangeNotifier {
   final DonoCarroService service;
+  DonoCarro? usuario;
 
   DonoCarroProvider({required this.service}) {
     loadDonoCarro();
   }
 
-  /*Future<void> getDonoCarro() async {
-    donoCarro =  await service.getDonoCarroById(id);
+  Future<void> getDonoCarro() async {
+    usuario =  await service.getDonoCarroByToken();
     notifyListeners();
-  }*/
+  }
+
   List<DonoCarro> _donoCarro = [];
 
   Future<void> loadDonoCarro() async {
@@ -30,11 +32,9 @@ class DonoCarroProvider with ChangeNotifier {
   }
 
   //Terminar com felipe
-  void updateDonoCarro(String nome, String telefone, String email,
-      String genero, String senha, String confSenha) async {
-    /*await service.updateUser(user.id, name, obs);
-    user.name = name;
-    user.obs = obs;*/
+  void updateDonoCarro(String nome, String telefone, 
+      String genero) async {
+    await service.updateDonoCarro(nome, telefone, genero);
     notifyListeners();
   }
 
