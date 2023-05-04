@@ -44,14 +44,16 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
               .usuario
               ?.nome ??
           '';
-          _formData['telefone'] = Provider.of<DonoCarroProvider>(context, listen: false)
-              .usuario
-              ?.telefone ??
-          '';
-          _formData['email'] = Provider.of<DonoCarroProvider>(context, listen: false)
-              .usuario
-              ?.email ??
-          '';
+      _formData['telefone'] =
+          Provider.of<DonoCarroProvider>(context, listen: false)
+                  .usuario
+                  ?.telefone ??
+              '';
+      _formData['email'] =
+          Provider.of<DonoCarroProvider>(context, listen: false)
+                  .usuario
+                  ?.email ??
+              '';
       setState(() {
         isLoading = false;
       });
@@ -94,15 +96,14 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                     );
                   }).toList(),
                   onChanged: (String? value) {
-                    setState(
-                      () {
-                        _selectedOption = value;
-                        _formData['genero'] = _selectedOption!;
-                      },
-                    );
+                    setState(() {
+                      _selectedOption = value;
+                      _formData['genero'] = _selectedOption!;
+                      // atualize o valor no seu provider aqui:
+                    });
                   },
                   decoration: InputDecoration(
-                    labelText: 'Genero',
+                    labelText: 'Gênero',
                     border: null,
                   ),
                 ),
