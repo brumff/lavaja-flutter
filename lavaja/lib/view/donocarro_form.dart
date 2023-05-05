@@ -18,20 +18,19 @@ class DonoCarroForm extends StatefulWidget {
   final String? id;
 }
 
-String? _selectedOption;
-
-List<String> _genero = [
-  'Feminino',
-  'Masculino',
-  'Outro',
-];
-
 class _DonoCarroFormState extends State<DonoCarroForm> {
   final _form = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
   final TextEditingController _senhaController = TextEditingController();
   String? _ConfSenha;
   bool isLoading = true;
+  String? _selectedOption;
+
+  List<String> _genero = [
+    'Feminino',
+    'Masculino',
+    'Outro',
+  ];
 
   @override
   void initState() {
@@ -54,6 +53,10 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   .usuario
                   ?.email ??
               '';
+      _selectedOption = Provider.of<DonoCarroProvider>(context, listen: false)
+                .usuario
+                ?.genero ??
+            '';
       setState(() {
         isLoading = false;
       });
@@ -89,7 +92,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                     }),
                 DropdownButtonFormField<String>(
                   value: _selectedOption,
-                  items: _genero.map((String value) {
+                  items: _genero!.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
