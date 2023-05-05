@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 
+import '../view/login_form.dart';
+
 class AuthService {
   final Dio dio = Dio();
   static String? token;
+  static String? authority;
 
   Future<dynamic> login(String email, String senha) async {
     try {
@@ -11,9 +14,10 @@ class AuthService {
         'senha': senha,
       });
       if (response.statusCode == 200) {
-       token = response.headers.map['authorization']![0];
-       print(token);
-       return response.data;
+        token = response.headers.map['authorization']![0];
+        final data = response.data;
+        authority = data['perfil'][0]['authority'];
+        return authority;
       } else {
         return null;
       }
@@ -21,5 +25,11 @@ class AuthService {
       throw Exception('Erro ao realizar login');
     }
   }
+
+  String? getAuthority() {
+    return authority;
+    
+  }
+
 
 }

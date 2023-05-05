@@ -9,14 +9,14 @@ class LoginForm extends StatefulWidget {
   _LoginFormState createState() => _LoginFormState();
 }
 
-enum Perfil { donoCarro, lavaCar }
+enum Perfil { ROLE_DONOCARRO, ROLE_LAVACAR }
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  Perfil? _perfil = Perfil.donoCarro;
+  Perfil? _perfil = Perfil.ROLE_DONOCARRO;
   AuthService _authService = AuthService();
 
   void _login() async {
@@ -25,14 +25,14 @@ class _LoginFormState extends State<LoginForm> {
     });
     final email = _emailController.text;
     final password = _passwordController.text;
-    final perfil = _perfil == Perfil.donoCarro ? 'donoCarro' : 'lavaCar';
-    //TODO: ajustar para bater na tabela diferente
-    try {
-      if (perfil == 'donoCarro') {
-        await _authService.login(email, password);
-      } else if (perfil == 'lavaCar') {
-        await _authService.login(email, password);
-      }
+    await _authService.login(email, password);
+
+    //_perfil o que foi selecionado na tela, tirando o Perfil
+    //print(_perfil.toString().split('.')[1]);
+    //print('pula linha');
+    //paga o que está setado no banco de dados no usuário
+    //print(AuthService.authority);
+    if (_perfil.toString().split('.')[1] == AuthService.authority) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           //não ta apresentando mensagem de sucesso
@@ -44,10 +44,10 @@ class _LoginFormState extends State<LoginForm> {
         _isLoading = false;
       });
       Navigator.of(context).pushNamed(AppRoutes.HOME, arguments: null);
-    } catch (e) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erro ao realizar login'),    
+          content: Text('Erro ao realizar login'),
           backgroundColor: Colors.red,
         ),
       );
@@ -87,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
                       child: Row(
                         children: [
                           Radio(
-                              value: Perfil.donoCarro,
+                              value: Perfil.ROLE_DONOCARRO,
                               groupValue: _perfil,
                               onChanged: (Perfil? value) {
                                 setState(() {
@@ -105,7 +105,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Row(
                       children: [
                         Radio(
-                            value: Perfil.lavaCar,
+                            value: Perfil.ROLE_LAVACAR,
                             groupValue: _perfil,
                             onChanged: (Perfil? value) {
                               setState(() {
