@@ -5,11 +5,15 @@ import '../models/lavacar.dart';
 
 class LavacarProvider with ChangeNotifier {
   final LavacarService service;
-  String id = "1";
-  Lavacar? lavacar;
+  Lavacar? usuario;
 
   LavacarProvider({required this.service}) {
     loadLavacar();
+  }
+
+  Future<void> getLavacar() async {
+    usuario = await service.getLavacarByToken();
+    notifyListeners();
   }
 
   List<Lavacar> _lavacar = [];
@@ -47,18 +51,26 @@ class LavacarProvider with ChangeNotifier {
       String telefone2,
       String email,
       String senha,
-      String confSenha,
-      bool ativo
-      ) async {
-    final lavacar = await service.createLavacar(cnpj, nome, logradouro, numero,
-        complemento, bairro, cidade, cep, telefone1, telefone2, email, senha, confSenha, ativo);
+      String confSenha) async {
+    final lavacar = await service.createLavacar(
+        cnpj,
+        nome,
+        logradouro,
+        numero,
+        complemento,
+        bairro,
+        cidade,
+        cep,
+        telefone1,
+        telefone2,
+        email,
+        senha,
+        confSenha);
     await loadLavacar();
     notifyListeners();
   }
 
-  //Terminar com felipe
   void updateLavacar(
-      Lavacar lavacar,
       String cnpj,
       String nome,
       String logradouro,
@@ -70,13 +82,8 @@ class LavacarProvider with ChangeNotifier {
       String telefone1,
       String telefone2,
       String email,
-      String senha,
-      String confSenha,
-      bool ativo
-      )async {
-    /*await service.updateUser(user.id, name, obs);
-    user.name = name;
-    user.obs = obs;*/
+      ) async {
+    await service.updateLavacar(cnpj, nome, logradouro, numero, complemento, bairro, cidade, cep, telefone1, telefone2, email);
     notifyListeners();
   }
 
@@ -86,9 +93,5 @@ class LavacarProvider with ChangeNotifier {
     await loadLavacar();
     notifyListeners();
   }
-
-  Future<void> getLavacar() async {
-    lavacar =  await service.getLavacarById(id);
-    notifyListeners();
-  }
 }
+

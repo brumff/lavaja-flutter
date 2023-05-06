@@ -87,7 +87,7 @@ class MyHomePage extends StatelessWidget {
               title: const Text('Editar perfil'),
               trailing: Icon(Icons.arrow_forward_ios_sharp),
               onTap: () {
-                Modular.to.navigate('/dono-carro/:id');
+                Modular.to.navigate('/dono-carro/');
               },
             ),
             ListTile(

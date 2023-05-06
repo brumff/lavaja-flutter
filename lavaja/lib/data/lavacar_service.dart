@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../models/lavacar.dart';
+import 'auth_service.dart';
 
 class LavacarService {
   final Dio dio = Dio();
@@ -9,6 +10,13 @@ class LavacarService {
     final response = await dio.get('http://localhost:8080/api/v1/lavacar');
     final data = response.data as List<dynamic>;
     return data.map((json) => Lavacar.fromMap(json)).toList();
+  }
+
+  Future<Lavacar> getLavacarByToken() async {
+    dio.options.headers = {'authorization': AuthService.token};
+    final response = await dio.get('http://localhost:8080/api/v1/lavacar/');
+    final data = response.data;
+    return Lavacar.fromMap(data);
   }
 
   Future<Lavacar> getLavacarById(String id) async {
@@ -31,8 +39,7 @@ class LavacarService {
       String? telefone2,
       String? email,
       String? senha,
-      String? confSenha,
-      bool? ativo) async {
+      String? confSenha) async {
     await dio.post('http://localhost:8080/api/v1/lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
@@ -46,13 +53,11 @@ class LavacarService {
       'telefone2': telefone2,
       'email': email,
       'senha': senha,
-      'confSenha': confSenha, 
-      'ativo': ativo
+      'confSenha': confSenha,
     });
   }
 
   Future<void> updateLavacar(
-      int? id,
       String? cnpj,
       String? nome,
       String? logradouro,
@@ -64,10 +69,9 @@ class LavacarService {
       String? telefone1,
       String? telefone2,
       String? email,
-      String? senha,
-      String? confSenha,
-      bool? ativo) async {
-    await dio.put('http://localhost:8080/api/v1/lavacar/$id', data: {
+      ) async {
+    dio.options.headers = {'authorization': AuthService.token};
+    await dio.put('http://localhost:8080/api/v1/lavacar/', data: {
       'cnpj': cnpj,
       'nome': nome,
       'logradouro': logradouro,
@@ -79,9 +83,6 @@ class LavacarService {
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,
-      'senha': senha,
-      'confSenha': confSenha, 
-      'ativo': ativo
     });
   }
 

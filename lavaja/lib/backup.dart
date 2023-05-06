@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 
 import '../data/auth_service.dart';
 import '../routes/app_routes.dart';
 
-class LoginForm extends StatefulWidget {
+/*class LoginForm extends StatefulWidget {
   @override
   _LoginFormState createState() => _LoginFormState();
 }
 
-enum Perfil { ROLE_DONOCARRO, ROLE_LAVACAR }
+enum Perfil { donoCarro, lavaCar }
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  Perfil? _perfil = Perfil.ROLE_DONOCARRO;
+  Perfil? _perfil = Perfil.donoCarro;
   AuthService _authService = AuthService();
 
   void _login() async {
@@ -26,14 +25,14 @@ class _LoginFormState extends State<LoginForm> {
     });
     final email = _emailController.text;
     final password = _passwordController.text;
-    await _authService.login(email, password);
-
-    //_perfil o que foi selecionado na tela, tirando o Perfil
-    //print(_perfil.toString().split('.')[1]);
-    //print('pula linha');
-    //paga o que está setado no banco de dados no usuário
-    //print(AuthService.authority);
-    if (_perfil.toString().split('.')[1] == AuthService.authority) {
+    final perfil = _perfil == Perfil.donoCarro ? 'donoCarro' : 'lavaCar';
+    //TODO: ajustar para bater na tabela diferente
+    try {
+      if (perfil == 'donoCarro') {
+        await _authService.login(email, password);
+      } else if (perfil == 'lavaCar') {
+        await _authService.login(email, password);
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           //não ta apresentando mensagem de sucesso
@@ -44,12 +43,11 @@ class _LoginFormState extends State<LoginForm> {
       setState(() {
         _isLoading = false;
       });
-      //verificar como faço para redicionar cada um para um rota
-      Modular.to.navigate(AppRoutes.HOMELAVACAR);
-    } else {
+      Navigator.of(context).pushNamed(AppRoutes.HOME, arguments: null);
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Erro ao realizar login'),
+          content: Text('Erro ao realizar login'),    
           backgroundColor: Colors.red,
         ),
       );
@@ -89,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
                       child: Row(
                         children: [
                           Radio(
-                              value: Perfil.ROLE_DONOCARRO,
+                              value: Perfil.donoCarro,
                               groupValue: _perfil,
                               onChanged: (Perfil? value) {
                                 setState(() {
@@ -107,7 +105,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: Row(
                       children: [
                         Radio(
-                            value: Perfil.ROLE_LAVACAR,
+                            value: Perfil.lavaCar,
                             groupValue: _perfil,
                             onChanged: (Perfil? value) {
                               setState(() {
@@ -207,4 +205,4 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-}
+}*/

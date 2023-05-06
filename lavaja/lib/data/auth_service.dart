@@ -15,6 +15,7 @@ class AuthService {
       });
       if (response.statusCode == 200) {
         token = response.headers.map['authorization']![0];
+        print(token);
         final data = response.data;
         authority = data['perfil'][0]['authority'];
         return authority;

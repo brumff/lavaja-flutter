@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeLavaCar extends StatefulWidget {
   @override
@@ -50,6 +51,44 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              height: 55,
+              color: Colors.blue,
+            ),
+            ListTile(
+              title: const Text('Editar perfil'),
+              trailing: Icon(Icons.arrow_forward_ios_sharp),
+              onTap: () {
+                Modular.to.navigate('/lava-car/');
+              },
+            ),
+            ListTile(
+              title: const Text('Serviços'),
+              trailing: Icon(Icons.arrow_forward_ios_sharp),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Alterar senha'),
+              trailing: Icon(Icons.arrow_forward_ios_sharp),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text(
+                'Sair',
+                style: TextStyle(color: Colors.red),
+              ),
+              trailing: Icon(Icons.exit_to_app, color: Colors.red),
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
           ],
         ),

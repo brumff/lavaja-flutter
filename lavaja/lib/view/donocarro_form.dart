@@ -11,11 +11,8 @@ import '../models/donocarro.dart';
 import '../textinputformatter.dart';
 
 class DonoCarroForm extends StatefulWidget {
-  const DonoCarroForm({super.key, this.id});
-
   @override
   State<DonoCarroForm> createState() => _DonoCarroFormState();
-  final String? id;
 }
 
 class _DonoCarroFormState extends State<DonoCarroForm> {
@@ -25,6 +22,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
   String? _ConfSenha;
   bool isLoading = true;
   String? _selectedOption;
+  bool _isEditing = false;
 
   List<String> _genero = [
     'Feminino',
@@ -54,9 +52,9 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   ?.email ??
               '';
       _selectedOption = Provider.of<DonoCarroProvider>(context, listen: false)
-                .usuario
-                ?.genero ??
-            '';
+              .usuario
+              ?.genero ??
+          '';
       setState(() {
         isLoading = false;
       });
@@ -192,11 +190,11 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                             _formData['confSenha'] ?? '',
                           );
                         }
-                        Modular.to.navigate(AppRoutes.HOME);
+                        Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
                       }
                       _cadastroRealizado(context);
                     },
-                    child: Text('Cadastrar'))
+                    child: Text('Salvar'))
               ],
             )),
       ),
