@@ -7,6 +7,7 @@ class AuthService {
   static String? token;
   static String? authority;
 
+
   Future<dynamic> login(String email, String senha) async {
     try {
       final response = await dio.post('http://localhost:8080/login', data: {

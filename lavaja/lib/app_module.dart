@@ -6,7 +6,9 @@ import 'package:lavaja/view/donocarro_form.dart';
 import 'package:lavaja/view/home_donocarro.dart';
 import 'package:lavaja/view/home_lavacar.dart';
 import 'package:lavaja/view/lavacar_form.dart';
+import 'package:lavaja/view/listaservico_form.dart';
 import 'package:lavaja/view/login_form.dart';
+import 'package:lavaja/view/servico_form.dart';
 
 class AppModule extends Module {
   @override
@@ -36,6 +38,16 @@ class AppModule extends Module {
           AppRoutes.EDITLAVACAR,
           child: (context, args) => LavacarForm(
           ),
-        )
+        ),
+        ChildRoute(
+          AppRoutes.LISTASERVICO,
+          child: (context, args) => ListaServicoForm(
+          ),
+        ), 
+        ChildRoute(
+          AppRoutes.CREATESERVICO,
+          child: (context, args) => ServicoForm(
+          ),
+        ),
       ];
 }

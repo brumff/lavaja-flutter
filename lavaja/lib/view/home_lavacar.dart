@@ -73,7 +73,9 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
             ListTile(
               title: const Text('Serviços'),
               trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {},
+              onTap: () {
+                Modular.to.navigate('/servico');
+              },
             ),
             ListTile(
               title: const Text('Alterar senha'),
