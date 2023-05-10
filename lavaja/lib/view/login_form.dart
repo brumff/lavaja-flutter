@@ -41,11 +41,17 @@ class _LoginFormState extends State<LoginForm> {
           backgroundColor: Colors.green, // alterado para verde
         ),
       );
+      print('Login realizado com sucesso');
       setState(() {
         _isLoading = false;
       });
-      //verificar como faço para redicionar cada um para um rota
-      Modular.to.navigate(AppRoutes.HOMELAVACAR);
+      print(AuthService.authority);
+      if (AuthService.authority == "ROLE_DONOCARRO") {
+        Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
+      }
+      if (AuthService.authority == "ROLE_LAVACAR") {
+        Modular.to.navigate(AppRoutes.HOMELAVACAR);
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
