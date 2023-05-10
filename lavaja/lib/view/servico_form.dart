@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/models/servico.dart';
 import 'package:lavaja/provider/servico_provider.dart';
 import 'package:provider/provider.dart';
 
-class ServicoForm extends StatefulWidget {
+import '../routes/app_routes.dart';
 
+class ServicoForm extends StatefulWidget {
   @override
   State<ServicoForm> createState() => _ServicoFormState();
 }
@@ -20,22 +22,6 @@ class _ServicoFormState extends State<ServicoForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  void save() {
-    final isValid = _form.currentState?.validate();
-
-    if (isValid!) {
-      _form.currentState!.save();
-
-      Provider.of<ServicoProvider>(context, listen: false).createServico(
-          servico?.nome ?? '',
-          servico?.valor ?? 0,
-          servico?.tamCarro ?? '',
-          servico?.tempServico ?? 0,
-          servico?.ativo ?? false);
-      Navigator.of(context).pop();
-    }
   }
 
   @override
@@ -85,16 +71,30 @@ class _ServicoFormState extends State<ServicoForm> {
                   },
                 ),
                 CheckboxListTile(
-                    title: Text('Ativo'),
-                    value: servico?.ativo ?? false,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        servico?.ativo = value;
-                      });
-                    }),
+                  title: Text('Ativo'),
+                  value: _formData['ativo'] == 'true',
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _formData['ativo'] = value.toString();
+                    });
+                  },
+                ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    final isValid = _form.currentState?.validate();
+                    if (isValid!) {
+                      _form.currentState!.save();
+                      Provider.of<ServicoProvider>(context, listen: false)
+                          .createServico(
+                              _formData['nome'] ?? '',
+                              double.tryParse(_formData['valor'] ?? '') ?? 0.0,
+                              _formData['tamCarro'] ?? '',
+                              double.tryParse(_formData['tempServico'] ?? '') ??
+                                  0.0,
+                              _formData['ativo'] == 'true');
+                      Modular.to.navigate(AppRoutes.LISTASERVICO);
+                    }
+                  },
                   child: Text('Salvar'),
                 ),
               ],
@@ -102,4 +102,16 @@ class _ServicoFormState extends State<ServicoForm> {
       ),
     );
   }
+}
+
+void _cadastroRealizado(BuildContext context) {
+  // Aqui você pode salvar o cadastro e exibir o snackbar
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Serviço cadastrada com sucesso!'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
+      //contentTextStyle: TextStyle(color: Colors.white),
+    ),
+  );
 }

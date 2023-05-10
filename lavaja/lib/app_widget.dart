@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/data/servico_service.dart';
 import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
+import 'package:lavaja/provider/servico_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'data/donocarro_service.dart';
@@ -16,6 +18,9 @@ class AppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider<DonoCarroProvider>(
           create: (ctx) => DonoCarroProvider(service: DonoCarroService()),
+        ),
+         ChangeNotifierProvider<ServicoProvider>(
+          create: (ctx) => ServicoProvider(service: ServicoService()),
         ),
       ],
       child: MaterialApp.router(
