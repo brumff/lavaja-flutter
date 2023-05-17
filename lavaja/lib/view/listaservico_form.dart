@@ -60,7 +60,8 @@ class MyHomePage extends StatelessWidget {
                                   leading: Icon(Icons.car_crash),
                                   trailing: Icon(Icons.edit),
                                   onTap: () {
-                                    Modular.to.navigate('/servico/:id');
+                                   Modular.to.pushNamed('/servico/${item.id}');
+                                   print(item.id);
                                   },
                                 );
                               }))

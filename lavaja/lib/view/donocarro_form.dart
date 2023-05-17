@@ -53,8 +53,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
               '';
       _selectedOption = Provider.of<DonoCarroProvider>(context, listen: false)
               .usuario
-              ?.genero ??
-          '';
+              ?.genero ;
       setState(() {
         isLoading = false;
       });
@@ -90,7 +89,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                     }),
                 DropdownButtonFormField<String>(
                   value: _selectedOption,
-                  items: _genero!.map((String value) {
+                  items: _genero.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -104,6 +103,8 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                     });
                   },
                   decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: 'Selecione',
                     labelText: 'Gênero',
                     border: null,
                   ),

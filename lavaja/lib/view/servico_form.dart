@@ -9,6 +9,11 @@ import 'package:provider/provider.dart';
 import '../routes/app_routes.dart';
 
 class ServicoForm extends StatefulWidget {
+  final String? id;
+  final bool isEditing;
+
+  const ServicoForm({Key? key, required this.isEditing, this.id})
+      : super(key: key);
   @override
   State<ServicoForm> createState() => _ServicoFormState();
 }
@@ -17,18 +22,36 @@ class _ServicoFormState extends State<ServicoForm> {
   final _form = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
   Servico? servico;
-
+  bool isLoading = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    if (widget.id != null) {
+      setState(() {
+          isLoading = true;
+        });
+      Provider.of<ServicoProvider>(context, listen: false)
+          .getServicoById(widget.id!)
+          .then((e) {
+        _formData['nome'] = e?.nome ?? '';
+        _formData['ativo'] = e?.ativo?.toString() ?? 'false';
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro de serviço'),
+        title: Text(widget.id == null ? 'Cadastro de serviço': 'Editar serviço'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -37,6 +60,7 @@ class _ServicoFormState extends State<ServicoForm> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  initialValue: _formData['nome'],
                   decoration: InputDecoration(labelText: 'Nome'),
                   onChanged: (value) => _formData['nome'] = value,
                   validator: (value) {

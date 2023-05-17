@@ -27,26 +27,31 @@ class AppModule extends Module {
           child: (context, args) => LavacarForm(),
         ),
         ChildRoute(AppRoutes.LAVACAR, child: (context, args) => LavacarForm()),
-        ChildRoute(AppRoutes.HOMEDONOCARRO, child: (context, args) => HomeDonoCarro()),
-        ChildRoute(AppRoutes.HOMELAVACAR, child: (context, args) => HomeLavaCar()),
+        ChildRoute(AppRoutes.HOMEDONOCARRO,
+            child: (context, args) => HomeDonoCarro()),
+        ChildRoute(AppRoutes.HOMELAVACAR,
+            child: (context, args) => HomeLavaCar()),
         ChildRoute(
           AppRoutes.EDITDONOCARRO,
-          child: (context, args) => DonoCarroForm(
-          ),
+          child: (context, args) => DonoCarroForm(),
         ),
         ChildRoute(
           AppRoutes.EDITLAVACAR,
-          child: (context, args) => LavacarForm(
-          ),
+          child: (context, args) => LavacarForm(),
         ),
         ChildRoute(
           AppRoutes.LISTASERVICO,
-          child: (context, args) => ListaServicoForm(
-          ),
-        ), 
+          child: (context, args) => ListaServicoForm(),
+        ),
         ChildRoute(
           AppRoutes.CREATESERVICO,
+          child: (context, args) => ServicoForm(isEditing: false,),
+        ),
+        ChildRoute(
+          AppRoutes.EDITSERVICO,
           child: (context, args) => ServicoForm(
+            id:  args.params['id'],
+            isEditing: true,
           ),
         ),
       ];

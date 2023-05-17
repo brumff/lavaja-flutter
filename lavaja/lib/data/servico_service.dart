@@ -49,7 +49,7 @@ class ServicoService {
 
   Future<void> updateServico(int? id, String? nome, double? valor,
       String? tamCarro, double? tempServico, bool? ativo) async {
-    await dio.put('http://localhost:8080/api/v1/servico', data: {
+    await dio.put('http://localhost:8080/api/v1/servico/:id', data: {
       'id': id,
       'nome': nome,
       'valor': valor,
