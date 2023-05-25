@@ -9,4 +9,5 @@ class AppRoutes {
   static const EDITLAVACAR = '/lava-car/';
   static const CREATESERVICO = '/servico/';
   static const EDITSERVICO = '/servico/:id';
+  static const CREATEFILA = '/contratarservico';
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/provider/lavacar_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeLavaCar extends StatefulWidget {
   @override
@@ -40,8 +42,10 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
                         _value = newValue;
                         if (_value) {
                           _switchColor = Colors.green;
+                          Provider.of<LavacarProvider>(context, listen: false).abrirLavacar(true);
                         } else {
                           _switchColor = Colors.red;
+                          Provider.of<LavacarProvider>(context, listen: false).abrirLavacar(false);
                         }
                       });
                     },

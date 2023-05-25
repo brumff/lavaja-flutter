@@ -50,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
         Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
       }
       if (AuthService.authority == "ROLE_LAVACAR") {
-        Modular.to.navigate(AppRoutes.HOMELAVACAR);
+        Modular.to.navigate(AppRoutes.CREATEFILA);
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

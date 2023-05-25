@@ -6,6 +6,9 @@ import '../models/lavacar.dart';
 class LavacarProvider with ChangeNotifier {
   final LavacarService service;
   Lavacar? usuario;
+  bool _isOpen = false;
+
+  bool get isOpen => _isOpen;
 
   LavacarProvider({required this.service}) {
     loadLavacar();
@@ -71,27 +74,32 @@ class LavacarProvider with ChangeNotifier {
   }
 
   void updateLavacar(
-      String cnpj,
-      String nome,
-      String logradouro,
-      String numero,
-      String complemento,
-      String bairro,
-      String cidade,
-      String cep,
-      String telefone1,
-      String telefone2,
-      String email,
-      ) async {
-    await service.updateLavacar(cnpj, nome, logradouro, numero, complemento, bairro, cidade, cep, telefone1, telefone2, email);
+    String cnpj,
+    String nome,
+    String logradouro,
+    String numero,
+    String complemento,
+    String bairro,
+    String cidade,
+    String cep,
+    String telefone1,
+    String telefone2,
+    String email,
+  ) async {
+    await service.updateLavacar(cnpj, nome, logradouro, numero, complemento,
+        bairro, cidade, cep, telefone1, telefone2, email);
     notifyListeners();
   }
 
-  void deleteLavacar(Lavacar lavacar) async {
-    await service.deleteLavacar(lavacar.id);
-    //carregar lista depois que excluir o usuário
-    await loadLavacar();
+  set isOpen(bool newValue) {
+    _isOpen = newValue;
     notifyListeners();
+  }
+
+  Future<bool> abrirLavacar(bool aberto) async {
+    final lavacar = await service.abrirLavacar(aberto);
+    await loadLavacar();
+    isOpen = aberto;
+    return isOpen;
   }
 }
-

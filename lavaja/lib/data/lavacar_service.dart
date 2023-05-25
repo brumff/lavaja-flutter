@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 
 import '../models/lavacar.dart';
@@ -58,18 +59,18 @@ class LavacarService {
   }
 
   Future<void> updateLavacar(
-      String? cnpj,
-      String? nome,
-      String? logradouro,
-      String? numero,
-      String? complemento,
-      String? bairro,
-      String? cidade,
-      String? cep,
-      String? telefone1,
-      String? telefone2,
-      String? email,
-      ) async {
+    String? cnpj,
+    String? nome,
+    String? logradouro,
+    String? numero,
+    String? complemento,
+    String? bairro,
+    String? cidade,
+    String? cep,
+    String? telefone1,
+    String? telefone2,
+    String? email,
+  ) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.put('http://localhost:8080/api/v1/lavacar/', data: {
       'cnpj': cnpj,
@@ -86,7 +87,10 @@ class LavacarService {
     });
   }
 
-  Future<void> deleteLavacar(int? id) async {
-    await dio.delete('http://localhost:8080/api/v1/lavacar/$id');
+  Future<void> abrirLavacar(bool? aberto) async {
+    dio.options.headers = {'authorization': AuthService.token};
+    dio.options.contentType = 'application/json';
+    await dio.post('http://localhost:8080/api/v1/lavacar/abrir',
+        data: aberto);
   }
 }

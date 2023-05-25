@@ -28,12 +28,15 @@ class _ServicoFormState extends State<ServicoForm> {
     super.initState();
     if (widget.id != null) {
       setState(() {
-          isLoading = true;
-        });
+        isLoading = true;
+      });
       Provider.of<ServicoProvider>(context, listen: false)
           .getServicoById(widget.id!)
           .then((e) {
         _formData['nome'] = e?.nome ?? '';
+        _formData['tempServico'] = e?.tempServico.toString() ?? '';
+        _formData['valor'] = e?.valor.toString() ?? '';
+        _formData['tamCarro'] = e?.tamCarro ?? '';
         _formData['ativo'] = e?.ativo?.toString() ?? 'false';
         setState(() {
           isLoading = false;
@@ -51,7 +54,8 @@ class _ServicoFormState extends State<ServicoForm> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.id == null ? 'Cadastro de serviço': 'Editar serviço'),
+        title:
+            Text(widget.id == null ? 'Cadastro de serviço' : 'Editar serviço'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -71,6 +75,7 @@ class _ServicoFormState extends State<ServicoForm> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _formData['valor'],
                   decoration: InputDecoration(labelText: 'Valor'),
                   onChanged: (value) => _formData['valor'] = value,
                   validator: (value) {
@@ -81,10 +86,12 @@ class _ServicoFormState extends State<ServicoForm> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _formData['tamCarro'],
                   decoration: InputDecoration(labelText: 'Tamanho do carro'),
                   onChanged: (value) => _formData['tamCarro'] = value,
                 ),
                 TextFormField(
+                  initialValue: _formData['tempServico'],
                   decoration: InputDecoration(labelText: 'Tempo serviço'),
                   onChanged: (value) => _formData['tempServico'] = value,
                   validator: (value) {
