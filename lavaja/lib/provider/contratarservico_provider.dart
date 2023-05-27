@@ -15,4 +15,14 @@ class ContratarServicoProvider with ChangeNotifier {
     contratarServico = await service.getListarServicosLavacar();
     notifyListeners();
   }
+
+  void patchContratarServico(int? id, String? statusServico) async {
+    await service.patchContratarServico(id, statusServico);
+    notifyListeners();
+  }
+
+  void deletarContratarServico(int? id) async {
+    await service.deletarContratarServico(id);
+    notifyListeners();
+  }
 }

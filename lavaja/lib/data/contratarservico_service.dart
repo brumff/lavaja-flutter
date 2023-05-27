@@ -16,11 +16,16 @@ class ContratarServicoService {
 
   Future<void> patchContratarServico(int? id, String? statusServico) async {
     dio.options.headers = {'authorization': AuthService.token};
-    await dio.put(
-      'http://localhost:8080/api/v1/contratarservico/lavacar-servicos/$id',
+    await dio.patch(
+      'http://localhost:8080/api/v1/contratarservico/$id',
       data: {
         'statusServico': statusServico,
       },
     );
+  }
+
+  Future<void> deletarContratarServico(int? id) async {
+    dio.options.headers = {'authorization': AuthService.token};
+    await dio.delete('http://localhost:8080/api/v1/contratarservico/$id');
   }
 }
