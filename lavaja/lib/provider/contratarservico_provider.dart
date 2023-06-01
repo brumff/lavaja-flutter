@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/models/contratarservico.dart';
@@ -25,4 +27,5 @@ class ContratarServicoProvider with ChangeNotifier {
     await service.deletarContratarServico(id);
     notifyListeners();
   }
+
 }

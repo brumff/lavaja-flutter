@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -15,6 +17,27 @@ class Filalavacar extends StatefulWidget {
 
 class _FilalavacarState extends State<Filalavacar> {
   List<int?> selectedItems = [];
+  List<int> countdownValues = [];
+  List<Timer?> countdownTimers = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void startCountdown(int initialValue, int index) {
+    countdownValues[index] = initialValue;
+
+    countdownTimers[index] = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        countdownValues[index]--;
+        if (countdownValues[index] < -10) {
+          timer.cancel();
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,15 +58,20 @@ class _FilalavacarState extends State<Filalavacar> {
                       Row(
                         children: [
                           Theme(
-                              data: Theme.of(context).copyWith(
-                                  iconTheme: IconThemeData(color: Colors.grey)),
-                              child: Icon(Icons.circle),),
-                              Text('Aguardando      ')
+                            data: Theme.of(context).copyWith(
+                                iconTheme: IconThemeData(color: Colors.grey)),
+                            child: Icon(Icons.circle),
+                          ),
+                          Text('Aguardando      ')
                         ],
                       ),
                       Row(
                         children: [
-                          Theme(data: Theme.of(context).copyWith(iconTheme: IconThemeData(color: Colors.green)), child: Icon(Icons.circle),),
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                                iconTheme: IconThemeData(color: Colors.green)),
+                            child: Icon(Icons.circle),
+                          ),
                           Text('Em andamento ')
                         ],
                       )
@@ -58,6 +86,15 @@ class _FilalavacarState extends State<Filalavacar> {
                         final item = data.contratarServico[index];
                         bool isSelected = selectedItems.contains(item.id);
                         bool isEmLavagem = item.statusServico == 'EM_LAVAGEM';
+                        if (countdownTimers.length <= index) {
+                          countdownValues.add(item.tempFila ?? 0);
+                          countdownTimers.add(null);
+                        }
+
+                        if (countdownTimers[index] == null &&
+                            item.tempFila != null) {
+                          startCountdown(item.tempFila!, index);
+                        }
                         return ListTile(
                           title: GestureDetector(
                               onTap: () {
@@ -67,6 +104,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                   } else {
                                     selectedItems.add(item.id);
                                   }
+                                  
                                 });
 
                                 if (isSelected) {
@@ -139,7 +177,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    'ID: ${item.id}, Status: ${item.statusServico}, Tempo ${item.tempFila}',
+                                    'ID: ${item.id}, Status: ${item.statusServico}, Tempo ${countdownValues[index]}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 10),
                                   )
