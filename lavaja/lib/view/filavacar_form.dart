@@ -23,18 +23,8 @@ class _FilalavacarState extends State<Filalavacar> {
   @override
   void initState() {
     super.initState();
-  }
-
-  void startCountdown(int initialValue, int index) {
-    countdownValues[index] = initialValue;
-
-    countdownTimers[index] = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        countdownValues[index]--;
-        if (countdownValues[index] < -10) {
-          timer.cancel();
-        }
-      });
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      setState(() {});
     });
   }
 
@@ -86,25 +76,23 @@ class _FilalavacarState extends State<Filalavacar> {
                         final item = data.contratarServico[index];
                         bool isSelected = selectedItems.contains(item.id);
                         bool isEmLavagem = item.statusServico == 'EM_LAVAGEM';
-                        if (countdownTimers.length <= index) {
-                          countdownValues.add(item.tempFila ?? 0);
-                          countdownTimers.add(null);
-                        }
-
-                        if (countdownTimers[index] == null &&
-                            item.tempFila != null) {
-                          startCountdown(item.tempFila!, index);
+                        var tempoEspera = DateTime.parse(item.dataServico!)
+                            .add(Duration(minutes: item.tempFila!))
+                            .difference(DateTime.now())
+                            .inSeconds
+                            .toString();
+                        if (item.statusServico == 'EM_LAVAGEM') {
+                          tempoEspera = '';
                         }
                         return ListTile(
                           title: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 setState(() {
                                   if (isSelected) {
                                     selectedItems.remove(item.id);
                                   } else {
                                     selectedItems.add(item.id);
                                   }
-                                  
                                 });
 
                                 if (isSelected) {
@@ -120,6 +108,21 @@ class _FilalavacarState extends State<Filalavacar> {
                                       .patchContratarServico(item.id,
                                           item.statusServico = 'EM_LAVAGEM');
                                 }
+                                await Future.delayed(Duration(minutes: item.servico!.tempServico!.toInt()));
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text('Confirmação'),
+                                        actions: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Confirmar')),
+                                        ],
+                                      );
+                                    });
                                 print(item.id);
                                 print(item.statusServico);
                               },
@@ -177,7 +180,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    'ID: ${item.id}, Status: ${item.statusServico}, Tempo ${countdownValues[index]}',
+                                    'ID: ${item.id}, Status: ${item.statusServico}, Tempo ${tempoEspera}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 10),
                                   )

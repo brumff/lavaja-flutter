@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:lavaja/models/servico.dart';
+
 class ContratarServico {
   int? id;
   String? origem;
   String? statusServico;
   String? dataServico;
   int? donoCarro;
-  int? servico;
+  Servico? servico;
   int? tempFila;
 
   ContratarServico(
@@ -25,7 +27,7 @@ class ContratarServico {
         statusServico: map['statusServico'],
         dataServico: map['dataServico'],
         donoCarro: map['donoCarro'],
-        servico: map['servico'],
+        servico: Servico.fromMap(map['servicoId']),
         tempFila: map['tempFila']);
   }
 

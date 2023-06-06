@@ -28,4 +28,5 @@ class ContratarServicoService {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.delete('http://localhost:8080/api/v1/contratarservico/$id');
   }
+
 }

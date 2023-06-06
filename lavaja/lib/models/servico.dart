@@ -6,7 +6,7 @@ class Servico{
      String? nome;
      double? valor;
      String? tamCarro;
-     double? tempServico;
+     num? tempServico;
      bool? ativo;
      int? lavacarId;
 
