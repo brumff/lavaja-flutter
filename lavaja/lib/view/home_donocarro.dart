@@ -8,6 +8,7 @@ import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/home_donocarro_provider.dart';
+import '../routes/app_routes.dart';
 
 class HomeDonoCarro extends StatelessWidget {
   static const appTitle = 'Home';
@@ -108,7 +109,7 @@ class MyHomePage extends StatelessWidget {
               title: const Text('Sair', style: TextStyle(color: Colors.red),),
               trailing: Icon(Icons.exit_to_app, color: Colors.red),
               onTap: () {
-                Navigator.pop(context);
+                 Modular.to.navigate(AppRoutes.LOGIN);
               },
             ),
           ],

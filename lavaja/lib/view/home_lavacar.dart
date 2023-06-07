@@ -5,6 +5,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../routes/app_routes.dart';
+
 class HomeLavaCar extends StatefulWidget {
   @override
   State<HomeLavaCar> createState() => _HomeLavaCarState();
@@ -43,6 +45,7 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
                         if (_value) {
                           _switchColor = Colors.green;
                           Provider.of<LavacarProvider>(context, listen: false).abrirLavacar(true);
+                             Modular.to.navigate(AppRoutes.CREATEFILA);
                         } else {
                           _switchColor = Colors.red;
                           Provider.of<LavacarProvider>(context, listen: false).abrirLavacar(false);
@@ -93,7 +96,7 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
               ),
               trailing: Icon(Icons.exit_to_app, color: Colors.red),
               onTap: () {
-                Navigator.pop(context);
+                  Modular.to.navigate(AppRoutes.LOGIN);
               },
             ),
           ],

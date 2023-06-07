@@ -94,7 +94,13 @@ class _LavacarFormState extends State<LavacarForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lava car'),
-        //para realizar updaload da imagem/logo
+        leading: IconButton(onPressed: () {
+           if (_formData['nome']!.isEmpty) {
+              Modular.to.navigate(AppRoutes.LOGIN);
+            } else {
+              Modular.to.navigate(AppRoutes.HOMELAVACAR);
+            }
+        }, icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -102,12 +108,12 @@ class _LavacarFormState extends State<LavacarForm> {
             key: _form,
             child: Column(
               children: <Widget>[
-                SizedBox(
+                /* SizedBox(
                   width: 100,
                   height: 100,
                   child: Image.network(
                       'https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?w=740&t=st=1679449312~exp=1679449912~hmac=ee1fc64f18337be42c14e1f416549d65b7c0674f7d4a074b156ac936e5a54283'),
-                ),
+                ),*/
                 TextFormField(
                   //enabled: !isEditing,
                   initialValue: _formData['cnpj'],
@@ -322,9 +328,9 @@ class _LavacarFormState extends State<LavacarForm> {
                                   _formData['senha'] ?? '',
                                   _formData['confSenha'] ?? '');
                         }
-                        Modular.to.navigate(AppRoutes.HOMELAVACAR);
+                        Modular.to.navigate(AppRoutes.LOGIN);
+                        _cadastroRealizado(context);
                       }
-                      _cadastroRealizado(context);
                     },
                     child: Text(
                         'Salvar')), //Text(isEditing? 'Editar' : 'Salvar')),

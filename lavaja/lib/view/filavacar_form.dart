@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/models/contratarservico.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/contratarservico_provider.dart';
 import '../provider/home_donocarro_provider.dart';
+import '../routes/app_routes.dart';
 
 class Filalavacar extends StatefulWidget {
   @override
@@ -113,11 +115,19 @@ class _FilalavacarState extends State<Filalavacar> {
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        title: Text('Confirmação'),
+                                        title: Text('Deseja finalizar o serviço? ${item.placaCarro}'),
                                         actions: [
                                           ElevatedButton(
                                               onPressed: () {
-                                                Navigator.of(context).pop();
+                                               Provider.of<ContratarServicoProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .patchContratarServico(
+                                                  item.id,
+                                                  item.statusServico =
+                                                      'FINALIZADO');
+                                                      Modular.to.navigate(AppRoutes.LISTASERVICO);
+
                                               },
                                               child: Text('Confirmar')),
                                         ],
@@ -139,6 +149,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                             : (isSelected
                                                 ? Colors.green
                                                 : Colors.grey),
+                                                size: 70,
                                       ),
                                       SizedBox(width: 10),
                                       GestureDetector(
@@ -155,8 +166,6 @@ class _FilalavacarState extends State<Filalavacar> {
                                                   item.statusServico =
                                                       'AGUARDANDO');
 
-                                          print(item.id);
-                                          print(item.statusServico);
                                         },
                                         child: Icon(
                                           Icons.keyboard_return,
@@ -180,7 +189,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    'ID: ${item.id}, Status: ${item.statusServico}, Tempo ${tempoEspera}',
+                                    'Placa: ${item.placaCarro}, Status: ${item.statusServico}, Tempo ${tempoEspera}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontSize: 10),
                                   )

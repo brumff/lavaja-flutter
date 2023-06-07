@@ -10,6 +10,7 @@ class ContratarServico {
   int? donoCarro;
   Servico? servico;
   int? tempFila;
+  String? placaCarro;
 
   ContratarServico(
       {this.id,
@@ -18,7 +19,8 @@ class ContratarServico {
       this.dataServico,
       this.donoCarro,
       this.servico,
-      this.tempFila});
+      this.tempFila,
+      this.placaCarro});
 
   factory ContratarServico.fromMap(Map<String, dynamic> map) {
     return ContratarServico(
@@ -28,7 +30,9 @@ class ContratarServico {
         dataServico: map['dataServico'],
         donoCarro: map['donoCarro'],
         servico: Servico.fromMap(map['servicoId']),
-        tempFila: map['tempFila']);
+        tempFila: map['tempFila'],
+        placaCarro: map['placaCarro']);
+        
   }
 
   Map<String, dynamic> toMap() {
@@ -39,7 +43,8 @@ class ContratarServico {
       'dataServico': dataServico,
       'donoCarro': dataServico,
       'servico': servico,
-      'tempFila': tempFila
+      'tempFila': tempFila,
+      'placaCarro': placaCarro
     };
   }
 

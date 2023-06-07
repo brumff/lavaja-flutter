@@ -26,33 +26,38 @@ class _LoginFormState extends State<LoginForm> {
     });
     final email = _emailController.text;
     final password = _passwordController.text;
-    await _authService.login(email, password);
 
-    //_perfil o que foi selecionado na tela, tirando o Perfil
-    //print(_perfil.toString().split('.')[1]);
-    //print('pula linha');
-    //paga o que está setado no banco de dados no usuário
-    //print(AuthService.authority);
-    if (_perfil.toString().split('.')[1] == AuthService.authority) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          //não ta apresentando mensagem de sucesso
-          content: Text('Login realizado com sucesso'),
-          backgroundColor: Colors.green, // alterado para verde
-        ),
-      );
-      print('Login realizado com sucesso');
-      setState(() {
-        _isLoading = false;
-      });
-      print(AuthService.authority);
-      if (AuthService.authority == "ROLE_DONOCARRO") {
-        Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
+    try {
+      await _authService.login(email, password);
+
+      if (_perfil.toString().split('.')[1] == AuthService.authority) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login realizado com sucesso'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        setState(() { 
+          _isLoading = false;
+        });
+
+        if (AuthService.authority == "ROLE_DONOCARRO") {
+          Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
+        } else if (AuthService.authority == "ROLE_LAVACAR") {
+          Modular.to.navigate(AppRoutes.HOMELAVACAR);
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao realizar login'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        setState(() {
+          _isLoading = false;
+        });
       }
-      if (AuthService.authority == "ROLE_LAVACAR") {
-        Modular.to.navigate(AppRoutes.CREATEFILA);
-      }
-    } else {
+    } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erro ao realizar login'),
@@ -155,7 +160,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
               SizedBox(height: 15),
-              Row(
+              /*Row(
                 children: [
                   GestureDetector(
                     onTap: () {},
@@ -172,7 +177,7 @@ class _LoginFormState extends State<LoginForm> {
               Divider(
                 color: Colors.black,
                 height: 2,
-              ),
+              ),*/
               SizedBox(height: 15),
               GestureDetector(
                 onTap: () {

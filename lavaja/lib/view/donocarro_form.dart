@@ -22,7 +22,6 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
   String? _ConfSenha;
   bool isLoading = true;
   String? _selectedOption;
-  bool _isEditing = false;
 
   List<String> _genero = [
     'Feminino',
@@ -52,8 +51,8 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   ?.email ??
               '';
       _selectedOption = Provider.of<DonoCarroProvider>(context, listen: false)
-              .usuario
-              ?.genero ;
+          .usuario
+          ?.genero;
       setState(() {
         isLoading = false;
       });
@@ -70,6 +69,14 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dono do carro'),
+        leading: IconButton(onPressed: () {
+          if (_formData['nome']!.isEmpty) {
+              Modular.to.navigate(AppRoutes.LOGIN);
+            } else {
+              Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
+            }
+        }
+        , icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -115,6 +122,12 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   keyboardType: TextInputType.phone,
                   inputFormatters: [phoneMaskFormatter],
                   onChanged: (value) => _formData['telefone'] = value,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   initialValue: _formData['email'],
@@ -190,10 +203,10 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                             _formData['senha'] ?? '',
                             _formData['confSenha'] ?? '',
                           );
+                          Modular.to.navigate(AppRoutes.LOGIN);
+                          _cadastroRealizado(context);
                         }
-                        Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
                       }
-                      _cadastroRealizado(context);
                     },
                     child: Text('Salvar'))
               ],

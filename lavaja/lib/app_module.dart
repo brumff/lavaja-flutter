@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/view/countdownscreen.dart';
