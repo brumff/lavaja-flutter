@@ -81,7 +81,7 @@ class _FilalavacarState extends State<Filalavacar> {
                         var tempoEspera = DateTime.parse(item.dataServico!)
                             .add(Duration(minutes: item.tempFila!))
                             .difference(DateTime.now())
-                            .inSeconds
+                            .inMinutes
                             .toString();
                         if (item.statusServico == 'EM_LAVAGEM') {
                           tempoEspera = '';
@@ -89,27 +89,22 @@ class _FilalavacarState extends State<Filalavacar> {
                         return ListTile(
                           title: GestureDetector(
                               onTap: () async {
+                               
                                 setState(() {
+                                  
                                   if (isSelected) {
                                     selectedItems.remove(item.id);
                                   } else {
                                     selectedItems.add(item.id);
                                   }
                                 });
-
                                 if (isSelected) {
                                   // Se já estiver selecionado, altera para "AGUARDANDO"
                                   Provider.of<ContratarServicoProvider>(context,
                                           listen: false)
                                       .patchContratarServico(item.id,
-                                          item.statusServico = 'AGUARDANDO');
-                                } else {
-                                  // Se não estiver selecionado, altera para "EM_LAVAGEM"
-                                  Provider.of<ContratarServicoProvider>(context,
-                                          listen: false)
-                                      .patchContratarServico(item.id,
                                           item.statusServico = 'EM_LAVAGEM');
-                                }
+                                } 
                                 await Future.delayed(Duration(minutes: item.servico!.tempServico!.toInt()));
                                 showDialog(
                                     context: context,
@@ -133,8 +128,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                         ],
                                       );
                                     });
-                                print(item.id);
-                                print(item.statusServico);
+                               
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -8,7 +8,7 @@ class FilaService {
   Future<void> createFila(String? origem, String? statusServico,
       DateTime? dataServico, int? donoCarro, int? servico) async {
     dio.options.headers = {'authorization': AuthService.token};
-    await dio.post('localhost:8080/api/v1/contratarservico', data: {
+    await dio.post('192.168.1.7:8080/api/v1/contratarservico', data: {
       'origem': origem,
       'statusServico': statusServico,
       'dataServico': dataServico,

@@ -22,6 +22,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
   String? _ConfSenha;
   bool isLoading = true;
   String? _selectedOption;
+  String? _senhaError;
 
   List<String> _genero = [
     'Feminino',
@@ -69,14 +70,15 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dono do carro'),
-        leading: IconButton(onPressed: () {
-          if (_formData['nome']!.isEmpty) {
-              Modular.to.navigate(AppRoutes.LOGIN);
-            } else {
-              Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
-            }
-        }
-        , icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+            onPressed: () {
+              if (_formData['nome']!.isEmpty) {
+                Modular.to.navigate(AppRoutes.LOGIN);
+              } else {
+                Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
+              }
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -150,11 +152,23 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   child: TextFormField(
                       obscureText: true,
                       decoration: InputDecoration(labelText: 'Senha'),
-                      onChanged: (value) => _formData['senha'] = value,
+                      onChanged: (value) {
+                        _formData['senha'] = value;
+                        setState(() {
+                          if (value.length >= 6) {
+                            _senhaError = null;
+                          } else {
+                            _senhaError =
+                                'A senha deve conter pelo menos 6 caracteres';
+                          }
+                        });
+                      },
                       controller: _senhaController,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Campo obrigatório';
+                        } else if (value.length < 6) {
+                          return 'A senha deve ter pelo menos 6 caracteres';
                         }
                         if (_ConfSenha != null && value != _ConfSenha) {
                           return 'As senhas não coincidem';
@@ -172,6 +186,8 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Campo obrigatório';
+                        } else if (value.length < 6) {
+                          return 'A senha deve ter pelo menos 6 caracteres';
                         }
                         if (_senhaController.text != value) {
                           return 'As senhas não coincidem';

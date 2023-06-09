@@ -94,13 +94,15 @@ class _LavacarFormState extends State<LavacarForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lava car'),
-        leading: IconButton(onPressed: () {
-           if (_formData['nome']!.isEmpty) {
-              Modular.to.navigate(AppRoutes.LOGIN);
-            } else {
-              Modular.to.navigate(AppRoutes.HOMELAVACAR);
-            }
-        }, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+            onPressed: () {
+              if (_formData['nome']!.isEmpty) {
+                Modular.to.navigate(AppRoutes.LOGIN);
+              } else {
+                Modular.to.navigate(AppRoutes.HOMELAVACAR);
+              }
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -266,6 +268,8 @@ class _LavacarFormState extends State<LavacarForm> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Campo obrigatório';
+                        } else if (value.length < 6) {
+                          return 'A senha deve ter pelo menos 6 caracteres';
                         }
                         if (_ConfSenha != null && value != _ConfSenha) {
                           return 'As senhas não coincidem';
@@ -283,7 +287,9 @@ class _LavacarFormState extends State<LavacarForm> {
                       onChanged: (value) => _formData['confSenha'] = value,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Campo obrigatório';
+                          return 'Campo obri gatório';
+                        } else if (value.length < 6) {
+                          return 'A senha deve ter pelo menos 6 caracteres';
                         }
                         if (_senhaController.text != value) {
                           return 'As senhas não coincidem';
