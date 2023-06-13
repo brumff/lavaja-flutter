@@ -89,9 +89,7 @@ class _FilalavacarState extends State<Filalavacar> {
                         return ListTile(
                           title: GestureDetector(
                               onTap: () async {
-                               
                                 setState(() {
-                                  
                                   if (isSelected) {
                                     selectedItems.remove(item.id);
                                   } else {
@@ -104,31 +102,34 @@ class _FilalavacarState extends State<Filalavacar> {
                                           listen: false)
                                       .patchContratarServico(item.id,
                                           item.statusServico = 'EM_LAVAGEM');
-                                } 
-                                await Future.delayed(Duration(minutes: item.servico!.tempServico!.toInt()));
+                                }
+                                await Future.delayed(Duration(
+                                    minutes:
+                                        item.servico!.tempServico!.toInt()));
                                 showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('Deseja finalizar o serviço? ${item.placaCarro}'),
-                                        actions: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                               Provider.of<ContratarServicoProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .patchContratarServico(
-                                                  item.id,
-                                                  item.statusServico =
-                                                      'FINALIZADO');
-                                                      Modular.to.navigate(AppRoutes.LISTASERVICO);
-
-                                              },
-                                              child: Text('Confirmar')),
-                                        ],
-                                      );
-                                    });
-                               
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                          'Deseja finalizar o serviço? ${item.placaCarro}'),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Provider.of<ContratarServicoProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .patchContratarServico(
+                                                      item.id,
+                                                      item.statusServico =
+                                                          'FINALIZADO');
+                                              Modular.to.navigate(
+                                                  AppRoutes.LISTASERVICO);
+                                            },
+                                            child: Text('Confirmar')),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -143,7 +144,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                             : (isSelected
                                                 ? Colors.green
                                                 : Colors.grey),
-                                                size: 70,
+                                        size: 70,
                                       ),
                                       SizedBox(width: 10),
                                       GestureDetector(
@@ -159,7 +160,6 @@ class _FilalavacarState extends State<Filalavacar> {
                                                   item.id,
                                                   item.statusServico =
                                                       'AGUARDANDO');
-
                                         },
                                         child: Icon(
                                           Icons.keyboard_return,

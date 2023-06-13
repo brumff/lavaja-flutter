@@ -9,6 +9,7 @@ import 'package:lavaja/view/lavacar_form.dart';
 import 'package:lavaja/view/listaservico_form.dart';
 import 'package:lavaja/view/login_form.dart';
 import 'package:lavaja/view/servico_form.dart';
+import 'package:lavaja/view/splash.dart';
 
 class AppModule extends Module {
   @override
@@ -16,11 +17,12 @@ class AppModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (context, args) => LoginForm()),
+        ChildRoute('/', child: (context, args) => Splash()),
         ChildRoute(AppRoutes.LOGIN, child: (context, args) => LoginForm()),
         ChildRoute(
           AppRoutes.DONOCARRO,
           child: (context, args) => DonoCarroForm(),
+          transition: TransitionType.rotate
         ),
         ChildRoute(
           AppRoutes.LAVACAR,
@@ -34,6 +36,7 @@ class AppModule extends Module {
         ChildRoute(
           AppRoutes.EDITDONOCARRO,
           child: (context, args) => DonoCarroForm(),
+          transition: TransitionType.leftToRight
         ),
         ChildRoute(
           AppRoutes.EDITLAVACAR,

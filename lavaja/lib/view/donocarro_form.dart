@@ -51,9 +51,10 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   .usuario
                   ?.email ??
               '';
-      _selectedOption = Provider.of<DonoCarroProvider>(context, listen: false)
+      _selectedOption  = Provider.of<DonoCarroProvider>(context, listen: false)
           .usuario
           ?.genero;
+          _formData['genero'] = _selectedOption ?? 'Outro';
       setState(() {
         isLoading = false;
       });

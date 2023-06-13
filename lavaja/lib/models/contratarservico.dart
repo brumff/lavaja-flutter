@@ -11,6 +11,7 @@ class ContratarServico {
   Servico? servico;
   int? tempFila;
   String? placaCarro;
+  DateTime? fimLavagem;
 
   ContratarServico(
       {this.id,
@@ -20,7 +21,8 @@ class ContratarServico {
       this.donoCarro,
       this.servico,
       this.tempFila,
-      this.placaCarro});
+      this.placaCarro,
+      this.fimLavagem});
 
   factory ContratarServico.fromMap(Map<String, dynamic> map) {
     return ContratarServico(

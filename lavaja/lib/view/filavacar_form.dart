@@ -17,6 +17,42 @@ class Filalavacar extends StatefulWidget {
 class _FilalavacarState extends State<Filalavacar> {
   List<int?> selectedItems = [];
 
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  void mostrarPopup(VoidCallback onPressed) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirmação'),
+          content: Text('Deseja finalizar lavagem?'),
+          actions: [
+            TextButton(
+              onPressed: onPressed,
+              child: Text('Confirmar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Future.delayed(Duration(minutes: 1)).whenComplete(() {
+                  mostrarPopup(
+                    onPressed
+                  );
+                });
+                Navigator.of(context).pop(); // Fechar o popup
+              },
+              child: Text('Cancelar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,48 +106,94 @@ class _FilalavacarState extends State<Filalavacar> {
                     itemCount: data.contratarServico.length,
                     itemBuilder: (context, index) {
                       final item = data.contratarServico[index];
+                      if (item.statusServico == 'FINALIZADO') {
+                        // Ignorar itens com status "FINALIZADO"
+                        return SizedBox.shrink();
+                      }
                       bool isSelected = selectedItems.contains(item.id);
                       bool isEmLavagem = item.statusServico == 'EM_LAVAGEM';
                       var tempoEspera = DateTime.parse(item.dataServico!)
-                            .add(Duration(minutes: item.tempFila!))
-                            .difference(DateTime.now())
-                            .inMinutes
-                            .toString();
-                        if (item.statusServico == 'EM_LAVAGEM') {
-                          tempoEspera = '';
-                        }
+                          .add(Duration(minutes: item.tempFila!))
+                          .difference(DateTime.now())
+                          .inMinutes
+                          .toString();
+                      if (item.statusServico == 'EM_LAVAGEM') {
+                        tempoEspera = item.fimLavagem
+                                ?.difference(DateTime.now())
+                                .inMinutes
+                                .toString() ??
+                            '';
+                      }
                       return ListTile(
                         title: InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Confirmação'),
-                                  content: Text('Deseja iniciar lavagem?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        // Enviar dados para o backend usando o provider
-                                        data.patchContratarServico(
-                                          item.id,
-                                          item.statusServico = 'EM_LAVAGEM',
-                                        );
+                          onTap: () async {
+                            if (item.statusServico == 'AGUARDANDO') {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Confirmação'),
+                                    content: Text('Deseja iniciar lavagem?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          // Enviar dados para o backend usando o provider
+                                          data.patchContratarServico(
+                                            item.id,
+                                            item.statusServico = 'EM_LAVAGEM',
+                                          );
+                                          item.fimLavagem = DateTime.now().add(
+                                              Duration(
+                                                  minutes: item
+                                                      .servico!.tempServico!
+                                                      .toInt()));
 
-                                        Navigator.of(context)
-                                            .pop(); // Fechar o popup
-                                      },
-                                      child: Text('Confirmar'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // Fechar o popup
-                                      },
-                                      child: Text('Cancelar'),
-                                    ),
-                                  ],
+                                          Navigator.of(context)
+                                              .pop(); // Fechar o popup
+                                        },
+                                        child: Text('Confirmar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Fechar o popup
+                                        },
+                                        child: Text('Cancelar'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text('Carro em lavagem'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Fechar o popup
+                                        },
+                                        child: Text('Voltar'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                            await Future.delayed(Duration(
+                                minutes: item.servico!.tempServico!.toInt()));
+                            mostrarPopup(
+                              () {
+                                // Enviar dados para o backend usando o provider
+                                data.patchContratarServico(
+                                  item.id,
+                                  item.statusServico = 'FINALIZADO',
                                 );
+
+                                Navigator.of(context).pop(); // Fechar o popup
                               },
                             );
                           },
