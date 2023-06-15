@@ -7,6 +7,7 @@ import 'package:lavaja/data/servico_service.dart';
 import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../components/menu_donocarro_component.dart';
 import '../provider/home_donocarro_provider.dart';
 import '../routes/app_routes.dart';
 
@@ -76,45 +77,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Container(
-              height: 55,
-              color: Colors.blue,
-            ),
-            ListTile(
-              title: const Text('Editar perfil'),
-              trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {
-                Modular.to.navigate('/dono-carro/');
-              },
-            ),
-            ListTile(
-              title: const Text('Listagem de pedidos'),
-              trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Alterar senha'),
-              trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Sair', style: TextStyle(color: Colors.red),),
-              trailing: Icon(Icons.exit_to_app, color: Colors.red),
-              onTap: () {
-                 Modular.to.navigate(AppRoutes.LOGIN);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MenuDonoCarroComponent(),
     );
   }
 }

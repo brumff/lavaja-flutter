@@ -13,38 +13,19 @@ class Splash extends StatefulWidget {
 }
 
 class __SplashState extends State<Splash> {
- /* @override
+  @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
       Modular.to.navigate('/login');
     });
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Transform.scale(
-              scale: 0.5, // Fator de escala para reduzir a imagem pela metade
-              child: Image.asset('assets/images/icone_carro.png'),
-            ),
-            Positioned(
-              top: 0,
-              child: Text(
-                'Lavaja',
-                style: TextStyle(
-                  fontSize: 40, // Tamanho do texto
-                  color: Color.fromRGBO(0, 43, 79, 1),
-                  fontFamily: 'Hind Siliguri' 
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: Image.asset('assets/images/icone_carro.png'),
       ),
     );
   }

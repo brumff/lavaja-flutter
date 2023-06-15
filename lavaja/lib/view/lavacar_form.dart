@@ -4,7 +4,7 @@ import 'package:lavaja/models/lavacar.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../components/disponibilidade_component.dart';
+
 import '../data/auth_service.dart';
 import '../routes/app_routes.dart';
 import '../textinputformatter.dart';

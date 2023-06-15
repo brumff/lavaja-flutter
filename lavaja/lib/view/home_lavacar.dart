@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../components/menu_lavacar_component.dart';
 import '../routes/app_routes.dart';
 
 class HomeLavaCar extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Lava Car'),
+        title: Text('Abrir Lava Car'),
       ),
       body: Center(
         child: Column(
@@ -62,46 +63,7 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Container(
-              height: 55,
-              color: Colors.blue,
-            ),
-            ListTile(
-              title: const Text('Editar perfil'),
-              trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {
-                Modular.to.navigate('/lava-car/');
-              },
-            ),
-            ListTile(
-              title: const Text('Serviços'),
-              trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {
-                Modular.to.navigate('/servico');
-              },
-            ),
-            ListTile(
-              title: const Text('Alterar senha'),
-              trailing: Icon(Icons.arrow_forward_ios_sharp),
-              onTap: () {},
-            ),
-            ListTile(
-              title: const Text(
-                'Sair',
-                style: TextStyle(color: Colors.red),
-              ),
-              trailing: Icon(Icons.exit_to_app, color: Colors.red),
-              onTap: () {
-                  Modular.to.navigate(AppRoutes.LOGIN);
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MenuLavacarComponent(),
     );
   }
 }

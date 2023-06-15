@@ -12,6 +12,7 @@ class ContratarServico {
   int? tempFila;
   String? placaCarro;
   DateTime? fimLavagem;
+  bool? isExpanded;
 
   ContratarServico(
       {this.id,
@@ -22,7 +23,8 @@ class ContratarServico {
       this.servico,
       this.tempFila,
       this.placaCarro,
-      this.fimLavagem});
+      this.fimLavagem, 
+      this.isExpanded});
 
   factory ContratarServico.fromMap(Map<String, dynamic> map) {
     return ContratarServico(

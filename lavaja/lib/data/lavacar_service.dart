@@ -9,7 +9,7 @@ class LavacarService {
 
   Future<List<Lavacar>> getLavacar() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar');
+    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/');
     final data = response.data as List<dynamic>;
     return data.map((json) => Lavacar.fromMap(json)).toList();
   }

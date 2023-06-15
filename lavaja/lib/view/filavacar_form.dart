@@ -7,6 +7,7 @@ import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/models/contratarservico.dart';
 import 'package:provider/provider.dart';
 
+import '../components/menu_lavacar_component.dart';
 import '../provider/contratarservico_provider.dart';
 
 class Filalavacar extends StatefulWidget {
@@ -40,9 +41,7 @@ class _FilalavacarState extends State<Filalavacar> {
             TextButton(
               onPressed: () {
                 Future.delayed(Duration(minutes: 1)).whenComplete(() {
-                  mostrarPopup(
-                    onPressed
-                  );
+                  mostrarPopup(onPressed);
                 });
                 Navigator.of(context).pop(); // Fechar o popup
               },
@@ -64,7 +63,8 @@ class _FilalavacarState extends State<Filalavacar> {
           final data = Provider.of<ContratarServicoProvider>(context);
 
           return Scaffold(
-            appBar: AppBar(title: Text('Fila')),
+            appBar: AppBar(title: Text('Fila'),
+            ),
             body: Column(
               children: [
                 Form(
@@ -127,60 +127,70 @@ class _FilalavacarState extends State<Filalavacar> {
                       return ListTile(
                         title: InkWell(
                           onTap: () async {
-                            if (item.statusServico == 'AGUARDANDO') {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('Confirmação'),
-                                    content: Text('Deseja iniciar lavagem?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          // Enviar dados para o backend usando o provider
-                                          data.patchContratarServico(
-                                            item.id,
-                                            item.statusServico = 'EM_LAVAGEM',
-                                          );
-                                          item.fimLavagem = DateTime.now().add(
-                                              Duration(
-                                                  minutes: item
-                                                      .servico!.tempServico!
-                                                      .toInt()));
+                            try {
+                              if (item.statusServico == 'AGUARDANDO') {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('Confirmação'),
+                                      content: Text('Deseja iniciar lavagem?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            // Enviar dados para o backend usando o provider
+                                            data.patchContratarServico(
+                                              item.id,
+                                              item.statusServico = 'EM_LAVAGEM',
+                                            );
+                                            item.fimLavagem = DateTime.now()
+                                                .add(Duration(
+                                                    minutes: item
+                                                        .servico!.tempServico!
+                                                        .toInt()));
 
-                                          Navigator.of(context)
-                                              .pop(); // Fechar o popup
-                                        },
-                                        child: Text('Confirmar'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Fechar o popup
-                                        },
-                                        child: Text('Cancelar'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: Text('Carro em lavagem'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Fechar o popup
-                                        },
-                                        child: Text('Voltar'),
-                                      ),
-                                    ],
-                                  );
-                                },
+                                            Navigator.of(context)
+                                                .pop(); // Fechar o popup
+                                          },
+                                          child: Text('Confirmar'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Fechar o popup
+                                          },
+                                          child: Text('Cancelar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text('Carro em lavagem'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Fechar o popup
+                                          },
+                                          child: Text('Voltar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Ocorreu um erro durante a execução.'),
+                                  backgroundColor: Colors.red,
+                                ),
                               );
                             }
                             await Future.delayed(Duration(
@@ -228,6 +238,7 @@ class _FilalavacarState extends State<Filalavacar> {
                 ),
               ],
             ),
+            drawer: MenuLavacarComponent(),
           );
         },
       ),
