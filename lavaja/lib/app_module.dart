@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/routes/app_routes.dart';
-import 'package:lavaja/view/countdownscreen.dart';
 import 'package:lavaja/view/donocarro_form.dart';
 import 'package:lavaja/view/filavacar_form.dart';
+import 'package:lavaja/view/historicoservico_lavacar.dart';
 import 'package:lavaja/view/home_donocarro.dart';
 import 'package:lavaja/view/home_lavacar.dart';
 import 'package:lavaja/view/lavacar_form.dart';
@@ -60,6 +60,10 @@ class AppModule extends Module {
          ChildRoute(
           AppRoutes.CREATEFILA,
           child: (context, args) => Filalavacar(),
+        ),
+        ChildRoute(
+          AppRoutes.HISTORICOLAVACAR,
+          child: (context, args) => HistoricoServicoLavacar(),
         ),
       ];
 }
