@@ -47,10 +47,10 @@ class ServicoService {
     });
   }
 
-  Future<void> updateServico(int? id, String? nome, double? valor,
+  Future<void> updateServico(String id,String? nome, double? valor,
       String? tamCarro, double? tempServico, bool? ativo) async {
-    await dio.put('http://192.168.100.112:8080/api/v1/servico/:id', data: {
-      'id': id,
+        dio.options.headers = {'authorization': AuthService.token};
+    await dio.put('http://192.168.100.112:8080/api/v1/servico/$id', data: {
       'nome': nome,
       'valor': valor,
       'tamCarro': tamCarro,

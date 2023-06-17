@@ -6,6 +6,7 @@ import 'package:lavaja/models/servico.dart';
 import 'package:lavaja/provider/servico_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../data/auth_service.dart';
 import '../routes/app_routes.dart';
 
 class ServicoForm extends StatefulWidget {
@@ -33,6 +34,7 @@ class _ServicoFormState extends State<ServicoForm> {
       Provider.of<ServicoProvider>(context, listen: false)
           .getServicoById(widget.id!)
           .then((e) {
+        _formData['id'] = e?.id.toString() ?? '';
         _formData['nome'] = e?.nome ?? '';
         _formData['tempServico'] = e?.tempServico.toString() ?? '';
         _formData['valor'] = e?.valor.toString() ?? '';
@@ -56,9 +58,11 @@ class _ServicoFormState extends State<ServicoForm> {
       appBar: AppBar(
         title:
             Text(widget.id == null ? 'Cadastro de serviço' : 'Editar serviço'),
-            leading: IconButton(onPressed: () {
-             Modular.to.navigate(AppRoutes.LISTASERVICO);
-            }, icon: Icon(Icons.arrow_back)),
+        leading: IconButton(
+            onPressed: () {
+              Modular.to.navigate(AppRoutes.LISTASERVICO);
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -118,15 +122,42 @@ class _ServicoFormState extends State<ServicoForm> {
                     final isValid = _form.currentState?.validate();
                     if (isValid!) {
                       _form.currentState!.save();
-                      Provider.of<ServicoProvider>(context, listen: false)
-                          .createServico(
-                              _formData['nome'] ?? '',
-                              double.tryParse(_formData['valor'] ?? '') ?? 0.0,
-                              _formData['tamCarro'] ?? '',
-                              double.tryParse(_formData['tempServico'] ?? '') ??
-                                  0.0,
-                              _formData['ativo'] == 'true');
-                      Modular.to.navigate(AppRoutes.LISTASERVICO);
+                      if (widget.id != null) {
+                        Provider.of<ServicoProvider>(context, listen: false)
+                            .updateServico(
+                                _formData['id'] ?? '',
+                                _formData['nome'] ?? '',
+                                double.tryParse(_formData['valor'] ?? '') ??
+                                    0.0,
+                                _formData['tamCarro'] ?? '',
+                                double.tryParse(
+                                        _formData['tempServico'] ?? '') ??
+                                    0.0,
+                                _formData['ativo'] == 'true');
+                        _edicaoRealizada(context);
+                        Provider.of<ServicoProvider>(context, listen: false)
+                            .loadServico()
+                            .then((_) {
+                          Modular.to.navigate(AppRoutes.LISTASERVICO);
+                        });
+                      } else {
+                        Provider.of<ServicoProvider>(context, listen: false)
+                            .createServico(
+                                _formData['nome'] ?? '',
+                                double.tryParse(_formData['valor'] ?? '') ??
+                                    0.0,
+                                _formData['tamCarro'] ?? '',
+                                double.tryParse(
+                                        _formData['tempServico'] ?? '') ??
+                                    0.0,
+                                _formData['ativo'] == 'true');
+                        _cadastroRealizado(context);
+                        Provider.of<ServicoProvider>(context, listen: false)
+                            .loadServico()
+                            .then((_) {
+                          Modular.to.navigate(AppRoutes.LISTASERVICO);
+                        });
+                      }
                     }
                   },
                   child: Text('Salvar'),
@@ -146,6 +177,16 @@ void _cadastroRealizado(BuildContext context) {
       duration: Duration(seconds: 2),
       backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
       //contentTextStyle: TextStyle(color: Colors.white),
+    ),
+  );
+}
+
+void _edicaoRealizada(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Edição realizada com sucesso!'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green,
     ),
   );
 }
