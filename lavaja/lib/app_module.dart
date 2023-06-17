@@ -26,9 +26,9 @@ class AppModule extends Module {
         ),
         ChildRoute(
           AppRoutes.LAVACAR,
-          child: (context, args) => LavacarForm(),
+          child: (context, args) => LavaCarForm(),
         ),
-        ChildRoute(AppRoutes.LAVACAR, child: (context, args) => LavacarForm()),
+        ChildRoute(AppRoutes.LAVACAR, child: (context, args) => LavaCarForm()),
         ChildRoute(AppRoutes.HOMEDONOCARRO,
             child: (context, args) => HomeDonoCarro()),
         ChildRoute(AppRoutes.HOMELAVACAR,
@@ -40,7 +40,7 @@ class AppModule extends Module {
         ),
         ChildRoute(
           AppRoutes.EDITLAVACAR,
-          child: (context, args) => LavacarForm(),
+          child: (context, args) => LavaCarForm(),
         ),
         ChildRoute(
           AppRoutes.LISTASERVICO,

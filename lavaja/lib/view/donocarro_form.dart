@@ -210,6 +210,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                             _formData['telefone'] ?? '',
                             _formData['genero'] ?? '',
                           );
+                           _edicaoRealizada(context);
                         } else {
                           Provider.of<DonoCarroProvider>(context, listen: false)
                               .createDonoCarro(
@@ -234,13 +235,21 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
 }
 
 void _cadastroRealizado(BuildContext context) {
-  // Aqui você pode salvar o cadastro e exibir o snackbar
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('Cadastro realizado com sucesso!'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
-      //contentTextStyle: TextStyle(color: Colors.white),
+      backgroundColor: Colors.green, 
+    ),
+  );
+}
+
+void _edicaoRealizada(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Edição realizada com sucesso!'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green, 
     ),
   );
 }

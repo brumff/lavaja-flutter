@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(primaryColor: Colors.blue),
         home: LoginForm(),
         routes: {
-          AppRoutes.LAVACAR: (_) => LavacarForm(),
+          AppRoutes.LAVACAR: (_) => LavaCarForm(),
           AppRoutes.DONOCARRO: (_) => DonoCarroForm(),
           AppRoutes.LOGIN: (_) => LoginForm(),
           AppRoutes.HOMEDONOCARRO: (_) => HomeDonoCarro(),

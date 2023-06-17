@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:lavaja/models/lavacar.dart';
+import 'package:lavaja/data/auth_service.dart';
+import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
+import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
-
-import '../data/auth_service.dart';
-import '../routes/app_routes.dart';
+import '../models/donocarro.dart';
 import '../textinputformatter.dart';
 
-class LavacarForm extends StatefulWidget {
+class LavaCarForm extends StatefulWidget {
   @override
-  State<LavacarForm> createState() => _LavacarFormState();
+  State<LavaCarForm> createState() => _LavaCarFormState();
 }
 
-class _LavacarFormState extends State<LavacarForm> {
+class _LavaCarFormState extends State<LavaCarForm> {
   final _form = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
-  bool _isAtivo = false;
-  TimeOfDay _horaInicio = TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _horaFim = TimeOfDay(hour: 0, minute: 0);
   final TextEditingController _senhaController = TextEditingController();
   String? _ConfSenha;
-  Lavacar lavacar = Lavacar();
   bool isLoading = true;
+  String? _selectedOption;
+  String? _senhaError;
 
-  // final Map<String, dynamic> _formData = {};
-  //bool isEditing = true;
   @override
-  initState() {
+  void initState() {
+    // TODO: implement initState
     super.initState();
     Provider.of<LavacarProvider>(context, listen: false)
         .getLavacar()
@@ -36,7 +35,6 @@ class _LavacarFormState extends State<LavacarForm> {
       _formData['cnpj'] =
           Provider.of<LavacarProvider>(context, listen: false).usuario?.cnpj ??
               '';
-      print(_formData['cnpj']);
       _formData['nome'] =
           Provider.of<LavacarProvider>(context, listen: false).usuario?.nome ??
               '';
@@ -93,7 +91,7 @@ class _LavacarFormState extends State<LavacarForm> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lava car'),
+        title: Text('Lava Car'),
         leading: IconButton(
             onPressed: () {
               if (_formData['nome']!.isEmpty) {
@@ -105,165 +103,155 @@ class _LavacarFormState extends State<LavacarForm> {
             icon: Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16),
         child: Form(
             key: _form,
             child: Column(
               children: <Widget>[
-                /* SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Image.network(
-                      'https://img.freepik.com/vetores-gratis/ilustracao-de-galeria-icone_53876-27002.jpg?w=740&t=st=1679449312~exp=1679449912~hmac=ee1fc64f18337be42c14e1f416549d65b7c0674f7d4a074b156ac936e5a54283'),
-                ),*/
                 TextFormField(
-                  //enabled: !isEditing,
-                  initialValue: _formData['cnpj'],
-                  decoration: InputDecoration(labelText: 'CNPJ'),
-                  inputFormatters: [cnpjMaskFormatter],
-                  //fazer validação CNPJ, formatação CNPJ
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => _formData['cnpj'] = value,
-                ),
+                    initialValue: _formData['cnpj'],
+                    decoration: InputDecoration(labelText: 'CNPJ'),
+                    inputFormatters: [cnpjMaskFormatter],
+                    onChanged: (value) => _formData['cnpj'] = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    }),
                 TextFormField(
-                  //enabled: !isEditing,
-                  initialValue: _formData['nome'],
-                  decoration: InputDecoration(labelText: 'Nome'),
-                  //fazer validação CNPJ, formatação CNPJ
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) => _formData['nome'] = value,
-                ),
+                    initialValue: _formData['nome'],
+                    decoration: InputDecoration(labelText: 'Nome'),
+                    onChanged: (value) => _formData['nome'] = value,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    }),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['logradouro'],
                   decoration: InputDecoration(labelText: 'Logradouro'),
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['logradouro'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['logradouro'] = value,
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['numero'],
                   decoration: InputDecoration(labelText: 'Nº'),
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['numero'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['numero'] = value,
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['complemento'],
                   decoration: InputDecoration(labelText: 'Complemento'),
-                  //fazer validação CNPJ, formatação CNPJ
                   onChanged: (value) => _formData['complemento'] = value,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['bairro'],
                   decoration: InputDecoration(labelText: 'Bairro'),
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['bairro'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['bairro'] = value,
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['cidade'],
                   decoration: InputDecoration(labelText: 'Cidade'),
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['cidade'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['cidade'] = value,
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['cep'],
                   decoration: InputDecoration(labelText: 'CEP'),
                   inputFormatters: [cepMaskFormatter],
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['cep'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['cep'] = value,
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['telefone1'],
                   decoration: InputDecoration(labelText: 'Telefone'),
                   inputFormatters: [phoneMaskFormatter],
-                  //fazer validação CNPJ, formatação CNPJ
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
-                    }
-                    return null;
-                  },
                   onChanged: (value) => _formData['telefone1'] = value,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['telefone2'],
-                  decoration: InputDecoration(labelText: 'Telefone Opcional'),
+                  decoration: InputDecoration(labelText: 'Telefone (Opcional)'),
                   inputFormatters: [phoneMaskFormatter],
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['telefone2'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['telefone2'] = value,
                 ),
                 TextFormField(
-                  //enabled: !isEditing,
                   initialValue: _formData['email'],
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(labelText: 'Email'),
-                  //fazer validação CNPJ, formatação CNPJ
+                  onChanged: (value) => _formData['email'] = value,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Campo obrigatorio';
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'E-mail inválido';
                     }
                     return null;
                   },
-                  onChanged: (value) => _formData['email'] = value,
                 ),
                 Visibility(
                   visible: AuthService.token == null,
                   child: TextFormField(
-                      //  initialValue: _formData['Senha'],
                       obscureText: true,
                       decoration: InputDecoration(labelText: 'Senha'),
-                      onChanged: (value) => _formData['senha'] = value,
+                      onChanged: (value) {
+                        _formData['senha'] = value;
+                        setState(() {
+                          if (value.length >= 6) {
+                            _senhaError = null;
+                          } else {
+                            _senhaError =
+                                'A senha deve conter pelo menos 6 caracteres';
+                          }
+                        });
+                      },
                       controller: _senhaController,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -280,14 +268,13 @@ class _LavacarFormState extends State<LavacarForm> {
                 Visibility(
                   visible: AuthService.token == null,
                   child: TextFormField(
-                      //initialValue: _formData['confSenha'],
                       obscureText: true,
                       decoration:
                           InputDecoration(labelText: 'Confirmação da senha'),
                       onChanged: (value) => _formData['confSenha'] = value,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Campo obri gatório';
+                          return 'Campo obrigatório';
                         } else if (value.length < 6) {
                           return 'A senha deve ter pelo menos 6 caracteres';
                         }
@@ -317,6 +304,7 @@ class _LavacarFormState extends State<LavacarForm> {
                                   _formData['telefone1'] ?? '',
                                   _formData['telefone2'] ?? '',
                                   _formData['email'] ?? '');
+                                  _edicaoRealizada(context);
                         } else {
                           Provider.of<LavacarProvider>(context, listen: false)
                               .createLavacar(
@@ -333,13 +321,12 @@ class _LavacarFormState extends State<LavacarForm> {
                                   _formData['email'] ?? '',
                                   _formData['senha'] ?? '',
                                   _formData['confSenha'] ?? '');
+                          Modular.to.navigate(AppRoutes.LOGIN);
+                          _cadastroRealizado(context);
                         }
-                        Modular.to.navigate(AppRoutes.LOGIN);
-                        _cadastroRealizado(context);
                       }
                     },
-                    child: Text(
-                        'Salvar')), //Text(isEditing? 'Editar' : 'Salvar')),
+                    child: Text('Salvar'))
               ],
             )),
       ),
@@ -352,6 +339,18 @@ void _cadastroRealizado(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('Cadastro realizado com sucesso!'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
+      //contentTextStyle: TextStyle(color: Colors.white),
+    ),
+  );
+}
+
+void _edicaoRealizada(BuildContext context) {
+  // Aqui você pode salvar o cadastro e exibir o snackbar
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Edição realizada com sucesso!'),
       duration: Duration(seconds: 2),
       backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
       //contentTextStyle: TextStyle(color: Colors.white),
