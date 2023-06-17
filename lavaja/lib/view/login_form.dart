@@ -181,8 +181,7 @@ class _LoginFormState extends State<LoginForm> {
               SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(AppRoutes.DONOCARRO, arguments: null);
+                  Modular.to.navigate(AppRoutes.DONOCARRO);
                 },
                 child: Text('Cadastre-se dono do carro',
                     style: TextStyle(
@@ -192,8 +191,7 @@ class _LoginFormState extends State<LoginForm> {
               SizedBox(height: 15),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(AppRoutes.LAVACAR, arguments: null);
+                  Modular.to.navigate(AppRoutes.LAVACAR);
                 },
                 child: Text('Cadastre-se lava car',
                     style: TextStyle(

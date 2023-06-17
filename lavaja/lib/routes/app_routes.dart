@@ -1,8 +1,8 @@
 class AppRoutes {
-  static const LAVACAR = '/lava-car';
+  static const LAVACAR = '/cadastro-lava-car';
   static const HOMEDONOCARRO = '/home-donocarro';
   static const HOMELAVACAR = '/home-lavacar';
-  static const DONOCARRO = '/dono-carro';
+  static const DONOCARRO = '/cadastro-dono-carro';
   static const LOGIN = '/login';
   static const LISTASERVICO = '/servico';
   static const EDITDONOCARRO = '/dono-carro/';

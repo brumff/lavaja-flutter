@@ -22,7 +22,7 @@ class AppModule extends Module {
         ChildRoute(
           AppRoutes.DONOCARRO,
           child: (context, args) => DonoCarroForm(),
-          transition: TransitionType.rotate
+          transition: TransitionType.leftToRight
         ),
         ChildRoute(
           AppRoutes.LAVACAR,
