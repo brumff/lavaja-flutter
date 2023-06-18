@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return ListTile(
                     title: Text(item.nome ?? ''),
                     subtitle: Text(
-                      'R\$ ${item.valor?.toStringAsFixed(2).replaceAll('.', ',')} - ${item.tempServico}',
+                      'R\$ ${item.valor?.toStringAsFixed(2).replaceAll('.', ',')} - ${item.tempServico} minutos',
                     ),
                     leading: Icon(Icons.car_crash),
                     trailing: Icon(Icons.edit),
