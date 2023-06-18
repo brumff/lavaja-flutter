@@ -25,7 +25,11 @@ class __SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset('assets/images/icone_carro.png'),
+        child: FractionallySizedBox(
+          widthFactor:
+              0.5,
+          child: Image.asset('assets/images/icone_carro.png'),
+        ),
       ),
     );
   }

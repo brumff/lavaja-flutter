@@ -17,53 +17,64 @@ class AppModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (context, args) => Splash()),
-        ChildRoute(AppRoutes.LOGIN, child: (context, args) => LoginForm()),
-        ChildRoute(
-          AppRoutes.DONOCARRO,
-          child: (context, args) => DonoCarroForm(),
-          transition: TransitionType.leftToRight
-        ),
-        ChildRoute(
-          AppRoutes.LAVACAR,
-          child: (context, args) => LavaCarForm(),
-        ),
-        ChildRoute(AppRoutes.LAVACAR, child: (context, args) => LavaCarForm()),
+        ChildRoute('/',
+            child: (context, args) => Splash(),
+            transition: TransitionType.upToDown),
+        ChildRoute(AppRoutes.LOGIN,
+            child: (context, args) => LoginForm(),
+            transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.DONOCARRO,
+            child: (context, args) => DonoCarroForm(),
+            transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.LAVACAR,
+            child: (context, args) => LavaCarForm(),
+            transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.LAVACAR,
+            child: (context, args) => LavaCarForm(),
+            transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.HOMEDONOCARRO,
-            child: (context, args) => HomeDonoCarro()),
+            child: (context, args) => HomeDonoCarro(),
+            transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.HOMELAVACAR,
-            child: (context, args) => HomeLavaCar()),
-        ChildRoute(
-          AppRoutes.EDITDONOCARRO,
-          child: (context, args) => DonoCarroForm(),
-          transition: TransitionType.leftToRight
-        ),
+            child: (context, args) => HomeLavaCar(),
+             transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.EDITDONOCARRO,
+            child: (context, args) => DonoCarroForm(),
+            transition: TransitionType.leftToRight),
         ChildRoute(
           AppRoutes.EDITLAVACAR,
           child: (context, args) => LavaCarForm(),
+           transition: TransitionType.leftToRight
         ),
         ChildRoute(
           AppRoutes.LISTASERVICO,
           child: (context, args) => ListaServicoForm(),
+           transition: TransitionType.leftToRight
         ),
         ChildRoute(
           AppRoutes.CREATESERVICO,
-          child: (context, args) => ServicoForm(isEditing: false,),
+          child: (context, args) => ServicoForm(
+            isEditing: false,
+          ),
+           transition: TransitionType.leftToRight
         ),
         ChildRoute(
           AppRoutes.EDITSERVICO,
           child: (context, args) => ServicoForm(
-            id:  args.params['id'],
+            id: args.params['id'],
             isEditing: true,
           ),
+           transition: TransitionType.leftToRight
         ),
-         ChildRoute(
+        ChildRoute(
           AppRoutes.CREATEFILA,
           child: (context, args) => Filalavacar(),
+           transition: TransitionType.leftToRight
         ),
         ChildRoute(
           AppRoutes.HISTORICOLAVACAR,
           child: (context, args) => HistoricoServicoLavacar(),
+           transition: TransitionType.leftToRight
         ),
       ];
 }

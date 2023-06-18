@@ -63,7 +63,8 @@ class _FilalavacarState extends State<Filalavacar> {
           final data = Provider.of<ContratarServicoProvider>(context);
 
           return Scaffold(
-            appBar: AppBar(title: Text('Fila'),
+            appBar: AppBar(
+              title: Text('Fila'),
             ),
             body: Column(
               children: [
@@ -127,72 +128,63 @@ class _FilalavacarState extends State<Filalavacar> {
                       return ListTile(
                         title: InkWell(
                           onTap: () async {
-                            try {
-                              if (item.statusServico == 'AGUARDANDO') {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text('Confirmação'),
-                                      content: Text('Deseja iniciar lavagem?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            // Enviar dados para o backend usando o provider
-                                            data.patchContratarServico(
-                                              item.id,
-                                              item.statusServico = 'EM_LAVAGEM',
-                                            );
-                                            item.fimLavagem = DateTime.now()
-                                                .add(Duration(
-                                                    minutes: item
-                                                        .servico!.tempServico!
-                                                        .toInt()));
+                            if (item.statusServico == 'AGUARDANDO') {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Confirmação'),
+                                    content: Text('Deseja iniciar lavagem?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          data.patchContratarServico(
+                                            item.id,
+                                            item.statusServico = 'EM_LAVAGEM',
+                                          );
 
-                                            Navigator.of(context)
-                                                .pop(); // Fechar o popup
-                                          },
-                                          child: Text('Confirmar'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Fechar o popup
-                                          },
-                                          child: Text('Cancelar'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: Text('Carro em lavagem'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Fechar o popup
-                                          },
-                                          child: Text('Voltar'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'Ocorreu um erro durante a execução.'),
-                                  backgroundColor: Colors.red,
-                                ),
+                                          item.fimLavagem = DateTime.now().add(
+                                              Duration(
+                                                  minutes: item
+                                                      .servico!.tempServico!
+                                                      .toInt()));
+
+                                          Navigator.of(context)
+                                              .pop(); // Fechar o popup
+                                        },
+                                        child: Text('Confirmar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Fechar o popup
+                                        },
+                                        child: Text('Cancelar'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text('Carro em lavagem'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Fechar o popup
+                                        },
+                                        child: Text('Voltar'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             }
+
                             await Future.delayed(Duration(
                                 minutes: item.servico!.tempServico!.toInt()));
                             mostrarPopup(
