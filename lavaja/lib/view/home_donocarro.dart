@@ -12,7 +12,7 @@ import '../provider/home_donocarro_provider.dart';
 import '../routes/app_routes.dart';
 
 class HomeDonoCarro extends StatelessWidget {
-  static const appTitle = 'Home';
+  static const appTitle = 'Início';
 
   @override
   Widget build(BuildContext context) {
