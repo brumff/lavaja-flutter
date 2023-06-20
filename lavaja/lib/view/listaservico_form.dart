@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:lavaja/data/servico_service.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/servico_provider.dart';

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/provider/contratarservico_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/servico_provider.dart';
 import '../routes/app_routes.dart';
 
 class HistoricoServicoLavacar extends StatelessWidget {

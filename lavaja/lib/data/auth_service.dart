@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import '../view/login_form.dart';
 
 class AuthService {
   final Dio dio = Dio();
@@ -10,7 +9,7 @@ class AuthService {
 
   Future<dynamic> login(String email, String senha) async {
     try {
-      final response = await dio.post('http://192.168.100.112:8080/login', data: {
+      final response = await dio.post('http://192.168.1.7:8080/login', data: {
         'email': email,
         'senha': senha,
       });

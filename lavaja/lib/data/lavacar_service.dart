@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 
 import '../models/lavacar.dart';
@@ -9,20 +8,20 @@ class LavacarService {
 
   Future<List<Lavacar>> getLavacar() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.100.112:8080/api/v1/lavacar/todos');
+    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/todos');
     final data = response.data as List<dynamic>;
     return data.map((json) => Lavacar.fromMap(json)).toList();
   }
 
   Future<Lavacar> getLavacarByToken() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.100.112:8080/api/v1/lavacar/meu-lavacar');
+    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/meu-lavacar');
     final data = response.data;
     return Lavacar.fromMap(data);
   }
 
   Future<Lavacar> getLavacarById(String id) async {
-    final response = await dio.get('http://192.168.100.112:8080/api/v1/lavacar/$id');
+    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/$id');
     final data = response.data;
     return Lavacar.fromMap(data);
   }
@@ -41,7 +40,7 @@ class LavacarService {
       String? email,
       String? senha,
       String? confSenha) async {
-    await dio.post('http://192.168.100.112:8080/api/v1/lavacar', data: {
+    await dio.post('http://192.168.1.7:8080/api/v1/lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
       'logradouro': logradouro,
@@ -72,7 +71,7 @@ class LavacarService {
     String? email,
   ) async {
     dio.options.headers = {'authorization': AuthService.token};
-    await dio.put('http://192.168.100.112:8080/api/v1/lavacar/meu-lavacar', data: {
+    await dio.put('http://192.168.1.7:8080/api/v1/lavacar/meu-lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
       'logradouro': logradouro,
@@ -90,7 +89,7 @@ class LavacarService {
   Future<void> abrirLavacar(bool? aberto) async {
     dio.options.headers = {'authorization': AuthService.token};
     dio.options.contentType = 'application/json';
-    await dio.post('http://192.168.100.112:8080/api/v1/lavacar/abrir',
+    await dio.post('http://192.168.1.7:8080/api/v1/lavacar/abrir',
         data: aberto ?? false);
   }
 }

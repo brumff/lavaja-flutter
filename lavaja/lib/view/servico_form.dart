@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/models/servico.dart';
 import 'package:lavaja/provider/servico_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../data/auth_service.dart';
 import '../routes/app_routes.dart';
 
 class ServicoForm extends StatefulWidget {

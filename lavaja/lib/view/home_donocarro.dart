@@ -1,15 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/servico_service.dart';
-import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../components/menu_donocarro_component.dart';
 import '../provider/home_donocarro_provider.dart';
-import '../routes/app_routes.dart';
 
 class HomeDonoCarro extends StatelessWidget {
   static const appTitle = 'Início';

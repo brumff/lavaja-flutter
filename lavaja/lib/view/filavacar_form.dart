@@ -1,10 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
-import 'package:lavaja/routes/app_routes.dart';
-import 'package:lavaja/models/contratarservico.dart';
 import 'package:provider/provider.dart';
 
 import '../components/menu_lavacar_component.dart';
@@ -17,7 +14,7 @@ class Filalavacar extends StatefulWidget {
 
 class _FilalavacarState extends State<Filalavacar> {
   List<int?> selectedItems = [];
-
+//atualiza o tempo a cada 1 minuto
   @override
   void initState() {
     super.initState();
@@ -25,14 +22,14 @@ class _FilalavacarState extends State<Filalavacar> {
       setState(() {});
     });
   }
-
-  void mostrarPopup(VoidCallback onPressed) {
+  //abre a pop para finalizar o serviço após o tempo ser zeradp
+  void mostrarPopup(VoidCallback onPressed, String placaCarro) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Confirmação'),
-          content: Text('Deseja finalizar lavagem?'),
+          content: Text('Deseja finalizar lavagem? Carro: $placaCarro'),
           actions: [
             TextButton(
               onPressed: onPressed,
@@ -41,7 +38,7 @@ class _FilalavacarState extends State<Filalavacar> {
             TextButton(
               onPressed: () {
                 Future.delayed(Duration(minutes: 1)).whenComplete(() {
-                  mostrarPopup(onPressed);
+                  mostrarPopup(onPressed, placaCarro);
                 });
                 Navigator.of(context).pop(); // Fechar o popup
               },
@@ -113,11 +110,13 @@ class _FilalavacarState extends State<Filalavacar> {
                       }
                       bool isSelected = selectedItems.contains(item.id);
                       bool isEmLavagem = item.statusServico == 'EM_LAVAGEM';
+                      //calculo do tempo de espera
                       var tempoEspera = DateTime.parse(item.dataServico!)
                           .add(Duration(minutes: item.tempFila!))
                           .difference(DateTime.now())
                           .inMinutes
                           .toString();
+                          //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
                       if (item.statusServico == 'EM_LAVAGEM') {
                         tempoEspera = item.fimLavagem
                                 ?.difference(DateTime.now())
@@ -134,7 +133,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                 builder: (context) {
                                   return AlertDialog(
                                     title: Text('Confirmação'),
-                                    content: Text('Deseja iniciar lavagem?'),
+                                    content: Text('Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
@@ -150,7 +149,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                                       .toInt()));
 
                                           Navigator.of(context)
-                                              .pop(); // Fechar o popup
+                                              .pop();
                                         },
                                         child: Text('Confirmar'),
                                       ),
@@ -195,8 +194,9 @@ class _FilalavacarState extends State<Filalavacar> {
                                   item.statusServico = 'FINALIZADO',
                                 );
 
-                                Navigator.of(context).pop(); // Fechar o popup
+                                Navigator.of(context).pop();
                               },
+                              item.placaCarro ?? '',
                             );
                           },
                           child: Column(

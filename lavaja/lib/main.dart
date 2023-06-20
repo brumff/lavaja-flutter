@@ -23,7 +23,6 @@ void main() {
    return runApp(ModularApp(module: AppModule(), child: AppWidget()));
 }
 
-//verificar com o felipe como usar varios providers
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
