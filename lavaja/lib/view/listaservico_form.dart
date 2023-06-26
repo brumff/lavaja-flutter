@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:provider/provider.dart';
 
+import '../components/menu_lavacar_component.dart';
 import '../provider/servico_provider.dart';
 import '../routes/app_routes.dart';
 
@@ -38,12 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: IconButton(
+       /* leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Modular.to.navigate(AppRoutes.HOMELAVACAR);
           },
-        ),
+        ),*/
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -54,31 +55,34 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Consumer<ServicoProvider>(
-        builder: (_, data, __) => Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: data.meusServicos.length,
-                itemBuilder: (context, index) {
-                  final item = data.meusServicos[index];
-                  return ListTile(
-                    title: Text(item.nome ?? ''),
-                    subtitle: Text(
-                      'R\$ ${item.valor?.toStringAsFixed(2).replaceAll('.', ',')} - ${item.tempServico} minutos',
-                    ),
-                    leading: Icon(Icons.car_crash),
-                    trailing: Icon(Icons.edit),
-                    onTap: () {
-                      Modular.to.pushNamed('/servico/${item.id}');
-                      print(item.id);
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+        builder: (_, data, __) {
+          if (data.meusServicos.isEmpty) {
+            return Center(
+              child: Text('Nenhum serviço cadastrado.'),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: data.meusServicos.length,
+              itemBuilder: (context, index) {
+                final item = data.meusServicos[index];
+                return ListTile(
+                  title: Text(item.nome ?? ''),
+                  subtitle: Text(
+                    'R\$ ${item.valor?.toStringAsFixed(2).replaceAll('.', ',')} - ${item.tempServico} minutos',
+                  ),
+                  leading: Icon(Icons.car_crash),
+                  trailing: Icon(Icons.edit),
+                  onTap: () {
+                    Modular.to.pushNamed('/servico/${item.id}');
+                    print(item.id);
+                  },
+                );
+              },
+            );
+          }
+        },
       ),
+       drawer: MenuLavacarComponent(),
     );
   }
 }

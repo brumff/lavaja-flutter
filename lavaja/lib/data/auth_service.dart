@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lavaja/data/prefs_service.dart';
 
 
 class AuthService {
@@ -15,12 +16,11 @@ class AuthService {
       });
       if (response.statusCode == 200) {
         token = response.headers.map['authorization']![0];
-        print(token);
         final data = response.data;
         authority = data['perfil'][0]['authority'];
-        return authority;
+        return true;
       } else {
-        return null;
+        return false;
       }
     } catch (error) {
       throw Exception('Erro ao realizar login');

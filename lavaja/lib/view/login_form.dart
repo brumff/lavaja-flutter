@@ -18,6 +18,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _isLoading = false;
   Perfil? _perfil = Perfil.ROLE_DONOCARRO;
   AuthService _authService = AuthService();
+  bool _senhaVisivel = false;
 
   void _login() async {
     setState(() {
@@ -36,7 +37,7 @@ class _LoginFormState extends State<LoginForm> {
             backgroundColor: Colors.green,
           ),
         );
-        setState(() { 
+        setState(() {
           _isLoading = false;
         });
 
@@ -147,10 +148,19 @@ class _LoginFormState extends State<LoginForm> {
               ),
               TextFormField(
                 controller: _passwordController,
-                obscureText: true,
+                obscureText: !_senhaVisivel,
                 decoration: InputDecoration(
-                  labelText: "Senha",
-                ),
+                    labelText: "Senha",
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _senhaVisivel = !_senhaVisivel;
+                        });
+                      },
+                      icon: Icon(
+                        _senhaVisivel ? Icons.visibility : Icons.visibility_off,
+                      ),
+                    )),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Campo obrigatório";

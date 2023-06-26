@@ -6,15 +6,19 @@ import 'package:lavaja/models/contratarservico.dart';
 
 class ContratarServicoProvider with ChangeNotifier {
   final ContratarServicoService service;
+  List<ContratarServico> contratarServico = [];
 
   ContratarServicoProvider({required this.service}) {
     loadContratarServico();
   }
 
-  List<ContratarServico> contratarServico = [];
-
   Future<void> loadContratarServico() async {
     contratarServico = await service.getListarServicosLavacar();
+    notifyListeners();
+  }
+
+  void toggleExpanded(int index) {
+    contratarServico[index].isExpanded = contratarServico[index].isExpanded;
     notifyListeners();
   }
 
@@ -27,5 +31,4 @@ class ContratarServicoProvider with ChangeNotifier {
     await service.deletarContratarServico(id);
     notifyListeners();
   }
-
 }

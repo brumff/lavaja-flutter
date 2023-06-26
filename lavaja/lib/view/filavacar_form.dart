@@ -18,10 +18,11 @@ class _FilalavacarState extends State<Filalavacar> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(minutes: 1), (timer) {
+    /*Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {});
-    });
+    });*/
   }
+
   //abre a pop para finalizar o serviço após o tempo ser zeradp
   void mostrarPopup(VoidCallback onPressed, String placaCarro) {
     showDialog(
@@ -116,7 +117,7 @@ class _FilalavacarState extends State<Filalavacar> {
                           .difference(DateTime.now())
                           .inMinutes
                           .toString();
-                          //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
+                      //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
                       if (item.statusServico == 'EM_LAVAGEM') {
                         tempoEspera = item.fimLavagem
                                 ?.difference(DateTime.now())
@@ -133,14 +134,17 @@ class _FilalavacarState extends State<Filalavacar> {
                                 builder: (context) {
                                   return AlertDialog(
                                     title: Text('Confirmação'),
-                                    content: Text('Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
+                                    content: Text(
+                                        'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          data.patchContratarServico(
-                                            item.id,
-                                            item.statusServico = 'EM_LAVAGEM',
-                                          );
+                                          try {
+                                            data.patchContratarServico(
+                                              item.id,
+                                              item.statusServico = 'EM_LAVAGEM',
+                                            );
+                                          } catch (error) {}
 
                                           item.fimLavagem = DateTime.now().add(
                                               Duration(
@@ -148,8 +152,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                                       .servico!.tempServico!
                                                       .toInt()));
 
-                                          Navigator.of(context)
-                                              .pop();
+                                          Navigator.of(context).pop();
                                         },
                                         child: Text('Confirmar'),
                                       ),

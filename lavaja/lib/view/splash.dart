@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/data/prefs_service.dart';
+
+import '../routes/app_routes.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -13,9 +16,8 @@ class __SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
-      Modular.to.navigate('/login');
-    });
+    Future.delayed(Duration(seconds: 3));
+    Modular.to.navigate('/login');
   }
 
   @override

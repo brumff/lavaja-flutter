@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/auth_service.dart';
+import 'package:lavaja/data/lavacar_service.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -20,62 +21,43 @@ class _LavaCarFormState extends State<LavaCarForm> {
   bool isLoading = true;
   String? _selectedOption;
   String? _senhaError;
+  //final provider = LavacarProvider(service: LavacarService());
+  bool _senhaVisivel = false;
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-    Provider.of<LavacarProvider>(context, listen: false)
-        .getLavacar()
-        .whenComplete(() {
-      _formData['cnpj'] =
-          Provider.of<LavacarProvider>(context, listen: false).usuario?.cnpj ??
-              '';
-      _formData['nome'] =
-          Provider.of<LavacarProvider>(context, listen: false).usuario?.nome ??
-              '';
-      _formData['logradouro'] =
-          Provider.of<LavacarProvider>(context, listen: false)
-                  .usuario
-                  ?.logradouro ??
-              '';
-      _formData['numero'] = Provider.of<LavacarProvider>(context, listen: false)
-              .usuario
-              ?.numero ??
-          '';
-      _formData['complemento'] =
-          Provider.of<LavacarProvider>(context, listen: false)
-                  .usuario
-                  ?.complemento ??
-              '';
-      _formData['bairro'] = Provider.of<LavacarProvider>(context, listen: false)
-              .usuario
-              ?.bairro ??
-          '';
-      _formData['cidade'] = Provider.of<LavacarProvider>(context, listen: false)
-              .usuario
-              ?.cidade ??
-          '';
-      _formData['cep'] =
-          Provider.of<LavacarProvider>(context, listen: false).usuario?.cep ??
-              '';
-      _formData['telefone1'] =
-          Provider.of<LavacarProvider>(context, listen: false)
-                  .usuario
-                  ?.telefone1 ??
-              '';
-      _formData['telefone2'] =
-          Provider.of<LavacarProvider>(context, listen: false)
-                  .usuario
-                  ?.telefone2 ??
-              '';
-      _formData['email'] =
-          Provider.of<LavacarProvider>(context, listen: false).usuario?.email ??
-              '';
-      setState(() {
-        isLoading = false;
+    if (AuthService() != null) {
+      super.initState();
+      Provider.of<LavacarProvider>(context, listen: false).getLavacar().whenComplete(() {
+        _formData['cnpj'] =
+            LavacarProvider(service: LavacarService()).usuario?.cnpj ?? '';
+        _formData['nome'] =
+            LavacarProvider(service: LavacarService()).usuario?.nome ?? '';
+        _formData['logradouro'] =
+            LavacarProvider(service: LavacarService()).usuario?.logradouro ??
+                '';
+        _formData['numero'] =
+            LavacarProvider(service: LavacarService()).usuario?.numero ?? '';
+        _formData['complemento'] =
+            LavacarProvider(service: LavacarService()).usuario?.complemento ??
+                '';
+        _formData['bairro'] =
+            LavacarProvider(service: LavacarService()).usuario?.bairro ?? '';
+        _formData['cidade'] =
+            LavacarProvider(service: LavacarService()).usuario?.cidade ?? '';
+        _formData['cep'] =
+            LavacarProvider(service: LavacarService()).usuario?.cep ?? '';
+        _formData['telefone1'] =
+            LavacarProvider(service: LavacarService()).usuario?.telefone1 ?? '';
+        _formData['telefone2'] =
+            LavacarProvider(service: LavacarService()).usuario?.telefone2 ?? '';
+        _formData['email'] =
+            LavacarProvider(service: LavacarService()).usuario?.email ?? '';
+        setState(() {
+          isLoading = false;
+        });
       });
-    });
+    }
   }
 
   @override
@@ -235,8 +217,22 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 Visibility(
                   visible: AuthService.token == null,
                   child: TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(labelText: 'Senha'),
+                      controller: _senhaController,
+                      obscureText: !_senhaVisivel,
+                      decoration: InputDecoration(
+                          labelText: 'Senha',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _senhaVisivel = !_senhaVisivel;
+                              });
+                            },
+                            icon: Icon(
+                              _senhaVisivel
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          )),
                       onChanged: (value) {
                         _formData['senha'] = value;
                         setState(() {
@@ -248,7 +244,6 @@ class _LavaCarFormState extends State<LavaCarForm> {
                           }
                         });
                       },
-                      controller: _senhaController,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Campo obrigatório';
@@ -265,8 +260,20 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   visible: AuthService.token == null,
                   child: TextFormField(
                       obscureText: true,
-                      decoration:
-                          InputDecoration(labelText: 'Confirmação da senha'),
+                      decoration: InputDecoration(
+                          labelText: 'Senha',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _senhaVisivel = !_senhaVisivel;
+                              });
+                            },
+                            icon: Icon(
+                              _senhaVisivel
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          )),
                       onChanged: (value) => _formData['confSenha'] = value,
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -300,7 +307,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                                   _formData['telefone1'] ?? '',
                                   _formData['telefone2'] ?? '',
                                   _formData['email'] ?? '');
-                                  _edicaoRealizada(context);
+                          _edicaoRealizada(context);
                         } else {
                           Provider.of<LavacarProvider>(context, listen: false)
                               .createLavacar(

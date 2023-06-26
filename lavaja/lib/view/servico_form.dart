@@ -34,7 +34,7 @@ class _ServicoFormState extends State<ServicoForm> {
         _formData['id'] = e?.id.toString() ?? '';
         _formData['nome'] = e?.nome ?? '';
         _formData['tempServico'] = e?.tempServico.toString() ?? '';
-        _formData['valor'] = e?.valor.toString() ?? '';
+        _formData['valor'] = e?.valor!.toStringAsFixed(2) ?? '';
         _formData['tamCarro'] = e?.tamCarro ?? '';
         _formData['ativo'] = e?.ativo?.toString() ?? 'false';
         setState(() {

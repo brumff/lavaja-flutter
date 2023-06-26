@@ -16,6 +16,7 @@ class ContratarServicoService {
 
   Future<void> patchContratarServico(int? id, String? statusServico) async {
     dio.options.headers = {'authorization': AuthService.token};
+    
     await dio.patch(
       'http://192.168.1.7:8080/api/v1/contratarservico/$id',
       data: {

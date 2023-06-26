@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/data/prefs_service.dart';
+import 'package:lavaja/models/lavacar.dart';
 
 import '../routes/app_routes.dart';
 
@@ -39,7 +41,7 @@ class MenuLavacarComponent extends StatelessWidget {
               title: 'Historico de serviços',
               icon: Icons.arrow_forward_ios_sharp,
               onTap: () {
-                 Modular.to.navigate('/historico-lavacar');
+                Modular.to.navigate('/historico-lavacar');
               }),
           CustomDrawerTile(
               title: 'Fechar lavacar',
@@ -50,8 +52,9 @@ class MenuLavacarComponent extends StatelessWidget {
             icon: Icons.exit_to_app,
             iconColor: Colors.red,
             textColor: Colors.red,
-            onTap: () {
-              Modular.to.navigate(AppRoutes.LOGIN);
+            onTap: ()  {
+               /*PrefsService.logout();*/
+            Modular.to.navigate(AppRoutes.LOGIN);
             },
           ),
         ],

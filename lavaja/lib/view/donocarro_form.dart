@@ -29,33 +29,35 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-    Provider.of<DonoCarroProvider>(context, listen: false)
-        .getDonoCarro()
-        .whenComplete(() {
-      _formData['nome'] = Provider.of<DonoCarroProvider>(context, listen: false)
-              .usuario
-              ?.nome ??
-          '';
-      _formData['telefone'] =
-          Provider.of<DonoCarroProvider>(context, listen: false)
-                  .usuario
-                  ?.telefone ??
-              '';
-      _formData['email'] =
-          Provider.of<DonoCarroProvider>(context, listen: false)
-                  .usuario
-                  ?.email ??
-              '';
-      _selectedOption  = Provider.of<DonoCarroProvider>(context, listen: false)
-          .usuario
-          ?.genero;
-          _formData['genero'] = _selectedOption ?? 'Outro';
-      setState(() {
-        isLoading = false;
+    if (AuthService.token != null) {
+      super.initState();
+      Provider.of<DonoCarroProvider>(context, listen: false)
+          .getDonoCarro()
+          .whenComplete(() {
+        _formData['nome'] =
+            Provider.of<DonoCarroProvider>(context, listen: false)
+                    .usuario
+                    ?.nome ??
+                '';
+        _formData['telefone'] =
+            Provider.of<DonoCarroProvider>(context, listen: false)
+                    .usuario
+                    ?.telefone ??
+                '';
+        _formData['email'] =
+            Provider.of<DonoCarroProvider>(context, listen: false)
+                    .usuario
+                    ?.email ??
+                '';
+        _selectedOption = Provider.of<DonoCarroProvider>(context, listen: false)
+            .usuario
+            ?.genero;
+        _formData['genero'] = _selectedOption ?? 'Outro';
+        setState(() {
+          isLoading = false;
+        });
       });
-    });
+    }
   }
 
   @override
@@ -207,7 +209,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                             _formData['telefone'] ?? '',
                             _formData['genero'] ?? '',
                           );
-                           _edicaoRealizada(context);
+                          _edicaoRealizada(context);
                         } else {
                           Provider.of<DonoCarroProvider>(context, listen: false)
                               .createDonoCarro(
@@ -236,7 +238,7 @@ void _cadastroRealizado(BuildContext context) {
     SnackBar(
       content: Text('Cadastro realizado com sucesso!'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.green, 
+      backgroundColor: Colors.green,
     ),
   );
 }
@@ -246,7 +248,7 @@ void _edicaoRealizada(BuildContext context) {
     SnackBar(
       content: Text('Edição realizada com sucesso!'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.green, 
+      backgroundColor: Colors.green,
     ),
   );
 }

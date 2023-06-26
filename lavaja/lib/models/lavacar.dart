@@ -16,9 +16,9 @@ class Lavacar {
   String? email;
   String? senha;
   String? confSenha;
-  bool? aberto; 
+  bool? aberto;
 
-// ver como fazer a parte da disponibilidade
+  // ver como fazer a parte da disponibilidade
   Lavacar(
       {this.id,
       this.cnpj,
@@ -38,22 +38,21 @@ class Lavacar {
 
   factory Lavacar.fromMap(Map<String, dynamic> map) {
     return Lavacar(
-      id: map['id'],
-      cnpj: map['cnpj'],
-      nome: map['nome'],
-      logradouro: map['logradouro'],
-      numero: map['numero'],
-      complemento: map['complemento'],
-      bairro: map['bairro'],
-      cidade: map['cidade'],
-      cep: map['cep'],
-      telefone1: map['telefone1'],
-      telefone2: map['telefone2'],
-      email: map['email'],
-      senha: map['senha'],
-      confSenha: map['confSenha'],
-      aberto: map['aberto']
-    );
+        id: map['id'],
+        cnpj: map['cnpj'],
+        nome: map['nome'],
+        logradouro: map['logradouro'],
+        numero: map['numero'],
+        complemento: map['complemento'],
+        bairro: map['bairro'],
+        cidade: map['cidade'],
+        cep: map['cep'],
+        telefone1: map['telefone1'],
+        telefone2: map['telefone2'],
+        email: map['email'],
+        senha: map['senha'],
+        confSenha: map['confSenha'],
+        aberto: map['aberto']);
   }
   Map<String, dynamic> toMap() {
     return {
@@ -75,4 +74,5 @@ class Lavacar {
   }
 
   String toJson() => json.encode(toMap());
+
 }
