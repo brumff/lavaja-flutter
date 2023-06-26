@@ -26,36 +26,69 @@ class _LavaCarFormState extends State<LavaCarForm> {
 
   @override
   void initState() {
-    if (AuthService() != null) {
+    if (AuthService.token != null) {
       super.initState();
-      Provider.of<LavacarProvider>(context, listen: false).getLavacar().whenComplete(() {
-        _formData['cnpj'] =
-            LavacarProvider(service: LavacarService()).usuario?.cnpj ?? '';
-        _formData['nome'] =
-            LavacarProvider(service: LavacarService()).usuario?.nome ?? '';
+      Provider.of<LavacarProvider>(context, listen: false)
+          .getLavacar()
+          .whenComplete(() {
+        _formData['cnpj'] = Provider.of<LavacarProvider>(context, listen: false)
+                .usuario
+                ?.cnpj ??
+            '';
+        _formData['nome'] = Provider.of<LavacarProvider>(context, listen: false)
+                .usuario
+                ?.nome ??
+            '';
         _formData['logradouro'] =
-            LavacarProvider(service: LavacarService()).usuario?.logradouro ??
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.logradouro ??
                 '';
         _formData['numero'] =
-            LavacarProvider(service: LavacarService()).usuario?.numero ?? '';
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.numero ??
+                '';
         _formData['complemento'] =
-            LavacarProvider(service: LavacarService()).usuario?.complemento ??
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.complemento ??
                 '';
         _formData['bairro'] =
-            LavacarProvider(service: LavacarService()).usuario?.bairro ?? '';
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.bairro ??
+                '';
         _formData['cidade'] =
-            LavacarProvider(service: LavacarService()).usuario?.cidade ?? '';
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.cidade ??
+                '';
         _formData['cep'] =
-            LavacarProvider(service: LavacarService()).usuario?.cep ?? '';
+            Provider.of<LavacarProvider>(context, listen: false).usuario?.cep ??
+                '';
         _formData['telefone1'] =
-            LavacarProvider(service: LavacarService()).usuario?.telefone1 ?? '';
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.telefone1 ??
+                '';
         _formData['telefone2'] =
-            LavacarProvider(service: LavacarService()).usuario?.telefone2 ?? '';
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.telefone2 ??
+                '';
         _formData['email'] =
-            LavacarProvider(service: LavacarService()).usuario?.email ?? '';
+            Provider.of<LavacarProvider>(context, listen: false)
+                    .usuario
+                    ?.email ??
+                '';
         setState(() {
           isLoading = false;
         });
+      });
+    } else {
+      setState(() {
+        isLoading = false;
       });
     }
   }

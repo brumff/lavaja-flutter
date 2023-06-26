@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../data/auth_service.dart';
 import '../routes/app_routes.dart';
 
 class MenuDonoCarroComponent extends StatelessWidget {
@@ -31,13 +32,16 @@ class MenuDonoCarroComponent extends StatelessWidget {
             },
           ),
           CustomDrawerTile(
-              title: 'Historico de serviços', icon: Icons.arrow_forward_ios_sharp, onTap: () {}),
+              title: 'Historico de serviços',
+              icon: Icons.arrow_forward_ios_sharp,
+              onTap: () {}),
           CustomDrawerTile(
             title: 'Sair',
             icon: Icons.exit_to_app,
             iconColor: Colors.red,
             textColor: Colors.red,
             onTap: () {
+              AuthService().logout();
               Modular.to.navigate(AppRoutes.LOGIN);
             },
           ),

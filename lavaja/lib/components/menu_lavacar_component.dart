@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/data/auth_service.dart';
 import 'package:lavaja/data/prefs_service.dart';
 import 'package:lavaja/models/lavacar.dart';
 
@@ -52,9 +53,9 @@ class MenuLavacarComponent extends StatelessWidget {
             icon: Icons.exit_to_app,
             iconColor: Colors.red,
             textColor: Colors.red,
-            onTap: ()  {
-               /*PrefsService.logout();*/
-            Modular.to.navigate(AppRoutes.LOGIN);
+            onTap: () {
+              AuthService().logout();
+              Modular.to.navigate(AppRoutes.LOGIN);
             },
           ),
         ],

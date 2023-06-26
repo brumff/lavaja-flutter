@@ -1,12 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:lavaja/data/prefs_service.dart';
 
-
 class AuthService {
   final Dio dio = Dio();
   static String? token;
   static String? authority;
-
 
   Future<dynamic> login(String email, String senha) async {
     try {
@@ -29,8 +27,9 @@ class AuthService {
 
   String? getAuthority() {
     return authority;
-    
   }
 
-
+  void logout() {
+    token = null; 
+  }
 }
