@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-/*class PrefsService {
+class PrefsService {
   static String _key = 'key';
   static save(String token) async {
     var prefs = await SharedPreferences.getInstance();
@@ -25,4 +25,4 @@ import 'package:shared_preferences/shared_preferences.dart';
      await prefs.remove(_key);
      print(_key);
   }
-}*/
+}

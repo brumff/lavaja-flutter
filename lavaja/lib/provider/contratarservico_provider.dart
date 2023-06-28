@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/models/contratarservico.dart';
+import 'package:lavaja/models/servico.dart';
 
 class ContratarServicoProvider with ChangeNotifier {
   final ContratarServicoService service;
@@ -29,6 +30,11 @@ class ContratarServicoProvider with ChangeNotifier {
 
   void deletarContratarServico(int? id) async {
     await service.deletarContratarServico(id);
+    notifyListeners();
+  }
+
+   void createContratarServico(String? origem, String? placaCarro,  int? servicoId) async {
+    final contratarServLavacar = await service.createContratarServico(origem, placaCarro, servicoId);
     notifyListeners();
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
+import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
 import '../components/menu_lavacar_component.dart';
@@ -69,7 +71,9 @@ class _FilalavacarState extends State<Filalavacar> {
                 Form(
                   child: Row(
                     children: [
-                      IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+                      IconButton(onPressed: () {
+                        Modular.to.navigate(AppRoutes.CONTRATARSERVLAVACAR);
+                      }, icon: Icon(Icons.add)),
                       Spacer(),
                       Column(
                         children: [
@@ -101,135 +105,142 @@ class _FilalavacarState extends State<Filalavacar> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: data.contratarServico.length,
-                    itemBuilder: (context, index) {
-                      final item = data.contratarServico[index];
-                      if (item.statusServico == 'FINALIZADO') {
-                        // Ignorar itens com status "FINALIZADO"
-                        return SizedBox.shrink();
-                      }
-                      bool isSelected = selectedItems.contains(item.id);
-                      bool isEmLavagem = item.statusServico == 'EM_LAVAGEM';
-                      //calculo do tempo de espera
-                      var tempoEspera = DateTime.parse(item.dataServico!)
-                          .add(Duration(minutes: item.tempFila!))
-                          .difference(DateTime.now())
-                          .inMinutes
-                          .toString();
-                      //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
-                      if (item.statusServico == 'EM_LAVAGEM') {
-                        tempoEspera = item.fimLavagem
-                                ?.difference(DateTime.now())
-                                .inMinutes
-                                .toString() ??
-                            '';
-                      }
-                      return ListTile(
-                        title: InkWell(
-                          onTap: () async {
-                            if (item.statusServico == 'AGUARDANDO') {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('Confirmação'),
-                                    content: Text(
-                                        'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          try {
-                                            data.patchContratarServico(
-                                              item.id,
-                                              item.statusServico = 'EM_LAVAGEM',
-                                            );
-                                          } catch (error) {}
-
-                                          item.fimLavagem = DateTime.now().add(
-                                              Duration(
-                                                  minutes: item
-                                                      .servico!.tempServico!
-                                                      .toInt()));
-
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text('Confirmar'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Fechar o popup
-                                        },
-                                        child: Text('Cancelar'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: Text('Carro em lavagem'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Fechar o popup
-                                        },
-                                        child: Text('Voltar'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
+                  child: data.contratarServico.isEmpty
+                      ? Center(
+                          child: Text('Não há carros na fila'),
+                        )
+                      : ListView.builder(
+                          itemCount: data.contratarServico.length,
+                          itemBuilder: (context, index) {
+                            final item = data.contratarServico[index];
+                            if (item.statusServico == 'FINALIZADO') {
+                              return SizedBox.shrink();
                             }
+                            bool isSelected = selectedItems.contains(item.id);
+                            bool isEmLavagem =
+                                item.statusServico == 'EM_LAVAGEM';
+                            //calculo do tempo de espera
+                            var tempoEspera = DateTime.parse(item.dataServico!)
+                                .add(Duration(minutes: item.tempFila!))
+                                .difference(DateTime.now())
+                                .inMinutes
+                                .toString();
+                            //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
+                            if (item.statusServico == 'EM_LAVAGEM') {
+                              tempoEspera = item.fimLavagem
+                                      ?.difference(DateTime.now())
+                                      .inMinutes
+                                      .toString() ??
+                                  '';
+                            }
+                            return ListTile(
+                              title: InkWell(
+                                onTap: () async {
+                                  if (item.statusServico == 'AGUARDANDO') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Confirmação'),
+                                          content: Text(
+                                              'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                try {
+                                                  data.patchContratarServico(
+                                                    item.id,
+                                                    item.statusServico =
+                                                        'EM_LAVAGEM',
+                                                  );
+                                                } catch (error) {}
 
-                            await Future.delayed(Duration(
-                                minutes: item.servico!.tempServico!.toInt()));
-                            mostrarPopup(
-                              () {
-                                // Enviar dados para o backend usando o provider
-                                data.patchContratarServico(
-                                  item.id,
-                                  item.statusServico = 'FINALIZADO',
-                                );
+                                                item.fimLavagem = DateTime.now()
+                                                    .add(Duration(
+                                                        minutes: item.servico!
+                                                            .tempServico!
+                                                            .toInt()));
 
-                                Navigator.of(context).pop();
-                              },
-                              item.placaCarro ?? '',
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Confirmar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // Fechar o popup
+                                              },
+                                              child: Text('Cancelar'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text('Carro em lavagem'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // Fechar o popup
+                                              },
+                                              child: Text('Voltar'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+
+                                  await Future.delayed(Duration(
+                                      minutes:
+                                          item.servico!.tempServico!.toInt()));
+                                  mostrarPopup(
+                                    () {
+                                      // Enviar dados para o backend usando o provider
+                                      data.patchContratarServico(
+                                        item.id,
+                                        item.statusServico = 'FINALIZADO',
+                                      );
+
+                                      Navigator.of(context).pop();
+                                    },
+                                    item.placaCarro ?? '',
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.car_crash,
+                                          color: isEmLavagem
+                                              ? Colors.green
+                                              : (isSelected
+                                                  ? Colors.green
+                                                  : Colors.grey),
+                                          size: 70,
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      'Placa: ${item.placaCarro}, Status: ${item.statusServico}, Tempo ${tempoEspera}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             );
                           },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.car_crash,
-                                    color: isEmLavagem
-                                        ? Colors.green
-                                        : (isSelected
-                                            ? Colors.green
-                                            : Colors.grey),
-                                    size: 70,
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'Placa: ${item.placaCarro}, Status: ${item.statusServico}, Tempo ${tempoEspera}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 10),
-                              ),
-                            ],
-                          ),
                         ),
-                      );
-                    },
-                  ),
                 ),
               ],
             ),
