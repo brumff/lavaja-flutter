@@ -20,9 +20,9 @@ class _FilalavacarState extends State<Filalavacar> {
   @override
   void initState() {
     super.initState();
-    /*Timer.periodic(Duration(minutes: 1), (timer) {
+    Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {});
-    });*/
+    });
   }
 
   //abre a pop para finalizar o serviço após o tempo ser zeradp
@@ -107,7 +107,7 @@ class _FilalavacarState extends State<Filalavacar> {
                 Expanded(
                   child: data.contratarServico.isEmpty
                       ? Center(
-                          child: Text('Não há carros na fila'),
+                          child: Text('Não há veículos na fila'),
                         )
                       : ListView.builder(
                           itemCount: data.contratarServico.length,
@@ -125,6 +125,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                 .difference(DateTime.now())
                                 .inMinutes
                                 .toString();
+                                print(tempoEspera);
                             //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
                             if (item.statusServico == 'EM_LAVAGEM') {
                               tempoEspera = item.fimLavagem

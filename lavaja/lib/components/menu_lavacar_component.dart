@@ -27,6 +27,13 @@ class MenuLavacarComponent extends StatelessWidget {
             },
           ),
           CustomDrawerTile(
+            title: 'Fila',
+            icon: Icons.arrow_forward_ios_sharp,
+            onTap: () {
+              Modular.to.navigate('/contratarservico');
+            },
+          ),
+          CustomDrawerTile(
             title: 'Serviços',
             icon: Icons.arrow_forward_ios_sharp,
             onTap: () {

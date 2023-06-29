@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/auth_service.dart';
 import 'package:lavaja/data/lavacar_service.dart';
+import 'package:lavaja/models/lavacar.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -95,6 +96,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
 
   @override
   Widget build(BuildContext context) {
+ 
     if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),
@@ -105,10 +107,11 @@ class _LavaCarFormState extends State<LavaCarForm> {
         title: Text('Lava Car'),
         leading: IconButton(
             onPressed: () {
-              if (_formData['nome']!.isEmpty) {
+              if (AuthService.token == null) {
                 Modular.to.navigate(AppRoutes.LOGIN);
-              } else {
-                Modular.to.navigate(AppRoutes.HOMELAVACAR);
+              }
+              else {
+                Modular.to.navigate(AppRoutes.CREATEFILA);
               }
             },
             icon: Icon(Icons.arrow_back)),

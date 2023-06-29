@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/prefs_service.dart';
@@ -16,8 +15,8 @@ class __SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3));
-    Modular.to.navigate('/login');
+    Future.delayed(Duration(seconds: 5));
+    Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
   }
 
   @override
@@ -25,8 +24,7 @@ class __SplashState extends State<Splash> {
     return Scaffold(
       body: Center(
         child: FractionallySizedBox(
-          widthFactor:
-              0.5,
+          widthFactor: 0.5,
           child: Image.asset('assets/images/icone_carro.png'),
         ),
       ),

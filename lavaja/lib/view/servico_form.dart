@@ -91,7 +91,7 @@ class _ServicoFormState extends State<ServicoForm> {
                 ),
                 TextFormField(
                   initialValue: _formData['tamCarro'],
-                  decoration: InputDecoration(labelText: 'Tamanho do carro'),
+                  decoration: InputDecoration(labelText: 'Tamanho do veículo'),
                   onChanged: (value) => _formData['tamCarro'] = value,
                 ),
                 TextFormField(

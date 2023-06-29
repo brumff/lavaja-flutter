@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/servico_service.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ import '../data/contratarservico_service.dart';
 import '../models/servico.dart';
 import '../provider/contratarservico_provider.dart';
 import '../provider/servico_provider.dart';
+import '../routes/app_routes.dart';
 
 class ContratarServLavacar extends StatefulWidget {
   @override
@@ -36,7 +38,10 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
           final data = Provider.of<ServicoProvider>(context);
           return Scaffold(
             appBar: AppBar(
-              title: Text('Incluir veículos na fila'),
+              title: Text('Incluir veículo na fila'),
+              leading: IconButton(onPressed: () {
+                  Modular.to.navigate(AppRoutes.CREATEFILA);
+              }, icon: Icon(Icons.arrow_back)),
             ),
             body: SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
@@ -88,6 +93,8 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                             _formData['placaCarro'] ?? '',
                              _formData['servico'] ?? '',
                           );
+                          Modular.to.navigate(AppRoutes.CREATEFILA);
+                          _cadastroRealizado(context);
                         }
                       },
                       child: Text('Salvar'),
@@ -101,4 +108,14 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
       ),
     );
   }
+}
+
+void _cadastroRealizado(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Cadastro realizado com sucesso!'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green,
+    ),
+  );
 }

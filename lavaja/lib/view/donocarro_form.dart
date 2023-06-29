@@ -76,7 +76,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
         title: Text('Dono do carro'),
         leading: IconButton(
             onPressed: () {
-              if (_formData['nome']!.isEmpty) {
+              if (AuthService.token == null) {
                 Modular.to.navigate(AppRoutes.LOGIN);
               } else {
                 Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
