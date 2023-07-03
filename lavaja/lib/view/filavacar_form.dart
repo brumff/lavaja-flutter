@@ -21,8 +21,7 @@ class _FilalavacarState extends State<Filalavacar> {
   void initState() {
     super.initState();
     Timer.periodic(Duration(minutes: 1), (timer) {
-      setState(() { 
-      });
+      setState(() {});
     });
   }
 
@@ -108,7 +107,9 @@ class _FilalavacarState extends State<Filalavacar> {
                   ),
                 ),
                 Expanded(
-                  child: data.contratarServico.isEmpty
+                  child: data.contratarServico.isEmpty ||
+                          data.contratarServico.every(
+                              (item) => item.statusServico == 'FINALIZADO')
                       ? Center(
                           child: Text('Não há veículos na fila'),
                         )
@@ -129,7 +130,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                 .inMinutes
                                 .toString();
                             print(tempoEspera);
-
+                            //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
                             if (item.statusServico == 'EM_LAVAGEM') {
                               tempoEspera = item.fimLavagem
                                       ?.difference(DateTime.now())
@@ -138,7 +139,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                   '';
                             }
                             return ListTile(
-                              title: GestureDetector(
+                              title: InkWell(
                                 onTap: () async {
                                   if (item.statusServico == 'AGUARDANDO') {
                                     showDialog(
@@ -151,13 +152,11 @@ class _FilalavacarState extends State<Filalavacar> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                try {
-                                                  data.patchContratarServico(
-                                                    item.id,
-                                                    item.statusServico =
-                                                        'EM_LAVAGEM',
-                                                  );
-                                                } catch (error) {}
+                                                data.patchContratarServico(
+                                                  item.id,
+                                                  item.statusServico =
+                                                      'EM_LAVAGEM',
+                                                );
 
                                                 item.fimLavagem = DateTime.now()
                                                     .add(Duration(
@@ -199,8 +198,23 @@ class _FilalavacarState extends State<Filalavacar> {
                                       },
                                     );
                                   }
+
+                                  await Future.delayed(Duration(
+                                      minutes:
+                                          item.servico!.tempServico!.toInt()));
+                                  mostrarPopup(
+                                    () {
+                                      // Enviar dados para o backend usando o provider
+                                      data.patchContratarServico(
+                                        item.id,
+                                        item.statusServico = 'FINALIZADO',
+                                      );
+
+                                      Navigator.of(context).pop();
+                                    },
+                                    item.placaCarro ?? '',
+                                  );
                                 },
-                                 
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
