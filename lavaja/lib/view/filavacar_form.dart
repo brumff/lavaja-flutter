@@ -21,7 +21,8 @@ class _FilalavacarState extends State<Filalavacar> {
   void initState() {
     super.initState();
     Timer.periodic(Duration(minutes: 1), (timer) {
-      setState(() {});
+      setState(() { 
+      });
     });
   }
 
@@ -71,9 +72,11 @@ class _FilalavacarState extends State<Filalavacar> {
                 Form(
                   child: Row(
                     children: [
-                      IconButton(onPressed: () {
-                        Modular.to.navigate(AppRoutes.CONTRATARSERVLAVACAR);
-                      }, icon: Icon(Icons.add)),
+                      IconButton(
+                          onPressed: () {
+                            Modular.to.navigate(AppRoutes.CONTRATARSERVLAVACAR);
+                          },
+                          icon: Icon(Icons.add)),
                       Spacer(),
                       Column(
                         children: [
@@ -125,8 +128,8 @@ class _FilalavacarState extends State<Filalavacar> {
                                 .difference(DateTime.now())
                                 .inMinutes
                                 .toString();
-                                print(tempoEspera);
-                            //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
+                            print(tempoEspera);
+
                             if (item.statusServico == 'EM_LAVAGEM') {
                               tempoEspera = item.fimLavagem
                                       ?.difference(DateTime.now())
@@ -135,7 +138,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                   '';
                             }
                             return ListTile(
-                              title: InkWell(
+                              title: GestureDetector(
                                 onTap: () async {
                                   if (item.statusServico == 'AGUARDANDO') {
                                     showDialog(
@@ -196,23 +199,8 @@ class _FilalavacarState extends State<Filalavacar> {
                                       },
                                     );
                                   }
-
-                                  await Future.delayed(Duration(
-                                      minutes:
-                                          item.servico!.tempServico!.toInt()));
-                                  mostrarPopup(
-                                    () {
-                                      // Enviar dados para o backend usando o provider
-                                      data.patchContratarServico(
-                                        item.id,
-                                        item.statusServico = 'FINALIZADO',
-                                      );
-
-                                      Navigator.of(context).pop();
-                                    },
-                                    item.placaCarro ?? '',
-                                  );
                                 },
+                                 
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

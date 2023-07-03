@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/data/lavacar_service.dart';
+import 'package:provider/provider.dart';
 
 import '../data/auth_service.dart';
 import '../models/lavacar.dart';
+import '../provider/lavacar_provider.dart';
 import '../routes/app_routes.dart';
 
 class LoginForm extends StatefulWidget {
@@ -41,11 +44,10 @@ class _LoginFormState extends State<LoginForm> {
         setState(() {
           _isLoading = false;
         });
-
+        print(AuthService.aberto);
         if (AuthService.authority == "ROLE_DONOCARRO") {
           Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
         } else if (AuthService.authority == "ROLE_LAVACAR") {
-         
           Modular.to.navigate(AppRoutes.HOMELAVACAR);
         }
       } else {

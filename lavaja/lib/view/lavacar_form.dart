@@ -227,12 +227,6 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   decoration: InputDecoration(labelText: 'Telefone (Opcional)'),
                   inputFormatters: [phoneMaskFormatter],
                   onChanged: (value) => _formData['telefone2'] = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    return null;
-                  },
                 ),
                 TextFormField(
                   initialValue: _formData['email'],
@@ -354,7 +348,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                                   _formData['complemento'] ?? '',
                                   _formData['bairro'] ?? '',
                                   _formData['cidade'] ?? '',
-                                  _formData['cep,'] ?? '',
+                                  _formData['cep'] ?? '',
                                   _formData['telefone1'] ?? '',
                                   _formData['telefone2'] ?? '',
                                   _formData['email'] ?? '',

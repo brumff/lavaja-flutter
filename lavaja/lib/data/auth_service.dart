@@ -5,6 +5,7 @@ class AuthService {
   final Dio dio = Dio();
   static String? token;
   static String? authority;
+  static String? aberto;
 
   Future<dynamic> login(String email, String senha) async {
     try {
@@ -16,6 +17,7 @@ class AuthService {
         token = response.headers.map['authorization']![0];
         final data = response.data;
         authority = data['perfil'][0]['authority'];
+        aberto = data['aberto'];
         return true;
       } else {
         return false;

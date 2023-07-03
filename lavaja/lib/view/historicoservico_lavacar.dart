@@ -51,13 +51,17 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                     );
                   },
                   body: ListTile(
-                    title: Text('Serviço: ${item.servico?.nome}'),
+                    title: Text('Serviço: ${item.servico?.nome} - Valor: ${item.servico?.valor}'),
+                    
                   ),
                   isExpanded: item.isExpanded ?? false,
                 );
               }).toList(),
+              
             ),
+          
           );
+          
         },
       ),
       drawer: MenuLavacarComponent(),
