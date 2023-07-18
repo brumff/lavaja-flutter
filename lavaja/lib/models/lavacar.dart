@@ -5,12 +5,13 @@ class Lavacar {
   //imagem
   String? cnpj;
   String? nome;
-  String? logradouro;
+  String? rua;
   String? numero;
-  String? complemento;
   String? bairro;
   String? cidade;
   String? cep;
+  String? latitude;
+  String? longitude;
   String? telefone1;
   String? telefone2;
   String? email;
@@ -23,12 +24,13 @@ class Lavacar {
       {this.id,
       this.cnpj,
       this.nome,
-      this.logradouro,
+      this.rua,
       this.numero,
-      this.complemento,
       this.bairro,
       this.cidade,
       this.cep,
+      this.latitude,
+      this.longitude,
       this.telefone1,
       this.telefone2,
       this.email,
@@ -41,12 +43,13 @@ class Lavacar {
         id: map['id'],
         cnpj: map['cnpj'],
         nome: map['nome'],
-        logradouro: map['logradouro'],
+        rua: map['logradouro'],
         numero: map['numero'],
-        complemento: map['complemento'],
         bairro: map['bairro'],
         cidade: map['cidade'],
         cep: map['cep'],
+        latitude: map['latitude'],
+        longitude: map['longitude'],
         telefone1: map['telefone1'],
         telefone2: map['telefone2'],
         email: map['email'],
@@ -59,11 +62,13 @@ class Lavacar {
       'id': id,
       'cnpj': cnpj,
       'nome': nome,
-      'logradouro': logradouro,
+      'rua': rua,
       'numero': numero,
-      'complemento': complemento,
       'bairro': bairro,
       'cidade': cidade,
+      'cep': cep,
+      'latitude': latitude,
+      'longitude': longitude,
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,

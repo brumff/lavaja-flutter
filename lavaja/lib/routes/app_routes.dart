@@ -12,4 +12,5 @@ class AppRoutes {
   static const CREATEFILA = '/contratarservico';
   static const HISTORICOLAVACAR = '/historico-lavacar';
   static const CONTRATARSERVLAVACAR = '/contratarservicolavacar';
+  static const TESTE = '/teste';
 }

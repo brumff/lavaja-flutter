@@ -61,7 +61,6 @@ class _FilalavacarState extends State<Filalavacar> {
       child: Builder(
         builder: (context) {
           final data = Provider.of<ContratarServicoProvider>(context);
-
           return Scaffold(
             appBar: AppBar(
               title: Text('Fila'),
