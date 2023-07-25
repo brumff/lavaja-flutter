@@ -17,7 +17,6 @@ class AuthService {
         token = response.headers.map['authorization']![0];
         final data = response.data;
         authority = data['perfil'][0]['authority'];
-        aberto = data['aberto'];
         await PrefsService.save(token!);
         return true;
       } else {

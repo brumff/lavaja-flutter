@@ -16,6 +16,21 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
   Color _switchColor = Colors.red;
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<LavacarProvider>(context, listen: false).getLavacar().then((_) {
+      bool usuarioAberto = Provider.of<LavacarProvider>(context, listen: false)
+              .usuario
+              ?.aberto ??
+          false;
+      setState(() {
+        _value = usuarioAberto;
+        _switchColor = usuarioAberto ? Colors.green : Colors.red;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -43,11 +58,13 @@ class _HomeLavaCarState extends State<HomeLavaCar> {
                         _value = newValue;
                         if (_value) {
                           _switchColor = Colors.green;
-                          Provider.of<LavacarProvider>(context, listen: false).abrirLavacar(true);
-                             Modular.to.navigate(AppRoutes.CREATEFILA);
+                          Provider.of<LavacarProvider>(context, listen: false)
+                              .abrirLavacar(true);
+                          Modular.to.navigate(AppRoutes.CREATEFILA);
                         } else {
                           _switchColor = Colors.red;
-                          Provider.of<LavacarProvider>(context, listen: false).abrirLavacar(false);
+                          Provider.of<LavacarProvider>(context, listen: false)
+                              .abrirLavacar(false);
                         }
                       });
                     },

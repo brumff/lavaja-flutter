@@ -54,7 +54,9 @@ class MenuLavacarComponent extends StatelessWidget {
           CustomDrawerTile(
               title: 'Fechar lavacar',
               icon: Icons.arrow_forward_ios_sharp,
-              onTap: () {}),
+              onTap: () {
+                Modular.to.navigate('/home-lavacar');
+              }),
           CustomDrawerTile(
             title: 'Sair',
             icon: Icons.exit_to_app,
