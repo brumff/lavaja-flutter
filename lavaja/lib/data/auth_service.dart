@@ -18,6 +18,7 @@ class AuthService {
         final data = response.data;
         authority = data['perfil'][0]['authority'];
         aberto = data['aberto'];
+        await PrefsService.save(token!);
         return true;
       } else {
         return false;
@@ -32,6 +33,7 @@ class AuthService {
   }
 
   void logout() {
-    token = null; 
+    token = null;
+    PrefsService.logout();
   }
 }

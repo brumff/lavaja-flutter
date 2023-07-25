@@ -43,7 +43,7 @@ class _TesteState extends State<Teste> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Geocode Example'),
+        title: Text('Exemplo de Geocodificação'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -53,13 +53,14 @@ class _TesteState extends State<Teste> {
             TextField(
               controller: _addressController,
               decoration: InputDecoration(
-                labelText: 'Address',
+                labelText: 'Endereço',
               ),
+              onChanged: (_) => _getCoordinates(),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _getCoordinates,
-              child: Text('Get Coordinates'),
+              child: Text('Obter Coordenadas'),
             ),
             SizedBox(height: 16.0),
             Text('Latitude: $_latitude'),

@@ -8,20 +8,23 @@ class LavacarService {
 
   Future<List<Lavacar>> getLavacar() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/todos');
+    final response =
+        await dio.get('http://192.168.1.7:8080/api/v1/lavacar/todos');
     final data = response.data as List<dynamic>;
     return data.map((json) => Lavacar.fromMap(json)).toList();
   }
 
   Future<Lavacar> getLavacarByToken() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/meu-lavacar');
+    final response =
+        await dio.get('http://192.168.1.7:8080/api/v1/lavacar/meu-lavacar');
     final data = response.data;
     return Lavacar.fromMap(data);
   }
 
   Future<Lavacar> getLavacarById(String id) async {
-    final response = await dio.get('http://192.168.1.7:8080/api/v1/lavacar/$id');
+    final response =
+        await dio.get('http://192.168.1.7:8080/api/v1/lavacar/$id');
     final data = response.data;
     return Lavacar.fromMap(data);
   }
@@ -29,12 +32,14 @@ class LavacarService {
   Future<void> createLavacar(
       String? cnpj,
       String? nome,
-      String? logradouro,
+      String? rua,
       String? numero,
       String? complemento,
       String? bairro,
       String? cidade,
       String? cep,
+      String? longitude,
+      String? latitude,
       String? telefone1,
       String? telefone2,
       String? email,
@@ -43,12 +48,14 @@ class LavacarService {
     await dio.post('http://192.168.1.7:8080/api/v1/lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
-      'logradouro': logradouro,
+      'rua': rua,
       'numero': numero,
       'complemento': complemento,
       'bairro': bairro,
       'cidade': cidade,
       'cep': cep,
+      'longitude': longitude,
+      'latitude': latitude,
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,
@@ -60,12 +67,14 @@ class LavacarService {
   Future<void> updateLavacar(
     String? cnpj,
     String? nome,
-    String? logradouro,
+    String? rua,
     String? numero,
     String? complemento,
     String? bairro,
     String? cidade,
     String? cep,
+    String? longitude,
+    String? latitude,
     String? telefone1,
     String? telefone2,
     String? email,
@@ -74,12 +83,14 @@ class LavacarService {
     await dio.put('http://192.168.1.7:8080/api/v1/lavacar/meu-lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
-      'logradouro': logradouro,
+      'rua': rua,
       'numero': numero,
       'complemento': complemento,
       'bairro': bairro,
       'cidade': cidade,
       'cep': cep,
+      'longitude': longitude,
+      'latitude': latitude,
       'telefone1': telefone1,
       'telefone2': telefone2,
       'email': email,

@@ -44,12 +44,14 @@ class LavacarProvider with ChangeNotifier {
   void createLavacar(
       String cnpj,
       String nome,
-      String logradouro,
+      String rua,
       String numero,
       String complemento,
       String bairro,
       String cidade,
       String cep,
+      String longitude,
+      String latitude,
       String telefone1,
       String telefone2,
       String email,
@@ -58,12 +60,14 @@ class LavacarProvider with ChangeNotifier {
     final lavacar = await service.createLavacar(
         cnpj,
         nome,
-        logradouro,
+        rua,
         numero,
         complemento,
         bairro,
         cidade,
         cep,
+        longitude,
+        latitude,
         telefone1,
         telefone2,
         email,
@@ -76,18 +80,20 @@ class LavacarProvider with ChangeNotifier {
   void updateLavacar(
     String cnpj,
     String nome,
-    String logradouro,
+    String rua,
     String numero,
     String complemento,
     String bairro,
     String cidade,
     String cep,
+    String longitude,
+    String latitude,
     String telefone1,
     String telefone2,
     String email,
   ) async {
-    await service.updateLavacar(cnpj, nome, logradouro, numero, complemento,
-        bairro, cidade, cep, telefone1, telefone2, email);
+    await service.updateLavacar(cnpj, nome, rua, numero, complemento,
+        bairro, cidade, cep, longitude, latitude, telefone1, telefone2, email);
     notifyListeners();
   }
 

@@ -10,8 +10,8 @@ class Lavacar {
   String? bairro;
   String? cidade;
   String? cep;
-  String? latitude;
-  String? longitude;
+  double? latitude;
+  double? longitude;
   String? telefone1;
   String? telefone2;
   String? email;
@@ -43,7 +43,7 @@ class Lavacar {
         id: map['id'],
         cnpj: map['cnpj'],
         nome: map['nome'],
-        rua: map['logradouro'],
+        rua: map['rua'],
         numero: map['numero'],
         bairro: map['bairro'],
         cidade: map['cidade'],

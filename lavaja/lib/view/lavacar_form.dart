@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:geocode/geocode.dart';
 import 'package:lavaja/data/auth_service.dart';
 import 'package:lavaja/data/lavacar_service.dart';
 import 'package:lavaja/models/lavacar.dart';
@@ -25,6 +26,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
   //final provider = LavacarProvider(service: LavacarService());
   bool _senhaVisivel = false;
   bool _aceitouTermo = false;
+  final TextEditingController _enderecoController = TextEditingController();
 
   void _abrirModalTermoDeUso() {
     showDialog(
@@ -94,6 +96,31 @@ class _LavaCarFormState extends State<LavaCarForm> {
         );
       },
     );
+  }
+
+  void _getCoordinates() async {
+    GeoCode geoCode = GeoCode();
+
+    try {
+      Coordinates coordinates = await geoCode.forwardGeocoding(
+          address: _enderecoController.text =
+              '${_formData['numero'] ?? ''} ${_formData['rua'] ?? ''}, ${_formData['cidade'] ?? ''}');
+      print(_enderecoController.text);
+      setState(() {
+        _formData['longitude'] = coordinates.latitude.toString();
+        _formData['latitude'] = coordinates.longitude.toString();
+        print(_formData['longitude']);
+        print(_formData['latitude']);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    _enderecoController.dispose();
+    super.dispose();
   }
 
   @override
@@ -208,7 +235,10 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 TextFormField(
                   initialValue: _formData['rua'],
                   decoration: InputDecoration(labelText: 'Rua'),
-                  onChanged: (value) => _formData['rua'] = value,
+                  onChanged: (value) {
+                    _formData['rua'] = value;
+                    _getCoordinates();
+                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Campo obrigatório';
@@ -219,7 +249,10 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 TextFormField(
                   initialValue: _formData['numero'],
                   decoration: InputDecoration(labelText: 'Nº'),
-                  onChanged: (value) => _formData['numero'] = value,
+                  onChanged: (value) {
+                    _formData['numero'] = value;
+                    _getCoordinates();
+                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Campo obrigatório';
@@ -241,7 +274,10 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 TextFormField(
                   initialValue: _formData['bairro'],
                   decoration: InputDecoration(labelText: 'Bairro'),
-                  onChanged: (value) => _formData['bairro'] = value,
+                  onChanged: (value) {
+                    _formData['bairro'] = value;
+                    _getCoordinates();
+                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Campo obrigatório';
@@ -252,7 +288,10 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 TextFormField(
                   initialValue: _formData['cidade'],
                   decoration: InputDecoration(labelText: 'Cidade'),
-                  onChanged: (value) => _formData['cidade'] = value,
+                  onChanged: (value) {
+                    _formData['cidade'] = value;
+                    _getCoordinates();
+                  },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Campo obrigatório';
@@ -421,6 +460,8 @@ class _LavaCarFormState extends State<LavaCarForm> {
                                   _formData['bairro'] ?? '',
                                   _formData['cidade'] ?? '',
                                   _formData['cep'] ?? '',
+                                  _formData['longitude'] ?? '',
+                                  _formData['latitude'] ?? '',
                                   _formData['telefone1'] ?? '',
                                   _formData['telefone2'] ?? '',
                                   _formData['email'] ?? '');
@@ -437,6 +478,8 @@ class _LavaCarFormState extends State<LavaCarForm> {
                                     _formData['bairro'] ?? '',
                                     _formData['cidade'] ?? '',
                                     _formData['cep'] ?? '',
+                                    _formData['longitude'] ?? '',
+                                    _formData['latitude'] ?? '',
                                     _formData['telefone1'] ?? '',
                                     _formData['telefone2'] ?? '',
                                     _formData['email'] ?? '',
