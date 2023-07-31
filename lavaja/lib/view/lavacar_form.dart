@@ -98,14 +98,15 @@ class _LavaCarFormState extends State<LavaCarForm> {
     );
   }
 
-  void _getCoordinates() async {
+  _getCoordinates() async {
     GeoCode geoCode = GeoCode();
 
     try {
       Coordinates coordinates = await geoCode.forwardGeocoding(
           address: _enderecoController.text =
               '${_formData['numero'] ?? ''} ${_formData['rua'] ?? ''}, ${_formData['cidade'] ?? ''}');
-      print(_enderecoController.text);
+
+      // Verifique se o widget foi descartado antes de atualizar o estado
       setState(() {
         _formData['longitude'] = coordinates.latitude.toString();
         _formData['latitude'] = coordinates.longitude.toString();
@@ -237,7 +238,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   decoration: InputDecoration(labelText: 'Rua'),
                   onChanged: (value) {
                     _formData['rua'] = value;
-                    _getCoordinates();
+                    // _getCoordinates();
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -251,7 +252,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   decoration: InputDecoration(labelText: 'Nº'),
                   onChanged: (value) {
                     _formData['numero'] = value;
-                    _getCoordinates();
+                    // _getCoordinates();
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -276,7 +277,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   decoration: InputDecoration(labelText: 'Bairro'),
                   onChanged: (value) {
                     _formData['bairro'] = value;
-                    _getCoordinates();
+                    //_getCoordinates();
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -290,7 +291,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   decoration: InputDecoration(labelText: 'Cidade'),
                   onChanged: (value) {
                     _formData['cidade'] = value;
-                    _getCoordinates();
+                    //_getCoordinates();
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -445,7 +446,8 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await _getCoordinates();
                       final isValid = _form.currentState?.validate();
                       if (isValid!) {
                         _form.currentState!.save();
