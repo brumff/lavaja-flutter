@@ -28,6 +28,7 @@ class _LoginFormState extends State<LoginForm> {
     setState(() {
       _isLoading = true;
     });
+
     final email = _emailController.text;
     final password = _passwordController.text;
 
@@ -44,22 +45,33 @@ class _LoginFormState extends State<LoginForm> {
         setState(() {
           _isLoading = false;
         });
-        print(AuthService.aberto);
+
         if (AuthService.authority == "ROLE_DONOCARRO") {
           Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
         } else if (AuthService.authority == "ROLE_LAVACAR") {
           try {
-            await Provider.of<LavacarProvider>(context, listen: false)
-                .getLavacar();
-            var aberto = Provider.of<LavacarProvider>(context, listen: false)
-                .usuario
-                ?.aberto;
-            if (aberto == true) {
-              Modular.to.navigate(AppRoutes.CREATEFILA);
-            } else {
-              Modular.to.navigate(AppRoutes.HOMELAVACAR);
-            }
-          } catch (error) {}
+            Provider.of<LavacarProvider>(context, listen: false)
+                .getLavacar()
+                .then((_) {
+              bool aberto = Provider.of<LavacarProvider>(context, listen: false)
+                      .usuario
+                      ?.aberto ??
+                  false;
+                  print(aberto);
+              if (aberto == true) {
+                   Modular.to.navigate(AppRoutes.CREATEFILA);
+              } else {
+                 Modular.to.navigate(AppRoutes.HOMELAVACAR);
+              }
+            });
+          } catch (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Erro ao obter informações do Lavacar'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -6,8 +6,7 @@ class PrefsService {
   static String _key = 'key';
   static save(String token) async {
     var prefs = await SharedPreferences.getInstance();
-    prefs.setString(_key, jsonEncode({"token": token, "isAuth": true}));
-    print(token);
+    prefs.setString(_key, jsonEncode({"token": token,  "isAuth": true}));
   }
 
   static Future<bool> isAuth() async {
@@ -20,9 +19,19 @@ class PrefsService {
     return false;
   }
 
-  static logout() async{
+  static logout() async{  
      var prefs = await SharedPreferences.getInstance();
      await prefs.remove(_key);
      print(_key);
+  }
+
+    static Future<String?> getToken() async {
+    var prefs = await SharedPreferences.getInstance();
+    var jsonResult = prefs.getString(_key);
+    if (jsonResult != null) {
+      var mapUser = jsonDecode(jsonResult);
+      return mapUser['token'];
+    }
+    return null;
   }
 }

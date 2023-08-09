@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:lavaja/data/prefs_service.dart';
 
 import '../routes/app_routes.dart';
@@ -15,8 +16,32 @@ class __SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5));
-    Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+    redirecionar();
+  }
+
+  Future<void> redirecionar() async {
+    bool auth = await PrefsService.isAuth();
+
+    if (auth == true) {
+      var token = await PrefsService.getToken();
+      if (token != null) {
+        var decodedToken = JwtDecoder.decode(token);
+        if (decodedToken != null && decodedToken.containsKey('profile')) {
+          var userProfile = decodedToken['profile'];
+          if (userProfile == 'ROLE_LAVACAR') {
+            Modular.to.pushReplacementNamed(AppRoutes.HOMELAVACAR);
+          } else if (userProfile == 'ROLE_DONOCARRO') {
+            Modular.to.pushReplacementNamed(AppRoutes.HOMEDONOCARRO);
+          } else {
+            Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+          }
+        }
+      }else {
+        Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+      }
+    } else {
+        Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+    }
   }
 
   @override

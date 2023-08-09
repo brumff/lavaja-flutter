@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../data/auth_service.dart';
+import '../data/prefs_service.dart';
 import '../routes/app_routes.dart';
 
 class MenuDonoCarroComponent extends StatelessWidget {
@@ -41,7 +42,7 @@ class MenuDonoCarroComponent extends StatelessWidget {
             iconColor: Colors.red,
             textColor: Colors.red,
             onTap: () {
-              AuthService().logout();
+              PrefsService.logout();
               Modular.to.navigate(AppRoutes.LOGIN);
             },
           ),
