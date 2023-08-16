@@ -19,25 +19,25 @@ class LavacarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Lavacar> _lavacar = [];
+  List<Lavacar> lavacar = [];
 
   List<Lavacar> get all {
-    return [..._lavacar];
+    return [...lavacar];
   }
 
-  List<Lavacar> get user => _lavacar;
+  List<Lavacar> get user => lavacar;
 
-  int get lavacarCount => _lavacar.length;
+  int get lavacarCount => lavacar.length;
 
   Lavacar? byIndex(int? i) {
     if (i == null) {
       return null;
     }
-    return _lavacar.elementAt(i);
+    return lavacar.elementAt(i);
   }
 
   Future<void> loadLavacar() async {
-    _lavacar = await service.getLavacar();
+    lavacar = await service.getLavacar();
     notifyListeners();
   }
 
