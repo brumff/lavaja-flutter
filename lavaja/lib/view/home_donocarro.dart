@@ -169,14 +169,13 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                 final nome = parts[0];
                 final distancia = parts[1];
                 final lavacar = lavacarList[index];
-                final tempoEspera =
-                    Provider.of<LavacarProvider>(context, listen: false)
-                        .getTempoEspera(lavacar.id.toString());
+                final tempoEspera = lavacar.tempoFila;
+                int tempoFormatado = tempoEspera?.toInt() ?? 0;
 
                 return ListTile(
                   title: Text(nome),
                   subtitle: Text(
-                      'Distância: $distancia km - Tempo de Espera: ${tempoEspera ?? "N/A"} minutos'),
+                      'Distância: $distancia km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos'),
                   trailing: Icon(Icons.arrow_forward_ios_sharp),
                 );
               },

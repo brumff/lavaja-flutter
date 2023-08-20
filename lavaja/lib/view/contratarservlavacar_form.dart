@@ -84,6 +84,7 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                     SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () {
+                        
                         final isValid = _form.currentState?.validate();
                         if (isValid!) {
                           _form.currentState!.save();
@@ -93,8 +94,10 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                             _formData['placaCarro'] ?? '',
                              _formData['servico'] ?? '',
                           );
+
                           Modular.to.navigate(AppRoutes.CREATEFILA);
                           _cadastroRealizado(context);
+
                         }
                       },
                       child: Text('Salvar'),

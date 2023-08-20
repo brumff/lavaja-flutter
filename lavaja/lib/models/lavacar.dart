@@ -17,7 +17,7 @@ class Lavacar {
   String? email;
   String? senha;
   String? confSenha;
-  int? tempFila;
+  double? tempoFila;
   bool? aberto;
 
   // ver como fazer a parte da disponibilidade
@@ -37,7 +37,7 @@ class Lavacar {
       this.email,
       this.senha,
       this.confSenha,
-      this.tempFila,
+      this.tempoFila,
       this.aberto});
 
   factory Lavacar.fromMap(Map<String, dynamic> map) {
@@ -57,6 +57,7 @@ class Lavacar {
         email: map['email'],
         senha: map['senha'],
         confSenha: map['confSenha'],
+        tempoFila: map['tempoFila'],
         aberto: map['aberto']);
   }
   Map<String, dynamic> toMap() {
@@ -76,6 +77,7 @@ class Lavacar {
       'email': email,
       'senha': senha,
       'confSenha': confSenha,
+      'tempoFila': tempoFila,
       'aberto': aberto
     };
   }

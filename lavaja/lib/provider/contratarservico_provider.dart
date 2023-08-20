@@ -8,7 +8,7 @@ import 'package:lavaja/models/servico.dart';
 class ContratarServicoProvider with ChangeNotifier {
   final ContratarServicoService service;
   List<ContratarServico> contratarServico = [];
-  
+
   ContratarServicoProvider({required this.service}) {
     loadContratarServico();
   }
@@ -39,4 +39,27 @@ class ContratarServicoProvider with ChangeNotifier {
         await service.createContratarServico(origem, placaCarro, servicoId);
     notifyListeners();
   }
+
+   List<String> calculateTempoEspera() {
+    List<String> tempos = [];
+
+    for (var item in contratarServico) {
+      if (item.statusServico == 'EM_LAVAGEM') {
+        var tempoEspera =
+            item.fimLavagem?.difference(DateTime.now()).inMinutes.toString() ??
+                '';
+        tempos.add(tempoEspera);
+      } else {
+        var tempoEspera = DateTime.parse(item.dataServico!)
+            .add(Duration(minutes: item.tempFila!))
+            .difference(DateTime.now())
+            .inMinutes
+            .toString();
+        tempos.add(tempoEspera);
+      }
+    }
+
+    return tempos;
+  }
 }
+
