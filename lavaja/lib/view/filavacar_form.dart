@@ -136,10 +136,6 @@ class _FilalavacarState extends State<Filalavacar> {
                                 .inMinutes
                                 .toString();
 
-                            lavacarProvider.setTempoEspera(
-                                item.servico?.lavacarId.toString() ?? '',
-                                tempoEspera);
-
                             print(tempoEspera);
                             if (item.statusServico == 'EM_LAVAGEM') {
                               tempoEspera = item.fimLavagem

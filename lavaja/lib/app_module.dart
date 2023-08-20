@@ -3,7 +3,6 @@ import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/view/buscaendereco.dart';
 import 'package:lavaja/view/contratarservlavacar_form.dart';
 import 'package:lavaja/view/donocarro_form.dart';
-import 'package:lavaja/view/filalavacar2_form.dart';
 import 'package:lavaja/view/filavacar_form.dart';
 import 'package:lavaja/view/historicoservico_lavacar.dart';
 import 'package:lavaja/view/home_donocarro.dart';
@@ -26,9 +25,6 @@ class AppModule extends Module {
             transition: TransitionType.upToDown),
         ChildRoute(AppRoutes.LOGIN,
             child: (context, args) => LoginForm(),
-            transition: TransitionType.leftToRight),
-        ChildRoute(AppRoutes.DONOCARRO,
-            child: (context, args) => DonoCarroForm(),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.LAVACAR,
             child: (context, args) => LavaCarForm(),
@@ -71,8 +67,6 @@ class AppModule extends Module {
         ChildRoute(AppRoutes.CONTRATARSERVLAVACAR,
             child: (context, args) => ContratarServLavacar(),
             transition: TransitionType.leftToRight),
-        ChildRoute(AppRoutes.TESTE,
-            child: (context, args) => MyApp(),
-            transition: TransitionType.leftToRight),
+        
       ];
 }
