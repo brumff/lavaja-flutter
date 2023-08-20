@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../components/menu_donocarro_component.dart';
 import '../data/servico_service.dart';
 import '../models/lavacar.dart';
+import '../provider/contratarservico_provider.dart';
 import '../provider/home_donocarro_provider.dart';
 
 class HomeDonoCarro extends StatefulWidget {
@@ -92,8 +93,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
           final distanceInMeters =
               data['features'][0]['properties']['segments'][0]['distance'];
           final distanceInKm = (distanceInMeters / 1000).toStringAsFixed(2);
-          calculatedDistancias.add(
-              '${location.nome}: $distanceInKm km'); 
+          calculatedDistancias.add('${location.nome}: $distanceInKm km');
         } else {
           print('Erro na requisição: ${response.statusCode}');
         }
@@ -102,31 +102,33 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       }
     }
     setState(() {
-      distancias = calculatedDistancias; 
+      distancias = calculatedDistancias;
     });
   }
 
   Future<void> _handleButtonPress() async {
     setState(() {
       isLoading = true;
-       _limparLista();
+      _limparLista();
     });
     await _buscarLatLong();
     await _listarLavacars();
     _calcularDistancia();
-
     setState(() {
       isLoading = false;
     });
   }
+
   void _limparLista() {
-  setState(() {
-    distancias.clear();
-  });
-}
+    setState(() {
+      distancias.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    ;
+
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
       body: Column(
@@ -166,10 +168,15 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                 final parts = distancias[index].split(':');
                 final nome = parts[0];
                 final distancia = parts[1];
+                final lavacar = lavacarList[index];
+                final tempoEspera =
+                    Provider.of<LavacarProvider>(context, listen: false)
+                        .getTempoEspera(lavacar.id.toString());
 
                 return ListTile(
                   title: Text(nome),
-                  subtitle: Text(distancia),
+                  subtitle: Text(
+                      'Distância: $distancia km - Tempo de Espera: ${tempoEspera ?? "N/A"} minutos'),
                   trailing: Icon(Icons.arrow_forward_ios_sharp),
                 );
               },
@@ -177,6 +184,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
           ),
         ],
       ),
+      drawer: MenuDonoCarroComponent(),
     );
   }
 }

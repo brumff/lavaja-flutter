@@ -17,6 +17,7 @@ class Lavacar {
   String? email;
   String? senha;
   String? confSenha;
+  int? tempFila;
   bool? aberto;
 
   // ver como fazer a parte da disponibilidade
@@ -36,6 +37,7 @@ class Lavacar {
       this.email,
       this.senha,
       this.confSenha,
+      this.tempFila,
       this.aberto});
 
   factory Lavacar.fromMap(Map<String, dynamic> map) {

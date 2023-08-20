@@ -10,7 +10,7 @@ class ContratarServicoService {
   Future<List<ContratarServico>> getListarServicosLavacar() async {
     dio.options.headers = {'authorization': AuthService.token};
     final response = await dio
-        .get('http://192.168.1.7:8080/api/v1/contratarservico/lavacar-servicos');
+        .get('http://192.168.100.112:8080/api/v1/contratarservico/lavacar-servicos');
     final data = response.data as List<dynamic>;
     return data.map((json) => ContratarServico.fromMap(json)).toList();
   }
@@ -19,7 +19,7 @@ class ContratarServicoService {
     dio.options.headers = {'authorization': AuthService.token};
     
     await dio.patch(
-      'http://192.168.1.7:8080/api/v1/contratarservico/$id',
+      'http://192.168.100.112:8080/api/v1/contratarservico/$id',
       data: {
         'statusServico': statusServico,
       },
@@ -28,13 +28,13 @@ class ContratarServicoService {
 
   Future<void> deletarContratarServico(int? id) async {
     dio.options.headers = {'authorization': AuthService.token};
-    await dio.delete('http://192.168.1.7:8080/api/v1/contratarservico/$id');
+    await dio.delete('http://192.168.100.112:8080/api/v1/contratarservico/$id');
   }
 
   Future<void> createContratarServico(String? origem, String? placaCarro, int? servicoId) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.post(
-      'http://192.168.1.7:8080/api/v1/contratarservico',
+      'http://192.168.100.112:8080/api/v1/contratarservico',
       data: {
         'origem': origem,
         'placaCarro': placaCarro,

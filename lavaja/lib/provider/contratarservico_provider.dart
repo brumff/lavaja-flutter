@@ -8,7 +8,7 @@ import 'package:lavaja/models/servico.dart';
 class ContratarServicoProvider with ChangeNotifier {
   final ContratarServicoService service;
   List<ContratarServico> contratarServico = [];
-
+  
   ContratarServicoProvider({required this.service}) {
     loadContratarServico();
   }
@@ -33,8 +33,10 @@ class ContratarServicoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-   void createContratarServico(String? origem, String? placaCarro,  int? servicoId) async {
-    final contratarServLavacar = await service.createContratarServico(origem, placaCarro, servicoId);
+  void createContratarServico(
+      String? origem, String? placaCarro, int? servicoId) async {
+    final contratarServLavacar =
+        await service.createContratarServico(origem, placaCarro, servicoId);
     notifyListeners();
   }
 }

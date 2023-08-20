@@ -7,6 +7,7 @@ import 'package:lavaja/provider/contratarservico_provider.dart';
 import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/provider/servico_provider.dart';
+import 'package:lavaja/view/filavacar_form.dart';
 import 'package:provider/provider.dart';
 
 import 'data/donocarro_service.dart';
@@ -30,10 +31,11 @@ class AppWidget extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        title: 'My Smart App',
+        title: 'Lavaja',
         theme: ThemeData(primarySwatch: Colors.blue),
         routeInformationParser: Modular.routeInformationParser,
         routerDelegate: Modular.routerDelegate,
+
       ),
     ); //added by extension
   }

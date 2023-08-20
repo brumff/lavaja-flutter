@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
+import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _FilalavacarState extends State<Filalavacar> {
     });
   }
 
-  //abre a pop para finalizar o serviço após o tempo ser zeradp
+  //abre a pop para finalizar o serviço após o tempo ser zerado
   void mostrarPopup(VoidCallback onPressed, String placaCarro) {
     showDialog(
       context: context,
@@ -53,6 +54,8 @@ class _FilalavacarState extends State<Filalavacar> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ContratarServicoProvider>(
@@ -61,6 +64,7 @@ class _FilalavacarState extends State<Filalavacar> {
       child: Builder(
         builder: (context) {
           final data = Provider.of<ContratarServicoProvider>(context);
+          final lavacarProvider = Provider.of<LavacarProvider>(context);
           return Scaffold(
             appBar: AppBar(
               title: Text('Fila'),
@@ -119,17 +123,24 @@ class _FilalavacarState extends State<Filalavacar> {
                             if (item.statusServico == 'FINALIZADO') {
                               return SizedBox.shrink();
                             }
+
                             bool isSelected = selectedItems.contains(item.id);
                             bool isEmLavagem =
                                 item.statusServico == 'EM_LAVAGEM';
+
+                            
                             //calculo do tempo de espera
                             var tempoEspera = DateTime.parse(item.dataServico!)
                                 .add(Duration(minutes: item.tempFila!))
                                 .difference(DateTime.now())
                                 .inMinutes
                                 .toString();
+
+                            lavacarProvider.setTempoEspera(
+                                item.servico?.lavacarId.toString() ?? '',
+                                tempoEspera);
+
                             print(tempoEspera);
-                            //se o carro estiver em lavagem o tempo apresenta será o tempo de serviço
                             if (item.statusServico == 'EM_LAVAGEM') {
                               tempoEspera = item.fimLavagem
                                       ?.difference(DateTime.now())

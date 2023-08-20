@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:lavaja/data/prefs_service.dart';
@@ -19,6 +20,8 @@ class __SplashState extends State<Splash> {
     redirecionar();
   }
 
+
+
   Future<void> redirecionar() async {
     bool auth = await PrefsService.isAuth();
 
@@ -36,11 +39,11 @@ class __SplashState extends State<Splash> {
             Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
           }
         }
-      }else {
+      } else {
         Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
       }
     } else {
-        Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+      Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
     }
   }
 
