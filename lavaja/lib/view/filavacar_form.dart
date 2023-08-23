@@ -21,9 +21,9 @@ class _FilalavacarState extends State<Filalavacar> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(minutes: 1), (timer) {
-      setState(() {});
-    });
+    //   Timer.periodic(Duration(minutes: 2), (timer) {
+    //  setState(() {});
+    //});
   }
 
   //abre a pop para finalizar o serviço após o tempo ser zerado
@@ -53,8 +53,6 @@ class _FilalavacarState extends State<Filalavacar> {
       },
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +126,6 @@ class _FilalavacarState extends State<Filalavacar> {
                             bool isEmLavagem =
                                 item.statusServico == 'EM_LAVAGEM';
 
-                            
                             //calculo do tempo de espera
                             var tempoEspera = DateTime.parse(item.dataServico!)
                                 .add(Duration(minutes: item.tempFila!))
@@ -137,6 +134,7 @@ class _FilalavacarState extends State<Filalavacar> {
                                 .toString();
 
                             print(tempoEspera);
+
                             if (item.statusServico == 'EM_LAVAGEM') {
                               tempoEspera = item.fimLavagem
                                       ?.difference(DateTime.now())

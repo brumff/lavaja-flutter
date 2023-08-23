@@ -11,6 +11,8 @@ import '../provider/contratarservico_provider.dart';
 import '../provider/servico_provider.dart';
 import '../routes/app_routes.dart';
 
+import '../textinputformatter.dart';
+
 class ContratarServLavacar extends StatefulWidget {
   @override
   State<ContratarServLavacar> createState() => _ContratarServLavacarState();
@@ -64,6 +66,13 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                         return null;
                       },
                     ),
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Telefone'),
+                      onChanged: (value) => _formData['telefone'] = value,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [phoneMaskFormatter],
+                      
+                    ),
                     DropdownButtonFormField<Servico>(
                       items: data.meusServicos.map((Servico value) {
                         return DropdownMenuItem<Servico>(
@@ -93,6 +102,7 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                             _formData['origem'] ?? '',
                             _formData['placaCarro'] ?? '',
                              _formData['servico'] ?? '',
+                             _formData['telefone'] ?? ''
                           );
 
                           Modular.to.navigate(AppRoutes.CREATEFILA);

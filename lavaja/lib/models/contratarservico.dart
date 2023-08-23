@@ -13,6 +13,7 @@ class ContratarServico {
   String? placaCarro;
   DateTime? fimLavagem;
   bool? isExpanded;
+  String? telefone;
 
   ContratarServico(
       {this.id,
@@ -24,7 +25,8 @@ class ContratarServico {
       this.tempFila,
       this.placaCarro,
       this.fimLavagem, 
-      this.isExpanded});
+      this.isExpanded,
+      this.telefone});
 
   factory ContratarServico.fromMap(Map<String, dynamic> map) {
     return ContratarServico(
@@ -35,7 +37,8 @@ class ContratarServico {
         donoCarro: map['donoCarro'],
         servico: Servico.fromMap(map['servicoId']),
         tempFila: map['tempFila'],
-        placaCarro: map['placaCarro']);
+        placaCarro: map['placaCarro'],
+        telefone:map['telefone']);
         
   }
 
@@ -48,7 +51,8 @@ class ContratarServico {
       'donoCarro': dataServico,
       'servico': servico,
       'tempFila': tempFila,
-      'placaCarro': placaCarro
+      'placaCarro': placaCarro,
+      'telefone': telefone
     };
   }
 

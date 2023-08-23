@@ -32,14 +32,15 @@ class ContratarServicoService {
   }
 
   Future<void> createContratarServico(
-      String? origem, String? placaCarro, int? servicoId) async {
+      String? origem, String? placaCarro, int? servicoId, String? telefone) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.post(
       'http://192.168.1.7:8080/api/v1/contratarservico',
       data: {
         'origem': origem,
         'placaCarro': placaCarro,
-        'servico': {'id': servicoId}
+        'servico': {'id': servicoId},
+        'telefone': telefone
       },
     );
   }

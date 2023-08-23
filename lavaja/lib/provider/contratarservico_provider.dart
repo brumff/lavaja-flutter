@@ -34,9 +34,9 @@ class ContratarServicoProvider with ChangeNotifier {
   }
 
   void createContratarServico(
-      String? origem, String? placaCarro, int? servicoId) async {
+      String? origem, String? placaCarro, int? servicoId, String? telefone) async {
     final contratarServLavacar =
-        await service.createContratarServico(origem, placaCarro, servicoId);
+        await service.createContratarServico(origem, placaCarro, servicoId, telefone);
     notifyListeners();
   }
 

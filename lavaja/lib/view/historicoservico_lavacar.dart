@@ -33,6 +33,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
               child: Text('Nenhum histórico encontrado.'),
             );
           }
+          
           return SingleChildScrollView(
             child: ExpansionPanelList(
               elevation: 1,

@@ -27,6 +27,10 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   double longitude = 0.0;
   List<String> distancias = [];
   bool isLoading = false;
+  List<Lavacar> filteredLavacarList = [];
+  double maxDistancia = 0.0;
+  int maxTempoEspera = 0;
+  bool distanciasCalculadas = false;
 
   Future<void> _listarLavacars() async {
     await Provider.of<LavacarProvider>(context, listen: false).loadLavacar();
@@ -34,11 +38,20 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       lavacarList =
           Provider.of<LavacarProvider>(context, listen: false).lavacar;
       listLoaded = true;
+      filteredLavacarList = List.from(lavacarList);
     });
     print('Lista de Lavacars:');
     lavacarList.forEach((item) {
       print(
-          'Nome: ${item.nome ?? 'N/A'}, Latitude: ${item.latitude.toString()}, Longitude: ${item.longitude.toString()}');
+          'Nome: ${item.nome ?? 'N/A'}, Tempo: ${item.tempoFila ?? 0} Latitude: ${item.latitude.toString()}, Longitude: ${item.longitude.toString()}');
+    });
+  }
+
+  void _applyFilters(double maxDistanciaValue, int maxTempoEsperaValue) {
+    setState(() {
+      filteredLavacarList = lavacarList
+          .where((lavacar) => lavacar.tempoFila! <= maxTempoEsperaValue)
+          .toList();
     });
   }
 
@@ -103,6 +116,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
     }
     setState(() {
       distancias = calculatedDistancias;
+      distanciasCalculadas = true;
     });
   }
 
@@ -127,8 +141,6 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
 
   @override
   Widget build(BuildContext context) {
-    ;
-
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
       body: Column(
@@ -153,33 +165,83 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                       icon: Icon(Icons.search))),
             ),
           ),
-          isLoading
-              ? Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Center(
-                    child: CircularProgressIndicator(),
+          SizedBox(height: 10), // Add spacing between the fields
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.timer_outlined),
+                SizedBox(width: 12),
+                /* Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      label: Text('De'),
+                    ),
                   ),
-                )
-              : SizedBox.shrink(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: distancias.length,
-              itemBuilder: (context, index) {
-                final parts = distancias[index].split(':');
-                final nome = parts[0];
-                final distancia = parts[1];
-                final lavacar = lavacarList[index];
-                final tempoEspera = lavacar.tempoFila;
-                int tempoFormatado = tempoEspera?.toInt() ?? 0;
-
-                return ListTile(
-                  title: Text(nome),
-                  subtitle: Text(
-                      'Distância: $distancia km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos'),
-                  trailing: Icon(Icons.arrow_forward_ios_sharp),
-                );
-              },
+                ),*/
+                SizedBox(width: 16),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(labelText: 'Até'),
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        maxTempoEspera  = 100;
+                      }
+                      setState(() {
+                        maxTempoEspera = int.parse(value);
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
+          ),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: TextButton(
+                onPressed: () {
+                  _applyFilters(maxDistancia, maxTempoEspera);
+                },
+                child: Text('Aplicar filtro'),
+                style: TextButton.styleFrom(
+                    primary: Colors.white, // Cor do texto do botão
+                    backgroundColor: Colors.blue),
+              )),
+          Expanded(
+            child: distanciasCalculadas
+                ? isLoading
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : ListView.builder(
+                      
+                        itemCount: filteredLavacarList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            isLoading = false;
+                          }
+                          final lavacar = filteredLavacarList[index];
+                          final distancia = distancias[index];
+                          final parts = distancia.split(':');
+                          final nome = parts[0];
+                          final distanciaText = parts[1];
+                          final tempoEspera = lavacar.tempoFila;
+                          int tempoFormatado = tempoEspera?.toInt() ?? 0;
+
+                          return ListTile(
+                            title: Text(nome),
+                            subtitle: Text(
+                              'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                            ),
+                            trailing: Icon(Icons.arrow_forward_ios_sharp),
+                          );
+                        },
+                      )
+                : SizedBox.shrink(),
           ),
         ],
       ),
