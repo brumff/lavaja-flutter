@@ -31,6 +31,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   double maxDistancia = 0.0;
   int maxTempoEspera = 0;
   bool distanciasCalculadas = false;
+  bool buscaEnd = false;
 
   Future<void> _listarLavacars() async {
     await Provider.of<LavacarProvider>(context, listen: false).loadLavacar();
@@ -75,10 +76,12 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
           setState(() {
             latitude = geometry['coordinates'][1];
             longitude = geometry['coordinates'][0];
+            buscaEnd = true;
           });
         } else {
           print(
               'Nenhum resultado encontrado para o endereço $endereco no Brasil.');
+          buscaEnd = false;
         }
       } else {
         print('Erro na requisição: ${response.statusCode}');
@@ -126,16 +129,20 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       _limparLista();
     });
     await _buscarLatLong();
-    await _listarLavacars();
-    _calcularDistancia();
-    setState(() {
-      isLoading = false;
-    });
+    print(buscaEnd);
+    if (buscaEnd == true) {
+      await _listarLavacars();
+      _calcularDistancia();
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void _limparLista() {
     setState(() {
       distancias.clear();
+      buscaEnd = false;
     });
   }
 
@@ -186,7 +193,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                     decoration: InputDecoration(labelText: 'Até'),
                     onChanged: (value) {
                       if (value.isEmpty) {
-                        maxTempoEspera  = 100;
+                        maxTempoEspera = 100;
                       }
                       setState(() {
                         maxTempoEspera = int.parse(value);
@@ -209,40 +216,34 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                     backgroundColor: Colors.blue),
               )),
           Expanded(
-            child: distanciasCalculadas
-                ? isLoading
-                    ? Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      )
-                    : ListView.builder(
-                      
-                        itemCount: filteredLavacarList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == 0) {
-                            isLoading = false;
-                          }
-                          final lavacar = filteredLavacarList[index];
-                          final distancia = distancias[index];
-                          final parts = distancia.split(':');
-                          final nome = parts[0];
-                          final distanciaText = parts[1];
-                          final tempoEspera = lavacar.tempoFila;
-                          int tempoFormatado = tempoEspera?.toInt() ?? 0;
-
-                          return ListTile(
-                            title: Text(nome),
-                            subtitle: Text(
-                              'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
-                            ),
-                            trailing: Icon(Icons.arrow_forward_ios_sharp),
+              child: buscaEnd
+                  ? ListView.builder(
+                      itemCount: filteredLavacarList.length,
+                      itemBuilder: (context, index) {
+                        if (distancias.length == 0) {
+                          return Center(
+                            child: CircularProgressIndicator(),
                           );
-                        },
-                      )
-                : SizedBox.shrink(),
-          ),
+                        }
+                        final lavacar = filteredLavacarList[index];
+                        final distancia = distancias[index];
+                        final parts = distancia.split(':');
+                        final nome = parts[0];
+                        final distanciaText = parts[1];
+                        final tempoEspera = lavacar.tempoFila;
+                        int tempoFormatado = tempoEspera?.toInt() ?? 0;
+                        return ListTile(
+                          title: Text(nome),
+                          subtitle: Text(
+                            'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                          ),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text('Endereço não encontrado'),
+                    )),
         ],
       ),
       drawer: MenuDonoCarroComponent(),
