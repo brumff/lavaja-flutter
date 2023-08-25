@@ -32,6 +32,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   int maxTempoEspera = 0;
   bool distanciasCalculadas = false;
   bool buscaEnd = false;
+  final _maxTempoEsperaController = TextEditingController();
+  double km = 0;
 
   Future<void> _listarLavacars() async {
     await Provider.of<LavacarProvider>(context, listen: false).loadLavacar();
@@ -48,10 +50,10 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
     });
   }
 
-  void _applyFilters(double maxDistanciaValue, int maxTempoEsperaValue) {
+  void _applyFilters(int _maxTempoEsperaController) {
     setState(() {
       filteredLavacarList = lavacarList
-          .where((lavacar) => lavacar.tempoFila! <= maxTempoEsperaValue)
+          .where((lavacar) => lavacar.tempoFila! <= _maxTempoEsperaController)
           .toList();
     });
   }
@@ -136,6 +138,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       setState(() {
         isLoading = false;
       });
+      _maxTempoEsperaController.text = maxTempoEspera.toString();
     }
   }
 
@@ -144,6 +147,18 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       distancias.clear();
       buscaEnd = false;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _maxTempoEsperaController.text = maxTempoEspera.toString();
+  }
+
+  @override
+  void dispose() {
+    _maxTempoEsperaController.dispose();
+    super.dispose();
   }
 
   @override
@@ -173,74 +188,118 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
             ),
           ),
           SizedBox(height: 10), // Add spacing between the fields
-          Padding(
+          /* Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(Icons.timer_outlined),
                 SizedBox(width: 12),
-                /* Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      label: Text('De'),
-                    ),
-                  ),
-                ),*/
                 SizedBox(width: 16),
                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(labelText: 'Até'),
-                    onChanged: (value) {
-                      if (value.isEmpty) {
-                        maxTempoEspera = 100;
-                      }
-                      setState(() {
-                        maxTempoEspera = int.parse(value);
-                      });
-                    },
-                  ),
-                ),
+                  child:             
               ],
             ),
-          ),
+          ),*/
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: TextButton(
                 onPressed: () {
-                  _applyFilters(maxDistancia, maxTempoEspera);
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: Container(
+                          height: 250,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(20),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      label: Text('Tempo de espera máx.')),
+                                  controller: _maxTempoEsperaController,
+                                  onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      maxTempoEspera = 10000;
+                                    } else {
+                                      try {
+                                        setState(() {
+                                          maxTempoEspera = int.parse(value);
+                                        });
+                                      } catch (e) {
+                                        print('Erro de conversão');
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+                              StatefulBuilder(
+                                builder: (context, state) {
+                                  return Slider(
+                                      value: km,
+                                      max: 50,
+                                      divisions: 5,
+                                      label: km.round().toString(),
+                                      onChanged: (double value) {
+                                        state(() {
+                                         
+                                        });
+                                        setState(() {
+                                          km = value;
+                                        });
+                                      });
+                                },
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.all(20),
+                                  child: TextButton(
+                                      onPressed: () {
+                                        _applyFilters(maxTempoEspera);
+                                        FocusScope.of(context).unfocus();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Aplicar filtros')))
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
-                child: Text('Aplicar filtro'),
+                child: Text('Filtros'),
                 style: TextButton.styleFrom(
                     primary: Colors.white, // Cor do texto do botão
                     backgroundColor: Colors.blue),
               )),
           Expanded(
               child: buscaEnd
-                  ? ListView.builder(
-                      itemCount: filteredLavacarList.length,
-                      itemBuilder: (context, index) {
-                        if (distancias.length == 0) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        final lavacar = filteredLavacarList[index];
-                        final distancia = distancias[index];
-                        final parts = distancia.split(':');
-                        final nome = parts[0];
-                        final distanciaText = parts[1];
-                        final tempoEspera = lavacar.tempoFila;
-                        int tempoFormatado = tempoEspera?.toInt() ?? 0;
-                        return ListTile(
-                          title: Text(nome),
-                          subtitle: Text(
-                            'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
-                          ),
-                          trailing: Icon(Icons.arrow_forward_ios),
-                        );
-                      },
-                    )
+                  ? distancias.length == 0
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          itemCount: filteredLavacarList.length,
+                          itemBuilder: (context, index) {
+                            final lavacar = filteredLavacarList[index];
+                            final distancia = distancias[index];
+                            final parts = distancia.split(':');
+                            final nome = parts[0];
+                            final distanciaText = parts[1];
+                            final tempoEspera = lavacar.tempoFila;
+                            int tempoFormatado = tempoEspera?.toInt() ?? 0;
+                            return ListTile(
+                              title: Text(nome),
+                              subtitle: Text(
+                                'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                              ),
+                              trailing: Icon(Icons.arrow_forward_ios),
+                            );
+                          },
+                        )
                   : Center(
                       child: Text('Endereço não encontrado'),
                     )),
