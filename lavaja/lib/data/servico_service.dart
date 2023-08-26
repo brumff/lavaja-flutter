@@ -21,10 +21,17 @@ class ServicoService {
     return data.map((json) => Servico.fromMap(json)).toList();
   }
 
-  Future<List<Servico>> getListarServicosLavacar() async {
+  Future<List<Servico>> getListarServicosLavacarLogado() async {
     dio.options.headers = {'authorization': AuthService.token};
     final response =
         await dio.get('http://192.168.1.7:8080/api/v1/servico/meus-servicos');
+    final data = response.data as List<dynamic>;
+    return data.map((json) => Servico.fromMap(json)).toList();
+  }
+
+    Future<List<Servico>> getListarServicosLavacar(int lavacarId) async {
+    final response =
+        await dio.get('http://192.168.1.7:8080/api/v1/servico/servicos-lavcar?lavacarid=$lavacarId');
     final data = response.data as List<dynamic>;
     return data.map((json) => Servico.fromMap(json)).toList();
   }

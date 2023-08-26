@@ -18,6 +18,7 @@ class Lavacar {
   String? senha;
   String? confSenha;
   double? tempoFila;
+  double? distancia;
   bool? aberto;
 
   // ver como fazer a parte da disponibilidade
@@ -38,6 +39,7 @@ class Lavacar {
       this.senha,
       this.confSenha,
       this.tempoFila,
+      this.distancia,
       this.aberto});
 
   factory Lavacar.fromMap(Map<String, dynamic> map) {

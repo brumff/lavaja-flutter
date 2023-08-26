@@ -28,7 +28,6 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   List<String> distancias = [];
   bool isLoading = false;
   List<Lavacar> filteredLavacarList = [];
-  double maxDistancia = 0.0;
   int maxTempoEspera = 0;
   bool distanciasCalculadas = false;
   bool buscaEnd = false;
@@ -53,7 +52,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   void _applyFilters(int _maxTempoEsperaController) {
     setState(() {
       filteredLavacarList = lavacarList
-          .where((lavacar) => lavacar.tempoFila! <= _maxTempoEsperaController)
+          .where((lavacar) =>
+              lavacar.tempoFila! <= _maxTempoEsperaController)
           .toList();
     });
   }
@@ -187,20 +187,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                       icon: Icon(Icons.search))),
             ),
           ),
-          SizedBox(height: 10), // Add spacing between the fields
-          /* Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.timer_outlined),
-                SizedBox(width: 12),
-                SizedBox(width: 16),
-                Expanded(
-                  child:             
-              ],
-            ),
-          ),*/
+          SizedBox(height: 10),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: TextButton(
@@ -237,7 +224,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                   },
                                 ),
                               ),
-                              StatefulBuilder(
+                              /*StatefulBuilder(
                                 builder: (context, state) {
                                   return Slider(
                                       value: km,
@@ -245,15 +232,13 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                       divisions: 5,
                                       label: km.round().toString(),
                                       onChanged: (double value) {
-                                        state(() {
-                                         
-                                        });
+                                        state(() {});
                                         setState(() {
                                           km = value;
                                         });
                                       });
                                 },
-                              ),
+                              ),*/
                               Padding(
                                   padding: EdgeInsets.all(20),
                                   child: TextButton(
@@ -272,7 +257,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                 },
                 child: Text('Filtros'),
                 style: TextButton.styleFrom(
-                    primary: Colors.white, // Cor do texto do botão
+                    primary: Colors.white, 
                     backgroundColor: Colors.blue),
               )),
           Expanded(
