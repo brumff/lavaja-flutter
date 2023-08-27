@@ -32,7 +32,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   bool distanciasCalculadas = false;
   bool buscaEnd = false;
   final _maxTempoEsperaController = TextEditingController();
-  double km = 0;
+  double maxDistance = 0;
+  final _maxDistanceController = TextEditingController();
 
   Future<void> _listarLavacars() async {
     await Provider.of<LavacarProvider>(context, listen: false).loadLavacar();
@@ -49,11 +50,24 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
     });
   }
 
-  void _applyFilters(int _maxTempoEsperaController) {
+  void _applyFilters(int _maxTempoEsperaController, double _maxDistanceController) {
     setState(() {
       filteredLavacarList = lavacarList
           .where((lavacar) =>
-              lavacar.tempoFila! <= _maxTempoEsperaController)
+              lavacar.tempoFila != null &&
+              lavacar.tempoFila! <= _maxTempoEsperaController &&   lavacar.distanceInKm != null &&
+              lavacar.distanceInKm! <= _maxDistanceController)
+          .toList();
+    });
+    print(filteredLavacarList);
+  }
+
+  void _applyDistanceFilter(double _maxDistanceController) {
+    setState(() {
+      filteredLavacarList = lavacarList
+          .where((lavacar) =>
+              lavacar.distanceInKm != null &&
+              lavacar.distanceInKm! <= _maxDistanceController)
           .toList();
     });
   }
@@ -110,7 +124,11 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
           final data = response.data;
           final distanceInMeters =
               data['features'][0]['properties']['segments'][0]['distance'];
-          final distanceInKm = (distanceInMeters / 1000).toStringAsFixed(2);
+          final distanceInKm =
+              double.parse((distanceInMeters / 1000).toStringAsFixed(2));
+          location.distanceInKm = distanceInKm;
+           print(distanceInKm) ;
+        
           calculatedDistancias.add('${location.nome}: $distanceInKm km');
         } else {
           print('Erro na requisição: ${response.statusCode}');
@@ -153,6 +171,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   void initState() {
     super.initState();
     _maxTempoEsperaController.text = maxTempoEspera.toString();
+    _maxTempoEsperaController.text = maxTempoEspera == 1000 ? '' : maxTempoEspera.toString();
   }
 
   @override
@@ -204,14 +223,14 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                           child: Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(20),
+                                padding: EdgeInsets.all(5),
                                 child: TextField(
                                   decoration: InputDecoration(
                                       label: Text('Tempo de espera máx.')),
                                   controller: _maxTempoEsperaController,
                                   onChanged: (value) {
                                     if (value.isEmpty) {
-                                      maxTempoEspera = 10000;
+                                      maxTempoEspera = 1000;
                                     } else {
                                       try {
                                         setState(() {
@@ -224,6 +243,28 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                   },
                                 ),
                               ),
+                              Padding(
+                                padding: EdgeInsets.all(5),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      label: Text('Distância máx. (km)')),
+                                  controller: _maxDistanceController,
+                                  onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      maxDistance = double.infinity;
+                                    } else {
+                                      try {
+                                        setState(() {
+                                          maxDistance = double.parse(value);
+                                        });
+                                      } catch (e) {
+                                        print('Erro de conversão');
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
+
                               /*StatefulBuilder(
                                 builder: (context, state) {
                                   return Slider(
@@ -243,7 +284,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                   padding: EdgeInsets.all(20),
                                   child: TextButton(
                                       onPressed: () {
-                                        _applyFilters(maxTempoEspera);
+                                        _applyFilters(maxTempoEspera, maxDistance);
+                                        //_applyDistanceFilter(maxDistance);
                                         FocusScope.of(context).unfocus();
                                         Navigator.pop(context);
                                       },
@@ -257,8 +299,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                 },
                 child: Text('Filtros'),
                 style: TextButton.styleFrom(
-                    primary: Colors.white, 
-                    backgroundColor: Colors.blue),
+                    primary: Colors.white, backgroundColor: Colors.blue),
               )),
           Expanded(
               child: buscaEnd
