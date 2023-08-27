@@ -2,21 +2,21 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/view/buscaendereco.dart';
 import 'package:lavaja/view/contratarservlavacar_form.dart';
+import 'package:lavaja/view/detalheslavacar_form.dart';
 import 'package:lavaja/view/donocarro_form.dart';
 import 'package:lavaja/view/filavacar_form.dart';
 import 'package:lavaja/view/historicoservico_lavacar.dart';
 import 'package:lavaja/view/home_donocarro.dart';
 import 'package:lavaja/view/home_lavacar.dart';
 import 'package:lavaja/view/lavacar_form.dart';
-import 'package:lavaja/view/listaservico_form.dart'; 
+import 'package:lavaja/view/listaservico_form.dart';
 import 'package:lavaja/view/login_form.dart';
 import 'package:lavaja/view/servico_form.dart';
 import 'package:lavaja/view/splash.dart';
 
 class AppModule extends Module {
   @override
-  List<Bind> get binds => [
-      ];
+  List<Bind> get binds => [];
 
   @override
   List<ModularRoute> get routes => [
@@ -67,6 +67,8 @@ class AppModule extends Module {
         ChildRoute(AppRoutes.CONTRATARSERVLAVACAR,
             child: (context, args) => ContratarServLavacar(),
             transition: TransitionType.leftToRight),
-        
+        ChildRoute(AppRoutes.DETALHESLAVACAR,
+            child: (context, args) => DetalhesLavacarForm(),
+            transition: TransitionType.leftToRight),
       ];
 }

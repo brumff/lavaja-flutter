@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
@@ -50,12 +51,14 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
     });
   }
 
-  void _applyFilters(int _maxTempoEsperaController, double _maxDistanceController) {
+  void _applyFilters(
+      int _maxTempoEsperaController, double _maxDistanceController) {
     setState(() {
       filteredLavacarList = lavacarList
           .where((lavacar) =>
               lavacar.tempoFila != null &&
-              lavacar.tempoFila! <= _maxTempoEsperaController &&   lavacar.distanceInKm != null &&
+              lavacar.tempoFila! <= _maxTempoEsperaController &&
+              lavacar.distanceInKm != null &&
               lavacar.distanceInKm! <= _maxDistanceController)
           .toList();
     });
@@ -127,8 +130,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
           final distanceInKm =
               double.parse((distanceInMeters / 1000).toStringAsFixed(2));
           location.distanceInKm = distanceInKm;
-           print(distanceInKm) ;
-        
+          print(distanceInKm);
+
           calculatedDistancias.add('${location.nome}: $distanceInKm km');
         } else {
           print('Erro na requisição: ${response.statusCode}');
@@ -171,7 +174,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   void initState() {
     super.initState();
     _maxTempoEsperaController.text = maxTempoEspera.toString();
-    _maxTempoEsperaController.text = maxTempoEspera == 1000 ? '' : maxTempoEspera.toString();
+    _maxTempoEsperaController.text =
+        maxTempoEspera == 1000 ? '' : maxTempoEspera.toString();
   }
 
   @override
@@ -223,7 +227,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                           child: Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(5),
+                                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                                 child: TextField(
                                   decoration: InputDecoration(
                                       label: Text('Tempo de espera máx.')),
@@ -243,8 +247,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                   },
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(5),
+                              /*Padding(
+                                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                                 child: TextField(
                                   decoration: InputDecoration(
                                       label: Text('Distância máx. (km)')),
@@ -263,28 +267,50 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                     }
                                   },
                                 ),
-                              ),
-
-                              /*StatefulBuilder(
-                                builder: (context, state) {
-                                  return Slider(
-                                      value: km,
-                                      max: 50,
-                                      divisions: 5,
-                                      label: km.round().toString(),
-                                      onChanged: (double value) {
-                                        state(() {});
-                                        setState(() {
-                                          km = value;
-                                        });
-                                      });
-                                },
                               ),*/
+                              StatefulBuilder(
+                                builder: (context, state) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start, // Alinhar à esquerda
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(20, 2, 20, 2),
+                                        child: Text(
+                                          'Filtro de Distância:',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey[700],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 16.0),
+                                        child: Slider(
+                                          value: maxDistance,
+                                          max: 50,
+                                          divisions: 10,
+                                          label: maxDistance.round().toString(),
+                                          onChanged: (double value) {
+                                            state(() {});
+                                            setState(() {
+                                              maxDistance = value;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                               Padding(
-                                  padding: EdgeInsets.all(20),
+                                  padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
                                   child: TextButton(
                                       onPressed: () {
-                                        _applyFilters(maxTempoEspera, maxDistance);
+                                        _applyFilters(
+                                            maxTempoEspera, maxDistance);
                                         //_applyDistanceFilter(maxDistance);
                                         FocusScope.of(context).unfocus();
                                         Navigator.pop(context);
@@ -317,17 +343,24 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                             final distanciaText = parts[1];
                             final tempoEspera = lavacar.tempoFila;
                             int tempoFormatado = tempoEspera?.toInt() ?? 0;
-                            return ListTile(
-                              title: Text(nome),
-                              subtitle: Text(
-                                'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+
+                            return GestureDetector(
+                              onTap: () {
+                                Modular.to.pushNamed('/detalhes-lavacar',
+                                    arguments: lavacar.id);
+                              },
+                              child: ListTile(
+                                title: Text(nome),
+                                subtitle: Text(
+                                  'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                                ),
+                                trailing: Icon(Icons.arrow_forward_ios),
                               ),
-                              trailing: Icon(Icons.arrow_forward_ios),
                             );
                           },
                         )
                   : Center(
-                      child: Text('Endereço não encontrado'),
+                      child: Text('Nenhum registro'),
                     )),
         ],
       ),
