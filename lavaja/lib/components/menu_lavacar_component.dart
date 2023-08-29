@@ -63,6 +63,7 @@ class MenuLavacarComponent extends StatelessWidget {
             iconColor: Colors.red,
             textColor: Colors.red,
             onTap: () {
+              AuthService().logout();
               PrefsService.logout();
               Modular.to.navigate(AppRoutes.LOGIN);
             },
