@@ -11,7 +11,7 @@ import '../provider/contratarservico_provider.dart';
 import '../provider/servico_provider.dart';
 import '../routes/app_routes.dart';
 
-import '../textinputformatter.dart';
+import '../uteis/textinputformatter.dart';
 
 class ContratarServLavacar extends StatefulWidget {
   @override

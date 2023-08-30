@@ -12,7 +12,7 @@ class DonoCarroProvider with ChangeNotifier {
   }
 
   Future<void> getDonoCarro() async {
-    usuario =  await service.getDonoCarroByToken();
+    usuario = await service.getDonoCarroByToken();
     notifyListeners();
   }
 
@@ -23,18 +23,17 @@ class DonoCarroProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createDonoCarro(String nome, String telefone, String genero,
+  void createDonoCarro(String nome, String cpf, String telefone, String genero,
       String email, String senha, String confSenha) async {
     final donocarro = await service.createDonoCarro(
-        nome, telefone, genero, email, senha, confSenha);
+        nome, cpf, telefone, genero, email, senha, confSenha);
     await loadDonoCarro();
     notifyListeners();
   }
 
-
-  void updateDonoCarro(String nome, String telefone, 
-      String genero) async {
-    await service.updateDonoCarro(nome, telefone, genero);
+  void updateDonoCarro(
+      String nome, String cpf, String telefone, String genero) async {
+    await service.updateDonoCarro(nome, cpf, telefone, genero);
     notifyListeners();
   }
 
@@ -44,6 +43,4 @@ class DonoCarroProvider with ChangeNotifier {
     await loadDonoCarro();
     notifyListeners();
   }
-
-
 }

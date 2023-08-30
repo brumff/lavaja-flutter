@@ -16,3 +16,8 @@ var cepMaskFormatter = MaskTextInputFormatter(
   mask: '#####-###',
   filter: {'#': RegExp(r'[0-9]')},
 );
+
+var cpfMaskFormatter = MaskTextInputFormatter(
+  mask: '###.###.###-##',
+  filter: {'#': RegExp(r'[0-9]')},
+);

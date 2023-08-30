@@ -12,17 +12,17 @@ class DonoCarroService {
   }
 
   Future<DonoCarro> getDonoCarroByToken() async {
-     dio.options.headers = {'authorization': AuthService.token};
-    final response =
-        await dio.get('http://192.168.1.7:8080/api/v1/donocarro/');
+    dio.options.headers = {'authorization': AuthService.token};
+    final response = await dio.get('http://192.168.1.7:8080/api/v1/donocarro/');
     final data = response.data;
     return DonoCarro.fromMap(data);
   }
 
-  Future<void> createDonoCarro(String? nome, String? telefone, String? email,
-      String? genero, String? senha, String? confSenha) async {
+  Future<void> createDonoCarro(String? nome, String? cpf, String? telefone,
+      String? email, String? genero, String? senha, String? confSenha) async {
     await dio.post('http://192.168.1.7:8080/api/v1/donocarro', data: {
       'nome': nome,
+      'cpf': cpf,
       'telefone': telefone,
       'email': email,
       'genero': genero,
@@ -31,12 +31,14 @@ class DonoCarroService {
     });
   }
 
-  Future<void> updateDonoCarro(String? nome, String? telefone, String? genero) async {
+  Future<void> updateDonoCarro(
+      String? nome, String? cpf, String? telefone, String? genero) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.put(
       'http://192.168.1.7:8080/api/v1/donocarro/',
       data: {
         'nome': nome,
+        'cpf': cpf,
         'telefone': telefone,
         'genero': genero,
       },

@@ -5,7 +5,8 @@ import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
-import '../textinputformatter.dart';
+import '../uteis/textinputformatter.dart';
+import '../uteis/validarcpf.dart';
 
 class DonoCarroForm extends StatefulWidget {
   @override
@@ -173,6 +174,21 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                       }
                       return null;
                     }),
+                TextFormField(
+                  initialValue: _formData['cpf'],
+                  decoration: InputDecoration(labelText: 'CPF'),
+                  inputFormatters: [cpfMaskFormatter],
+                  onChanged: (value) => _formData['cpf'] = value,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Campo obrigatório';
+                    }
+                    if (!isValidCPF(value)) {
+                      return 'CPF inválido';
+                    }
+                    return null; // CPF válido
+                  },
+                ),
                 DropdownButtonFormField<String>(
                   value: _selectedOption,
                   items: _genero.map((String value) {
@@ -333,6 +349,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                           Provider.of<DonoCarroProvider>(context, listen: false)
                               .updateDonoCarro(
                             _formData['nome'] ?? '',
+                            _formData['cpf'] ?? '',
                             _formData['telefone'] ?? '',
                             _formData['genero'] ?? '',
                           );
@@ -343,6 +360,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                                     listen: false)
                                 .createDonoCarro(
                               _formData['nome'] ?? '',
+                              _formData['cpf'] ?? '',
                               _formData['telefone'] ?? '',
                               _formData['email'] ?? '',
                               _formData['genero'] ?? '',

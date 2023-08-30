@@ -8,7 +8,7 @@ import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
-import '../textinputformatter.dart';
+import '../uteis/textinputformatter.dart';
 
 class LavaCarForm extends StatefulWidget {
   @override
