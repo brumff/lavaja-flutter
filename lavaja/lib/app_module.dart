@@ -13,10 +13,15 @@ import 'package:lavaja/view/listaservico_form.dart';
 import 'package:lavaja/view/login_form.dart';
 import 'package:lavaja/view/servico_form.dart';
 import 'package:lavaja/view/splash.dart';
+import 'package:lavaja/view/teste.dart';
+
+import 'controller/teste_controller.dart';
 
 class AppModule extends Module {
   @override
-  List<Bind> get binds => [];
+  List<Bind> get binds => [
+     Bind((i) => LocalizacaoController())
+  ];
 
   @override
   List<ModularRoute> get routes => [
@@ -26,8 +31,8 @@ class AppModule extends Module {
         ChildRoute(AppRoutes.LOGIN,
             child: (context, args) => LoginForm(),
             transition: TransitionType.leftToRight),
-        ChildRoute(AppRoutes.LAVACAR,
-            child: (context, args) => LavaCarForm(),
+        ChildRoute(AppRoutes.DONOCARRO,
+            child: (context, args) => DonoCarroForm(),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.LAVACAR,
             child: (context, args) => LavaCarForm(),

@@ -12,14 +12,12 @@ class ServicoProvider with ChangeNotifier {
     loadServico();
   }
 
-  /*ServicoProvider({required this.service}) {
-    loadServicos();
-  }*/
 
   Future<void> loadServico() async {
     meusServicos = await service.getListarServicosLavacarLogado();
     notifyListeners();
   }
+
 
   Future<Servico?> getServicoById(String id) async {
     servico = await service.getServicoById(id);
@@ -31,9 +29,6 @@ class ServicoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Servico>> getListarServicosLavacar(int lavacarId) async {
-    return await service.getListarServicosLavacar(lavacarId);
-  }
 
   void createServico(String nome, double valor, String tamCarro,
       double tempServico, bool ativo) async {

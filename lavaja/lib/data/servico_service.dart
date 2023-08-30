@@ -29,13 +29,6 @@ class ServicoService {
     return data.map((json) => Servico.fromMap(json)).toList();
   }
 
-    Future<List<Servico>> getListarServicosLavacar(int lavacarId) async {
-    final response =
-        await dio.get('http://192.168.1.7:8080/api/v1/servico/servicos-lavcar?lavacarid=$lavacarId');
-    final data = response.data as List<dynamic>;
-    return data.map((json) => Servico.fromMap(json)).toList();
-  }
-
   Future<Servico> getServicoById(String id) async {
     final response = await dio.get('http://192.168.1.7:8080/api/v1/servico/$id');
     final data = response.data;

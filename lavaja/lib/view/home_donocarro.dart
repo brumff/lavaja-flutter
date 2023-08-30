@@ -9,6 +9,7 @@ import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../components/menu_donocarro_component.dart';
+import '../controller/teste_controller.dart';
 import '../data/servico_service.dart';
 import '../models/lavacar.dart';
 import '../provider/contratarservico_provider.dart';
@@ -35,6 +36,8 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   final _maxTempoEsperaController = TextEditingController();
   double maxDistance = 0;
   final _maxDistanceController = TextEditingController();
+  final LocalizacaoController _localizacaoController =
+      Modular.get<LocalizacaoController>();
 
   Future<void> _listarLavacars() async {
     await Provider.of<LavacarProvider>(context, listen: false).loadLavacar();
@@ -65,14 +68,26 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
     print(filteredLavacarList);
   }
 
-  void _applyDistanceFilter(double _maxDistanceController) {
-    setState(() {
-      filteredLavacarList = lavacarList
-          .where((lavacar) =>
-              lavacar.distanceInKm != null &&
-              lavacar.distanceInKm! <= _maxDistanceController)
-          .toList();
-    });
+  Future<void> _verificarLocalizacao() async {
+    await _localizacaoController.getPosicao();
+
+    if (_localizacaoController.erro.isEmpty) {
+      setState(() {
+        latitude = _localizacaoController.lat;
+        print(latitude);
+        longitude = _localizacaoController.long;
+        print(longitude);
+        buscaEnd = true;
+      });
+
+      await _listarLavacars();
+      await _calcularDistancia();
+      
+    } else {
+      setState(() {
+        buscaEnd = false;
+      });
+    }
   }
 
   Future<void> _buscarLatLong() async {
@@ -152,7 +167,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       _limparLista();
     });
     await _buscarLatLong();
-    print(buscaEnd);
+
     if (buscaEnd == true) {
       await _listarLavacars();
       _calcularDistancia();
@@ -173,6 +188,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
   @override
   void initState() {
     super.initState();
+    _verificarLocalizacao();
     _maxTempoEsperaController.text = maxTempoEspera.toString();
     _maxTempoEsperaController.text =
         maxTempoEspera == 1000 ? '' : maxTempoEspera.toString();
@@ -247,27 +263,6 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                   },
                                 ),
                               ),
-                              /*Padding(
-                                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      label: Text('Distância máx. (km)')),
-                                  controller: _maxDistanceController,
-                                  onChanged: (value) {
-                                    if (value.isEmpty) {
-                                      maxDistance = double.infinity;
-                                    } else {
-                                      try {
-                                        setState(() {
-                                          maxDistance = double.parse(value);
-                                        });
-                                      } catch (e) {
-                                        print('Erro de conversão');
-                                      }
-                                    }
-                                  },
-                                ),
-                              ),*/
                               StatefulBuilder(
                                 builder: (context, state) {
                                   return Column(
@@ -311,7 +306,6 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                                       onPressed: () {
                                         _applyFilters(
                                             maxTempoEspera, maxDistance);
-                                        //_applyDistanceFilter(maxDistance);
                                         FocusScope.of(context).unfocus();
                                         Navigator.pop(context);
                                       },
@@ -348,6 +342,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
                               onTap: () {
                                 Modular.to.pushNamed('/detalhes-lavacar',
                                     arguments: lavacar.id);
+                                print(lavacar.id);
                               },
                               child: ListTile(
                                 title: Text(nome),
