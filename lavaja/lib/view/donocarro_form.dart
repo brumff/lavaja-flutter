@@ -113,6 +113,11 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                     .usuario
                     ?.nome ??
                 '';
+        _formData['cpf'] =
+            Provider.of<DonoCarroProvider>(context, listen: false)
+                    .usuario
+                    ?.cpf ??
+                '';
         _formData['telefone'] =
             Provider.of<DonoCarroProvider>(context, listen: false)
                     .usuario
@@ -367,6 +372,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                               _formData['senha'] ?? '',
                               _formData['confSenha'] ?? '',
                             );
+                            
                             Modular.to.navigate(AppRoutes.LOGIN);
                             _cadastroRealizado(context);
                           } else {
@@ -386,7 +392,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
 void _cadastroRealizado(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text('Cadastro realizado com sucesso!'),
+      content: Text('Cdastro realizado com sucesso'),
       duration: Duration(seconds: 2),
       backgroundColor: Colors.green,
     ),
@@ -404,13 +410,13 @@ void _edicaoRealizada(BuildContext context) {
 }
 
 void _erroTermo(BuildContext context) {
-  // Aqui você pode salvar o cadastro e exibir o snackbar
+
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('É obrigatório aceitar os termos de uso para continuar.'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.red, // Definindo a cor de fundo do SnackBar
-      //contentTextStyle: TextStyle(color: Colors.white),
+      backgroundColor: Colors.red,
     ),
   );
 }
+

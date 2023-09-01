@@ -18,9 +18,10 @@ class DonoCarroService {
     return DonoCarro.fromMap(data);
   }
 
-  Future<void> createDonoCarro(String? nome, String? cpf, String? telefone,
-      String? email, String? genero, String? senha, String? confSenha) async {
-    await dio.post('http://192.168.1.7:8080/api/v1/donocarro', data: {
+ Future<String> createDonoCarro(String? nome, String? cpf, String? telefone,
+    String? email, String? genero, String? senha, String? confSenha) async {
+  try {
+    final response = await dio.post('http://192.168.1.7:8080/api/v1/donocarro', data: {
       'nome': nome,
       'cpf': cpf,
       'telefone': telefone,
@@ -29,7 +30,19 @@ class DonoCarroService {
       'senha': senha,
       'confSenha': confSenha
     });
+
+    if (response.statusCode == 200) {
+      return 'Cadastro realizado com sucesso!';
+    } else {
+      return 'Erro ao cadastrar: ${response.data}';
+    }
+  } on DioError catch (e) {
+    if (e.response != null) {
+      return 'Erro no backend: ${e.response!.data}';
+    }
+    return 'Erro no Dio: $e';
   }
+}
 
   Future<void> updateDonoCarro(
       String? nome, String? cpf, String? telefone, String? genero) async {

@@ -60,7 +60,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
       filteredLavacarList = lavacarList
           .where((lavacar) =>
               lavacar.tempoFila != null &&
-              lavacar.tempoFila! <= _maxTempoEsperaController &&
+              lavacar.tempoFila! <= _maxTempoEsperaController ||
               lavacar.distanceInKm != null &&
               lavacar.distanceInKm! <= _maxDistanceController)
           .toList();
