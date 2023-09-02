@@ -14,14 +14,14 @@ import 'package:lavaja/view/login_form.dart';
 import 'package:lavaja/view/servico_form.dart';
 import 'package:lavaja/view/splash.dart';
 import 'package:lavaja/view/teste.dart';
+import 'package:lavaja/view/veiculo_form.dart';
+import 'package:lavaja/view/veiculo_lista.dart';
 
 import 'controller/teste_controller.dart';
 
 class AppModule extends Module {
   @override
-  List<Bind> get binds => [
-     Bind((i) => LocalizacaoController())
-  ];
+  List<Bind> get binds => [Bind((i) => LocalizacaoController())];
 
   @override
   List<ModularRoute> get routes => [
@@ -75,5 +75,20 @@ class AppModule extends Module {
         ChildRoute(AppRoutes.DETALHESLAVACAR,
             child: (context, args) => DetalhesLavacarForm(),
             transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.CREATEVEICULO,
+            child: (context, args) => VeiculoForm(
+                isEditing: false,
+                ),
+            transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.LISTAVEICULOS,
+            child: (context, args) => VeiculoLista(
+                ),
+            transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.EDITVEICULO,
+            child: (context, args) => VeiculoForm(
+                  id: args.params[
+                    'id'],
+                  isEditing: true,
+                ),)
       ];
 }

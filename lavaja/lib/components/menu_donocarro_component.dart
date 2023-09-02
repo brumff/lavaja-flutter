@@ -26,10 +26,10 @@ class MenuDonoCarroComponent extends StatelessWidget {
             },
           ),
           CustomDrawerTile(
-            title: 'Alterar senha',
+            title: 'Veículos',
             icon: Icons.arrow_forward_ios_sharp,
             onTap: () {
-              Navigator.pop(context);
+              Modular.to.navigate('/lista-veiculos/');
             },
           ),
           CustomDrawerTile(

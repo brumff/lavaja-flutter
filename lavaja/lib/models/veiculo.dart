@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:lavaja/models/donocarro.dart';
+
 class Veiculo {
   int? id;
   String? marca;
   String? modelo;
   String? placa;
   String? cor;
-  int? donoCarroModel;
+  DonoCarro? donoCarroModel;
   bool? deleted;
 
   Veiculo(
@@ -25,7 +27,7 @@ class Veiculo {
       modelo: map['modelo'],
       placa: map['placa'],
       cor: map['cor'],
-      donoCarroModel: map['donoCarroModel'],
+     // donoCarroModel: map['donoCarroModel'],
       deleted: map['deleted'],
     );
   }
@@ -37,7 +39,7 @@ class Veiculo {
       'modelo': modelo,
       'placa': placa,
       'cor': cor,
-      'donoCarroModel': donoCarroModel,
+      //'donoCarroModel': donoCarroModel,
       'deleted': deleted,
     };
   }

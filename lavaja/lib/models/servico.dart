@@ -14,7 +14,7 @@ class Servico{
 
      factory Servico.fromMap(Map<String, dynamic> map) {
       return Servico(
-        id: map['id'],
+        id: map['id'] as int,
         nome: map['nome'],
         valor: map['valor'],
         tamCarro: map['tamCarro'],

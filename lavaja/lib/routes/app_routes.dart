@@ -13,4 +13,7 @@ class AppRoutes {
   static const HISTORICOLAVACAR = '/historico-lavacar';
   static const CONTRATARSERVLAVACAR = '/contratarservicolavacar';
   static const DETALHESLAVACAR = '/detalhes-lavacar';
+  static const CREATEVEICULO = '/cadastrar-veiculo/';
+  static const LISTAVEICULOS = '/lista-veiculos/';
+  static const EDITVEICULO = '/veiculo/:id';
 }

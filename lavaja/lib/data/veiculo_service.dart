@@ -19,25 +19,23 @@ Future<Veiculo> getVeiculoById(String id) async {
     return Veiculo.fromMap(data);
   }
 
-  Future<void> createVeiculo(String? marca, String? modelo, String? placa, String? cor, int? donoCarroModel, bool? deleted) async {
+  Future<void> createVeiculo(String? marca, String? modelo, String? placa, String? cor) async {
 
     await dio.post('http://192.168.1.7:8080/api/v1/veiculo', data: {
       'marca': marca,
       'modelo': modelo,
       'placa': placa,
       'cor': cor,
-      'donoCarroModel': donoCarroModel,
-      'deleted': deleted,
     });
   }
-    Future<void> updateVeiculo(String id, String? marca, String? modelo, String? placa, String? cor, int? donoCarroModel) async {
+    Future<void> updateVeiculo(int id, String? marca, String? modelo, String? placa, String? cor) async {
 
     await dio.put('http://192.168.1.7:8080/api/v1/veiculo/$id', data: {
       'marca': marca,
       'modelo': modelo,
       'placa': placa,
       'cor': cor,
-      'donoCarroModel': donoCarroModel,
+     
     });
   }
 

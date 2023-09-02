@@ -15,15 +15,18 @@ class VeiculoProvider with ChangeNotifier {
     veiculos = await service.getListarVeiculos();
      notifyListeners();
   }
-
-   void createVeiculo(String? marca, String? modelo, String? placa, String? cor, int? donoCarroModel, bool? deleted) async {
+   Future<Veiculo?> getVeiculoById(String id) async {
+    veiculo = await service.getVeiculoById(id);
+    return veiculo;
+  }
+   Future<void> createVeiculo(String? marca, String? modelo, String? placa, String? cor) async {
     final veiculo =
-        await service.createVeiculo(marca, modelo, placa, cor, donoCarroModel, deleted);
+        await service.createVeiculo(marca, modelo, placa, cor);
     notifyListeners();
   }
-  void update(String id, String? marca, String? modelo, String? placa, String? cor, int? donoCarroModel) async {
+  void update(int id, String? marca, String? modelo, String? placa, String? cor) async {
     final veiculo = await service.updateVeiculo(
-        id, marca, modelo, placa, cor, donoCarroModel);
+        id, marca, modelo, placa, cor);
     await loadVeiculo();
     notifyListeners();
   }

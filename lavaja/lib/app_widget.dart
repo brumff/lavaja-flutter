@@ -3,12 +3,14 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/data/detalhesservico_service.dart';
 import 'package:lavaja/data/servico_service.dart';
+import 'package:lavaja/data/veiculo_service.dart';
 import 'package:lavaja/models/contratarservico.dart';
 import 'package:lavaja/provider/contratarservico_provider.dart';
 import 'package:lavaja/provider/detalhesservico_provider.dart';
 import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/provider/servico_provider.dart';
+import 'package:lavaja/provider/veiculo_provider.dart';
 import 'package:lavaja/view/filavacar_form.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +39,9 @@ class AppWidget extends StatelessWidget {
         ),
          ChangeNotifierProvider<LocalizacaoController>(
           create: (ctx) => LocalizacaoController(),
+        ),
+        ChangeNotifierProvider<VeiculoProvider>(
+          create: (ctx) => VeiculoProvider(service: VeiculoService()),
         ),
       ],
       child: MaterialApp.router(
