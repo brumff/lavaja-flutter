@@ -24,7 +24,7 @@ class VeiculoProvider with ChangeNotifier {
         await service.createVeiculo(marca, modelo, placa, cor);
     notifyListeners();
   }
-  void update(int id, String? marca, String? modelo, String? placa, String? cor) async {
+ Future<void> update(int id, String? marca, String? modelo, String? placa, String? cor) async {
     final veiculo = await service.updateVeiculo(
         id, marca, modelo, placa, cor);
     await loadVeiculo();

@@ -24,6 +24,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
   @override
   void initState() {
     super.initState();
+    print(widget.id);
     if (widget.id != null) {
       setState(() {
         isLoading = true;
@@ -32,7 +33,9 @@ class _VeiculoFormState extends State<VeiculoForm> {
           .getVeiculoById(widget.id!)
           .then((e) {
         _formData['id'] = e?.id.toString() ?? '';
+
         _formData['marca'] = e?.marca ?? '';
+
         _formData['modelo'] = e?.modelo ?? '';
         _formData['placa'] = e?.placa ?? '';
         _formData['cor'] = e?.cor ?? '';
@@ -66,6 +69,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  initialValue: _formData['marca'],
                   decoration: InputDecoration(labelText: 'Marca'),
                   onChanged: (value) => _formData['marca'] = value,
                   validator: (value) {
@@ -76,6 +80,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _formData['modelo'],
                   decoration: InputDecoration(labelText: 'Modelo'),
                   onChanged: (value) => _formData['modelo'] = value,
                   validator: (value) {
@@ -86,6 +91,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _formData['placa'],
                   decoration: InputDecoration(labelText: 'Placa'),
                   onChanged: (value) => _formData['placa'] = value,
                   validator: (value) {
@@ -96,6 +102,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _formData['cor'],
                   decoration: InputDecoration(labelText: 'Cor'),
                   onChanged: (value) => _formData['cor'] = value,
                   validator: (value) {},
@@ -105,31 +112,65 @@ class _VeiculoFormState extends State<VeiculoForm> {
                     final isValid = _form.currentState?.validate();
                     if (isValid!) {
                       _form.currentState!.save();
+                      if (widget.id != null) {
+                        try {
+                          await Provider.of<VeiculoProvider>(context,
+                                  listen: false)
+                              .update(
+                                  int.parse(_formData['id'] ?? ''),
+                                  _formData['marca'] ?? '',
+                                  _formData['modelo'] ?? '',
+                                  _formData['placa'] ?? '',
+                                  _formData['cor'] ?? '');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Veículo editado com sucesso!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          Provider.of<VeiculoProvider>(context, listen: false)
+                              .loadVeiculo()
+                              .then((_) {
+                            Modular.to.navigate(AppRoutes.LISTAVEICULOS);
+                          });
+                        } catch (error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Erro ao editar veículo'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      } else {
+                        try {
+                          await Provider.of<VeiculoProvider>(context,
+                                  listen: false)
+                              .createVeiculo(
+                            _formData['marca'] ?? '',
+                            _formData['modelo'] ?? '',
+                            _formData['placa'] ?? '',
+                            _formData['cor'] ?? '',
+                          );
 
-                      try {
-                        await Provider.of<VeiculoProvider>(context,
-                                listen: false)
-                            .createVeiculo(
-                          _formData['marca'] ?? '',
-                          _formData['modelo'] ?? '',
-                          _formData['placa'] ?? '',
-                          _formData['cor'] ?? '',
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Veículo criado com sucesso!'),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      } catch (error) {
-                        print(error);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Erro ao criar veículo'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Veículo criado com sucesso!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          Provider.of<VeiculoProvider>(context, listen: false)
+                              .loadVeiculo()
+                              .then((_) {
+                            Modular.to.navigate(AppRoutes.LISTAVEICULOS);
+                          });
+                        } catch (error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Erro ao criar veículo'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       }
                     }
                   },
