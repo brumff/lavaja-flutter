@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
@@ -340,9 +339,7 @@ class _HomeDonoCarroState extends State<HomeDonoCarro> {
 
                             return GestureDetector(
                               onTap: () {
-                                Modular.to.pushNamed('/detalhes-lavacar',
-                                    arguments: lavacar.id);
-                                print(lavacar.id);
+                                Modular.to.pushNamed('/detalhes-lavacar/${lavacar.id}');
                               },
                               child: ListTile(
                                 title: Text(nome),

@@ -10,8 +10,6 @@ class LavacarProvider with ChangeNotifier {
   Lavacar? usuario;
   bool _isOpen = false;
   Map<String, String> _temposEspera = {};
-  
-  
 
   void setTempoEspera(String lavacarId, String tempo) {
     _temposEspera[lavacarId] = tempo;
@@ -22,7 +20,6 @@ class LavacarProvider with ChangeNotifier {
     return _temposEspera[lavacarId];
   }
 
-
   bool get isOpen => _isOpen;
 
   LavacarProvider({required this.service}) {
@@ -32,6 +29,17 @@ class LavacarProvider with ChangeNotifier {
   Future<void> getLavacar() async {
     usuario = await service.getLavacarByToken();
     notifyListeners();
+  }
+
+  Future<Lavacar> LavacaId(String id) async {
+    usuario = await service.getLavacarById(id);
+    notifyListeners();
+
+    if (usuario != null) {
+      return usuario!;
+    } else {
+      throw Exception('Não foi possível obter os dados do Lavacar');
+    }
   }
 
   List<Lavacar> lavacar = [];

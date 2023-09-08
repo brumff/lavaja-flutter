@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>398186825013-021pi0ek892f9nin2npbpm998g7ehfr6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.398186825013-021pi0ek892f9nin2npbpm998g7ehfr6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCKl2D1vxRqts7tI_tlxK2NH6SjruBY5bI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>398186825013</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.lavaja</string>
+	<key>PROJECT_ID</key>
+	<string>lavaja-392623</string>
+	<key>STORAGE_BUCKET</key>
+	<string>lavaja-392623.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:398186825013:ios:1673c2dd3d92afdd01b87c</string>
+</dict>
+</plist>

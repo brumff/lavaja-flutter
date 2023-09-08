@@ -47,13 +47,15 @@ dependencies:
   flutter_local_notifications: ^9.4.0
   flutter_native_timezone: ^2.0.0
   jwt_decoder: ^2.0.1 
-  flutter_map: ^0.14.0
-  latlong2: 
+  latlong2: ^0.9.0
   flutter_background_service: ^5.0.1
   flutter_background_service_android: ^6.0.1
   device_info_plus: ^9.0.3
-  syncfusion_flutter_sliders: 
   permission_handler: ^10.4.3
+  firebase_core:
+  timezone:
+
+
 
 dev_dependencies:
   flutter_test:

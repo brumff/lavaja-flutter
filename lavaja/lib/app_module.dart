@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/view/buscaendereco.dart';
+import 'package:lavaja/view/card_home_donocarro.dart';
 import 'package:lavaja/view/contratarservlavacar_form.dart';
 import 'package:lavaja/view/detalheslavacar_form.dart';
 import 'package:lavaja/view/donocarro_form.dart';
@@ -40,6 +41,7 @@ class AppModule extends Module {
         ChildRoute(AppRoutes.HOMEDONOCARRO,
             child: (context, args) => HomeDonoCarro(),
             transition: TransitionType.leftToRight),
+     
         ChildRoute(AppRoutes.HOMELAVACAR,
             child: (context, args) => HomeLavaCar(),
             transition: TransitionType.leftToRight),
@@ -73,22 +75,24 @@ class AppModule extends Module {
             child: (context, args) => ContratarServLavacar(),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.DETALHESLAVACAR,
-            child: (context, args) => DetalhesLavacarForm(),
+            child: (context, args) => DetalhesLavacarForm(
+                  id: args.params['id'],
+                ),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.CREATEVEICULO,
             child: (context, args) => VeiculoForm(
-                isEditing: false,
+                  isEditing: false,
                 ),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.LISTAVEICULOS,
-            child: (context, args) => VeiculoLista(
-                ),
+            child: (context, args) => VeiculoLista(),
             transition: TransitionType.leftToRight),
-        ChildRoute(AppRoutes.EDITVEICULO,
-            child: (context, args) => VeiculoForm(
-                  id: args.params[
-                    'id'],
-                  isEditing: true,
-                ),)
+        ChildRoute(
+          AppRoutes.EDITVEICULO,
+          child: (context, args) => VeiculoForm(
+            id: args.params['id'],
+            isEditing: true,
+          ),
+        )
       ];
 }

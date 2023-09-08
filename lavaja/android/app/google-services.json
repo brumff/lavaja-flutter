@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "398186825013",
+    "project_id": "lavaja-392623",
+    "storage_bucket": "lavaja-392623.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398186825013:android:041dd1dd943b232501b87c",
+        "android_client_info": {
+          "package_name": "com.example.lavaja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398186825013-5jrk2k38rk0g75aejnimuatun19lcr5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC09y2KXxYaA2J4YXBACdhIAu1BaLkLN30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398186825013-5jrk2k38rk0g75aejnimuatun19lcr5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398186825013:android:8e2560bf539fbdd701b87c",
+        "android_client_info": {
+          "package_name": "com.lavaja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398186825013-5jrk2k38rk0g75aejnimuatun19lcr5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC09y2KXxYaA2J4YXBACdhIAu1BaLkLN30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398186825013-5jrk2k38rk0g75aejnimuatun19lcr5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

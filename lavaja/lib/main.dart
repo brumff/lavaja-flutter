@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/data/lavacar_service.dart';
+import 'package:lavaja/firebase_options.dart';
 import 'package:lavaja/provider/contratarservico_provider.dart';
 import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
@@ -26,10 +28,10 @@ import 'app_module.dart';
 import 'app_widget.dart';
 import 'data/donocarro_service.dart';
 
-void main() {
-   return runApp(ModularApp(module: AppModule(), child: AppWidget()));
-}
 
+void main() async {
+  return runApp(ModularApp(module: AppModule(), child: AppWidget()));
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -43,7 +45,8 @@ class MyApp extends StatelessWidget {
           create: (ctx) => DonoCarroProvider(service: DonoCarroService()),
         ),
         ChangeNotifierProvider<ContratarServicoProvider>(
-          create: (ctx) => ContratarServicoProvider(service: ContratarServicoService()),
+          create: (ctx) =>
+              ContratarServicoProvider(service: ContratarServicoService()),
         ),
       ],
       child: MaterialApp(
