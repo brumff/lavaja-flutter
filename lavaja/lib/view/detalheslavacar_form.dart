@@ -50,64 +50,115 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
         isLoading = false;
       });
     });
-     Provider.of<DetalhesServicoProvider>(context, listen: false).getDetalhesServico(widget.id!);
+    Provider.of<DetalhesServicoProvider>(context, listen: false)
+        .getDetalhesServico(widget.id!);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('${lavacarNome}'.toUpperCase()),
-        ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 16,
+      appBar: AppBar(
+        title: Text('${lavacarNome}'.toUpperCase()),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 16,
+          ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${lavacarNome}',
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${lavacarNome}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Text(
+                        'Tempo fila: ${lavacarTempoFila?.toStringAsFixed(0)} Min.',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          'Tempo fila: ${lavacarTempoFila?.toStringAsFixed(0)}',
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding:  EdgeInsets.fromLTRB(16, 2, 16, 16),
-                    child: Text(
-                        'Endereço: ${lavacarRua}, ${lavacarNumero} - ${lavacarBairro}, ${lavacarCidade}'),
-                  ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, 2, 16, 16),
+                  child: Text(
+                      'Endereço: ${lavacarRua}, ${lavacarNumero} - ${lavacarBairro}, ${lavacarCidade}'),
+                ),
+              ],
             ),
-            Expanded(child: Consumer<DetalhesServicoProvider>(builder: (_, data, __) {
-              return ListView.builder(
+          ),
+           SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 2, 2, 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Serviços:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              child: Consumer<DetalhesServicoProvider>(builder: (_, data, __) {
+            return ListView.builder(
                 itemCount: data.detalhesServico.length,
                 itemBuilder: (context, index) {
                   final item = data.detalhesServico[index];
-                  return ListTile(
-                    title: Text(item.nome ?? ''),
-                    subtitle: Text('R\$: ${item.valor.toString() ?? ''}' ),
-                    trailing: Text('Contratar Serviço'),
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text(
+                            item.nome ?? '',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'R\$ ${item.valor.toString() ?? ''}',
+                          ),
+                          trailing: Row(
+                             mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Contratar Serviço', style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]
+                              ),),
+                              Icon(Icons.arrow_forward_ios),
+                              
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Divider(),
+                        )
+                      ],
+                    ),
                   );
                 });
-            } ))
-          ],
-        ),
-        );
+          }))
+        ],
+      ),
+    );
   }
 }
