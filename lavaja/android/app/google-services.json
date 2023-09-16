@@ -29,6 +29,13 @@
             {
               "client_id": "398186825013-5jrk2k38rk0g75aejnimuatun19lcr5k.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "398186825013-021pi0ek892f9nin2npbpm998g7ehfr6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lavaja"
+              }
             }
           ]
         }
@@ -58,6 +65,13 @@
             {
               "client_id": "398186825013-5jrk2k38rk0g75aejnimuatun19lcr5k.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "398186825013-021pi0ek892f9nin2npbpm998g7ehfr6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lavaja"
+              }
             }
           ]
         }

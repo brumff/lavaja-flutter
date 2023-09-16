@@ -1,22 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:provider/provider.dart';
 
 import '../data/auth_service.dart';
 import '../data/prefs_service.dart';
+import '../provider/donocarro_provider.dart';
 import '../routes/app_routes.dart';
 
-class MenuDonoCarroComponent extends StatelessWidget {
-  const MenuDonoCarroComponent({Key? key}) : super(key: key);
+class MenuDonoCarroComponent extends StatefulWidget {
+  @override
+  State<MenuDonoCarroComponent> createState() => _MenuDonoCarroComponentState();
+}
+
+class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
+  String? nomeUsuario;
+  String? emailUsuario;
+
+  @override
+  void initState() {
+  
+  }
 
   @override
   Widget build(BuildContext context) {
+    final bool isLoggedIn = AuthService.token != null;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           Container(
-            height: 75,
-            color: Colors.blue,
+            height: 110,
+            child: UserAccountsDrawerHeader(
+              accountName: Text('${nomeUsuario}'),
+              accountEmail: Text('${emailUsuario}'),
+            ),
+          ),
+          CustomDrawerTile(
+            title: 'Menu',
+            icon: Icons.arrow_forward_ios_sharp,
+            onTap: () {
+              Modular.to.navigate('/home-donocarro');
+            },
+          ),
+          CustomDrawerTile(
+            title: 'Localizar lavacar',
+            icon: Icons.arrow_forward_ios_sharp,
+            onTap: () {
+              Modular.to.navigate('/buscar-lavacar');
+            },
           ),
           CustomDrawerTile(
             title: 'Editar perfil',

@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:lavaja/view/buscaendereco.dart';
+import 'package:lavaja/view/buscar_lavacar.dart';
 import 'package:lavaja/view/card_home_donocarro.dart';
 import 'package:lavaja/view/contratarservlavacar_form.dart';
 import 'package:lavaja/view/detalheslavacar_form.dart';
@@ -41,7 +42,9 @@ class AppModule extends Module {
         ChildRoute(AppRoutes.HOMEDONOCARRO,
             child: (context, args) => HomeDonoCarro(),
             transition: TransitionType.leftToRight),
-     
+     ChildRoute(AppRoutes.BUSCARLAVACAR,
+            child: (context, args) => BuscarLavacar(),
+            transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.HOMELAVACAR,
             child: (context, args) => HomeLavaCar(),
             transition: TransitionType.leftToRight),

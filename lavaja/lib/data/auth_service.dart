@@ -9,7 +9,7 @@ class AuthService {
 
   Future<dynamic> login(String email, String senha) async {
     try {
-      final response = await dio.post('http://192.168.100.112:8080/login', data: {
+      final response = await dio.post('http://192.168.1.20:8080/login', data: {
         'email': email,
         'senha': senha,
       });

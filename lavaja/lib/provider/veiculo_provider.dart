@@ -30,5 +30,9 @@ class VeiculoProvider with ChangeNotifier {
     await loadVeiculo();
     notifyListeners();
   }
-  
+  Future<void> deletar(int? id) async {
+   final veiculo = await service.deletarVeiculo(id);
+     await loadVeiculo();
+     notifyListeners();
+  }
 }

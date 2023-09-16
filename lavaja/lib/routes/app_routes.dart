@@ -16,5 +16,5 @@ class AppRoutes {
   static const CREATEVEICULO = '/cadastrar-veiculo/';
   static const LISTAVEICULOS = '/lista-veiculos/';
   static const EDITVEICULO = '/veiculo/:id';
-  static const DONOCARRO2 = '/cadastro-dono-carro2';
+  static const BUSCARLAVACAR = '/buscar-lavacar';
 }

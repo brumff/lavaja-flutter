@@ -55,7 +55,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.id == null ? 'Cadastro veículo' : 'Editar veículo'),
+        title: Text(widget.id == null ? 'CADASTRAR VEÍCULO' : 'EDITAR VEÍCULO'),
         leading: IconButton(
             onPressed: () {
               Modular.to.navigate(AppRoutes.LISTAVEICULOS);
@@ -65,119 +65,139 @@ class _VeiculoFormState extends State<VeiculoForm> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Form(
-            key: _form,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  initialValue: _formData['marca'],
-                  decoration: InputDecoration(labelText: 'Marca'),
-                  onChanged: (value) => _formData['marca'] = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _formData['modelo'],
-                  decoration: InputDecoration(labelText: 'Modelo'),
-                  onChanged: (value) => _formData['modelo'] = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _formData['placa'],
-                  decoration: InputDecoration(labelText: 'Placa'),
-                  onChanged: (value) => _formData['placa'] = value,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Campo obrigatório';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  initialValue: _formData['cor'],
-                  decoration: InputDecoration(labelText: 'Cor'),
-                  onChanged: (value) => _formData['cor'] = value,
-                  validator: (value) {},
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final isValid = _form.currentState?.validate();
-                    if (isValid!) {
-                      _form.currentState!.save();
-                      if (widget.id != null) {
-                        try {
-                          await Provider.of<VeiculoProvider>(context,
-                                  listen: false)
-                              .update(
-                                  int.parse(_formData['id'] ?? ''),
-                                  _formData['marca'] ?? '',
-                                  _formData['modelo'] ?? '',
-                                  _formData['placa'] ?? '',
-                                  _formData['cor'] ?? '');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Veículo editado com sucesso!'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          Provider.of<VeiculoProvider>(context, listen: false)
-                              .loadVeiculo()
-                              .then((_) {
-                            Modular.to.navigate(AppRoutes.LISTAVEICULOS);
-                          });
-                        } catch (error) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Erro ao editar veículo'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      } else {
-                        try {
-                          await Provider.of<VeiculoProvider>(context,
-                                  listen: false)
-                              .createVeiculo(
-                            _formData['marca'] ?? '',
-                            _formData['modelo'] ?? '',
-                            _formData['placa'] ?? '',
-                            _formData['cor'] ?? '',
-                          );
+          key: _form,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                initialValue: _formData['marca'],
+                decoration: InputDecoration(labelText: 'Marca'),
+                onChanged: (value) => _formData['marca'] = value,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo obrigatório';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                initialValue: _formData['modelo'],
+                decoration: InputDecoration(labelText: 'Modelo'),
+                onChanged: (value) => _formData['modelo'] = value,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo obrigatório';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                initialValue: _formData['placa'],
+                decoration: InputDecoration(labelText: 'Placa'),
+                onChanged: (value) => _formData['placa'] = value,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo obrigatório';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                initialValue: _formData['cor'],
+                decoration: InputDecoration(labelText: 'Cor'),
+                onChanged: (value) => _formData['cor'] = value,
+                validator: (value) {},
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final isValid = _form.currentState?.validate();
+                  if (isValid!) {
+                    _form.currentState!.save();
+                    if (widget.id != null) {
+                      try {
+                        await Provider.of<VeiculoProvider>(context,
+                                listen: false)
+                            .update(
+                                int.parse(_formData['id'] ?? ''),
+                                _formData['marca'] ?? '',
+                                _formData['modelo'] ?? '',
+                                _formData['placa'] ?? '',
+                                _formData['cor'] ?? '');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Veículo editado com sucesso!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Provider.of<VeiculoProvider>(context, listen: false)
+                            .loadVeiculo()
+                            .then((_) {
+                          Modular.to.navigate(AppRoutes.LISTAVEICULOS);
+                        });
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Erro ao editar veículo'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    } else {
+                      try {
+                        await Provider.of<VeiculoProvider>(context,
+                                listen: false)
+                            .createVeiculo(
+                          _formData['marca'] ?? '',
+                          _formData['modelo'] ?? '',
+                          _formData['placa'] ?? '',
+                          _formData['cor'] ?? '',
+                        );
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Veículo criado com sucesso!'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          Provider.of<VeiculoProvider>(context, listen: false)
-                              .loadVeiculo()
-                              .then((_) {
-                            Modular.to.navigate(AppRoutes.LISTAVEICULOS);
-                          });
-                        } catch (error) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Erro ao criar veículo'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Veículo criado com sucesso!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Provider.of<VeiculoProvider>(context, listen: false)
+                            .loadVeiculo()
+                            .then((_) {
+                          Modular.to.navigate(AppRoutes.LISTAVEICULOS);
+                        });
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Erro ao criar veículo'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  }
+                },
+                child: Text('Salvar'),
+              ),
+              Visibility(
+                visible: widget.id != null,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (widget.id != null) {
+                      int? veiculoId = int.tryParse(widget.id!);
+                      if (veiculoId != null) {
+                        await Provider.of<VeiculoProvider>(context,
+                                listen: false)
+                            .deletar(veiculoId);
                       }
                     }
                   },
-                  child: Text('Salvar'),
-                )
-              ],
-            )),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  child: Text('Excluir'),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

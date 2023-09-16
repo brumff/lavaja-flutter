@@ -101,7 +101,7 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
               ],
             ),
           ),
-           SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
             padding: EdgeInsets.fromLTRB(16, 2, 2, 2),
             child: Row(
@@ -138,13 +138,16 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
                             'R\$ ${item.valor.toString() ?? ''}',
                           ),
                           trailing: Row(
-                             mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('Contratar Serviço', style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]
-                              ),),
+                              Text(
+                                'Contratar Serviço',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey[700]),
+                              ),
                               Icon(Icons.arrow_forward_ios),
-                              
                             ],
                           ),
                         ),

@@ -152,7 +152,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dono do carro'),
+        title:Text(AuthService.token == null ? 'DONO DO CARRO' : 'EDITAR PERFIL'),
         leading: IconButton(
             onPressed: () {
               if (AuthService.token == null) {

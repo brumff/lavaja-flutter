@@ -52,8 +52,9 @@ dependencies:
   flutter_background_service_android: ^6.0.1
   device_info_plus: ^9.0.3
   permission_handler: ^10.4.3
-  firebase_core:
   timezone:
+  firebase_core: ^2.15.1
+  firebase_messaging: ^14.6.7
 
 
 

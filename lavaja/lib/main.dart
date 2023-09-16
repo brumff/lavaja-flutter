@@ -7,6 +7,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
+import 'package:lavaja/data/firebase_api.dart';
 import 'package:lavaja/data/lavacar_service.dart';
 import 'package:lavaja/firebase_options.dart';
 import 'package:lavaja/provider/contratarservico_provider.dart';
@@ -30,6 +31,9 @@ import 'data/donocarro_service.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().iniNotification();
   return runApp(ModularApp(module: AppModule(), child: AppWidget()));
 }
 
