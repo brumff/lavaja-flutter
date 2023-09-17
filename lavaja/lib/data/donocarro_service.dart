@@ -6,7 +6,8 @@ class DonoCarroService {
   final Dio dio = Dio();
 
   Future<List<DonoCarro>> getDonoCarro() async {
-    final response = await dio.get('http://192.168.1.20:8080/api/v1/donocarro');
+    dio.options.headers = {'authorization': AuthService.token};
+    final response = await dio.get('http://192.168.1.20:8080/api/v1/donocarro/');
     final data = response.data as List<dynamic>;
     return data.map((json) => DonoCarro.fromMap(json)).toList();
   }
