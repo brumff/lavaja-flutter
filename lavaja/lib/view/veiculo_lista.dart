@@ -11,7 +11,7 @@ class VeiculoLista extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SEUS VEÍCULOS'),
+        title: Text('MEUS VEÍCULOS'),
         actions: [
           IconButton(
               onPressed: () {

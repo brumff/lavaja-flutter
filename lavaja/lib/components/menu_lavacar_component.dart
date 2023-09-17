@@ -6,8 +6,26 @@ import 'package:lavaja/models/lavacar.dart';
 
 import '../routes/app_routes.dart';
 
-class MenuLavacarComponent extends StatelessWidget {
+class MenuLavacarComponent extends StatefulWidget {
   const MenuLavacarComponent({Key? key}) : super(key: key);
+
+  @override
+  State<MenuLavacarComponent> createState() => _MenuLavacarComponentState();
+}
+
+class _MenuLavacarComponentState extends State<MenuLavacarComponent> {
+  String? emailUsuario;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (AuthService.token != null) {
+      var usuario = AuthService.getUsuario();
+
+      emailUsuario = usuario['email'] ?? '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +34,8 @@ class MenuLavacarComponent extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            height: 75,
+            height: 110,
+            child: UserAccountsDrawerHeader(accountName: Text('teste'), accountEmail:  Text('${emailUsuario}')),
             color: Colors.blue,
           ),
           CustomDrawerTile(

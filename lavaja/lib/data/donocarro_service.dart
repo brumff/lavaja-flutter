@@ -13,36 +13,38 @@ class DonoCarroService {
 
   Future<DonoCarro> getDonoCarroByToken() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.1.20:8080/api/v1/donocarro/');
+    final response =
+        await dio.get('http://192.168.1.20:8080/api/v1/donocarro/');
     final data = response.data;
     return DonoCarro.fromMap(data);
   }
 
- Future<String> createDonoCarro(String? nome, String? cpf, String? telefone,
-    String? email, String? genero, String? senha, String? confSenha) async {
-  try {
-    final response = await dio.post('http://192.168.1.20:8080/api/v1/donocarro', data: {
-      'nome': nome,
-      'cpf': cpf,
-      'telefone': telefone,
-      'email': email,
-      'genero': genero,
-      'senha': senha,
-      'confSenha': confSenha
-    });
+  Future<String> createDonoCarro(String? nome, String? cpf, String? telefone,
+      String? email, String? genero, String? senha, String? confSenha) async {
+    try {
+      final response =
+          await dio.post('http://192.168.1.20:8080/api/v1/donocarro', data: {
+        'nome': nome,
+        'cpf': cpf,
+        'telefone': telefone,
+        'email': email,
+        'genero': genero,
+        'senha': senha,
+        'confSenha': confSenha
+      });
 
-    if (response.statusCode == 200) {
-      return 'Cadastro realizado com sucesso!';
-    } else {
-      return 'Erro ao cadastrar: ${response.data}';
+      if (response.statusCode == 200) {
+        return 'Cadastro realizado com sucesso!';
+      } else {
+        return 'Erro ao cadastrar: ${response.data}';
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return 'Erro no backend: ${e.response!.data}';
+      }
+      return 'Erro no Dio: $e';
     }
-  } on DioError catch (e) {
-    if (e.response != null) {
-      return 'Erro no backend: ${e.response!.data}';
-    }
-    return 'Erro no Dio: $e';
   }
-}
 
   Future<void> updateDonoCarro(
       String? nome, String? cpf, String? telefone, String? genero) async {
@@ -60,5 +62,15 @@ class DonoCarroService {
 
   Future<void> deleteDonoCarro(int? id) async {
     await dio.delete('http://192.168.1.20:8080/api/v1/donocarro/$id');
+  }
+
+  Future<void> tokenFirebase(String? tokenFirebase) async {
+    dio.options.headers = {'authorization': AuthService.token};
+    await dio.put(
+      'http://192.168.1.20:8080/api/v1/donocarro/tokenfirebase',
+      data: {
+        'tokenFirebase': tokenFirebase
+      },
+    );
   }
 }

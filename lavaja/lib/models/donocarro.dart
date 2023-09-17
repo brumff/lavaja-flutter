@@ -10,6 +10,7 @@ class DonoCarro {
   String? senha;
   String? confSenha;
   String? perfis;
+  String? tokenFirebase;
 
   DonoCarro(
       {this.id,
@@ -20,7 +21,8 @@ class DonoCarro {
       this.genero,
       this.senha,
       this.confSenha,
-      this.perfis});
+      this.perfis,
+      this.tokenFirebase});
 
   factory DonoCarro.fromMap(Map<String, dynamic> map) {
     return DonoCarro(
@@ -32,7 +34,9 @@ class DonoCarro {
         genero: map['genero'],
         senha: map['senha'],
         confSenha: map['confSenha'],
-        perfis: map['perfis']);
+        perfis: map['perfis'],
+        tokenFirebase: map['tokebFirebase']
+        );
   }
 
   Map<String, dynamic> toMap() {
@@ -45,7 +49,8 @@ class DonoCarro {
       'genero': genero,
       'senha': senha,
       'confSenha': confSenha,
-      'perfis': perfis
+      'perfis': perfis,
+      'tokenFirebase': tokenFirebase
     };
   }
 

@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'auth_service.dart';
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -16,8 +20,6 @@ class FirebaseApi {
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
-
-
   }
 
   Future initPushNotification() async {

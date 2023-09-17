@@ -1,9 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/lavacar_service.dart';
+import 'package:lavaja/provider/donocarro_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../data/auth_service.dart';
+import '../data/donocarro_service.dart';
+import '../data/firebase_api.dart';
 import '../models/lavacar.dart';
 import '../provider/lavacar_provider.dart';
 import '../routes/app_routes.dart';
@@ -23,6 +27,7 @@ class _LoginFormState extends State<LoginForm> {
   Perfil? _perfil = Perfil.ROLE_DONOCARRO;
   AuthService _authService = AuthService();
   bool _senhaVisivel = false;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   void _login() async {
     setState(() {
@@ -48,6 +53,12 @@ class _LoginFormState extends State<LoginForm> {
 
         if (AuthService.authority == "ROLE_DONOCARRO") {
           Modular.to.navigate(AppRoutes.HOMEDONOCARRO);
+          try {
+            final firebaseToken = await _firebaseMessaging.getToken();
+            Provider.of<DonoCarroProvider>(context, listen: false)
+                .tokenFirebase(firebaseToken);
+            print(firebaseToken);
+          } catch (error) {}
         } else if (AuthService.authority == "ROLE_LAVACAR") {
           try {
             Provider.of<LavacarProvider>(context, listen: false)
@@ -57,11 +68,11 @@ class _LoginFormState extends State<LoginForm> {
                       .usuario
                       ?.aberto ??
                   false;
-                  print(aberto);
+              print(aberto);
               if (aberto == true) {
-                   Modular.to.navigate(AppRoutes.CREATEFILA);
+                Modular.to.navigate(AppRoutes.CREATEFILA);
               } else {
-                 Modular.to.navigate(AppRoutes.HOMELAVACAR);
+                Modular.to.navigate(AppRoutes.HOMELAVACAR);
               }
             });
           } catch (error) {

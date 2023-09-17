@@ -43,4 +43,10 @@ class DonoCarroProvider with ChangeNotifier {
     await loadDonoCarro();
     notifyListeners();
   }
+
+  void tokenFirebase
+      (String? tokenFirebase) async {
+    await service.tokenFirebase(tokenFirebase);
+    notifyListeners();
+  }
 }

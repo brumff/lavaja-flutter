@@ -35,6 +35,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseApi().iniNotification();
   return runApp(ModularApp(module: AppModule(), child: AppWidget()));
+  
 }
 
 class MyApp extends StatelessWidget {
