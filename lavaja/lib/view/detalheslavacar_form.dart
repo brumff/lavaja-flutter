@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/detalhesservico_service.dart';
 import 'package:lavaja/data/servico_service.dart';
 import 'package:lavaja/models/servico.dart';
@@ -137,18 +138,23 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
                           subtitle: Text(
                             'R\$ ${item.valor.toString() ?? ''}',
                           ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Contratar Serviço',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[700]),
-                              ),
-                              Icon(Icons.arrow_forward_ios),
-                            ],
+                          trailing: GestureDetector(
+                            onTap: () {
+                               Modular.to.pushNamed('/contratarservicodonocarro');
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Contratar Serviço',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[700]),
+                                ),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            ),
                           ),
                         ),
                         Padding(

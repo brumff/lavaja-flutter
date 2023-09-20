@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:lavaja/models/servico.dart';
+import 'package:lavaja/models/veiculo.dart';
 
 class ContratarServico {
   int? id;
@@ -9,6 +10,7 @@ class ContratarServico {
   String? dataServico;
   int? donoCarro;
   Servico? servico;
+  Veiculo? veiculo;
   int? tempFila;
   String? placaCarro;
   DateTime? fimLavagem;
@@ -22,6 +24,7 @@ class ContratarServico {
       this.dataServico,
       this.donoCarro,
       this.servico,
+      this.veiculo,
       this.tempFila,
       this.placaCarro,
       this.fimLavagem, 
@@ -36,6 +39,7 @@ class ContratarServico {
         dataServico: map['dataServico'],
         donoCarro: map['donoCarro'],
         servico: Servico.fromMap(map['servicoId']),
+        veiculo: Veiculo.fromMap(map['veiculoId']),
         tempFila: map['tempFila'],
         placaCarro: map['placaCarro'],
         telefone:map['telefone']);
@@ -50,6 +54,7 @@ class ContratarServico {
       'dataServico': dataServico,
       'donoCarro': dataServico,
       'servico': servico,
+      'veiculo': veiculo,
       'tempFila': tempFila,
       'placaCarro': placaCarro,
       'telefone': telefone
