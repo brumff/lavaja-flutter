@@ -8,8 +8,10 @@ import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/provider/servico_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../app_module.dart';
 import '../components/menu_lavacar_component.dart';
 import '../models/lavacar.dart';
+import '../routes/app_routes.dart';
 
 class DetalhesLavacarForm extends StatefulWidget {
   final String? id;
@@ -140,7 +142,16 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
                           ),
                           trailing: GestureDetector(
                             onTap: () {
-                               Modular.to.pushNamed('/contratarservicodonocarro');
+                              print(lavacarTempoFila);
+                              Modular.to.pushNamed(
+                                AppRoutes.CONTRATARSERVDONOCARRO,
+                                arguments: {
+                                  'tempoDeEspera': lavacarTempoFila,
+                                  'servicoSelecionado': item.nome,
+                                  'valorTotal': item.valor.toString(),
+                                  'id': widget.id
+                                },
+                              );
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,

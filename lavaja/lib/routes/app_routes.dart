@@ -17,5 +17,5 @@ class AppRoutes {
   static const LISTAVEICULOS = '/lista-veiculos/';
   static const EDITVEICULO = '/veiculo/:id';
   static const BUSCARLAVACAR = '/buscar-lavacar';
-  static const CONTRATARSERVDONOCARRO = '/contratarservicodonocarro';
+  static const CONTRATARSERVDONOCARRO = '/contratar-servico-donocarro/:tempoDeEspera/:servicoSelecionado/:valorTotal/:lavacarId';
 }

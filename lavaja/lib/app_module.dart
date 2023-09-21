@@ -98,8 +98,15 @@ class AppModule extends Module {
             isEditing: true,
           ),
         ),
-        ChildRoute(AppRoutes.CONTRATARSERVDONOCARRO,
-            child: (context, args) => ContratarServDonocarro(),
-            transition: TransitionType.leftToRight),
+        ChildRoute(
+          AppRoutes.CONTRATARSERVDONOCARRO,
+          child: (context, args) => ContratarServDonocarro(
+            tempoDeEspera: args.params['tempoDeEspera'],
+            servicoSelecionado: args.params['servicoSelecionado'],
+            valorTotal: args.params['valorTotal'],
+            lavacarId: args.data['id']
+          ),
+          transition: TransitionType.leftToRight,
+        ),
       ];
 }
