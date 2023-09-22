@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:lavaja/data/veiculo_service.dart';
 import 'package:lavaja/provider/veiculo_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:lavaja/models/veiculo.dart';
 
 import '../provider/lavacar_provider.dart';
 
@@ -35,6 +37,9 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
   String? lavacarTelefone2;
   double? lavacarTempoFila;
   bool isLoading = true;
+  Veiculo? _selectedOption;
+  final _form = GlobalKey<FormState>();
+  final Map<String, dynamic> _formData = {};
 
   @override
   void initState() {
@@ -79,135 +84,138 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
   Widget build(BuildContext context) {
     final veiculoProvider = Provider.of<VeiculoProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Resumo do pedido'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 16,
-            ),
-            Center(
-              child: isLoading
-                  ? CircularProgressIndicator()
-                  : Column(
-                      children: [
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.location_on_sharp,
-                              ),
-                              title: Text(
-                                '${lavacarNome}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                'Endereço: ${lavacarRua}, ${lavacarNumero} - ${lavacarBairro}, ${lavacarCidade}',
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.timer,
-                              ),
-                              title: Text(
-                                'Tempo de espera',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text(
-                                '${tempoDeEspera} Min.',
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.local_car_wash_sharp,
-                              ),
-                              title: Text(
-                                'Serviço',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text('${servicoSelecionado}'),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.directions_car_filled_sharp,
-                              ),
-                              title: Text(
-                                'Veículo',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: DropdownButton(
-                                value: selectedVehicle.isNotEmpty
-                                    ? selectedVehicle
-                                    : veiculoProvider
-                                                .veiculo?.placa?.isNotEmpty ==
-                                            true
-                                        ? veiculoProvider.veiculo!
-                                            .placa // Use a string diretamente
-                                        : null,
-                                items: [
-                                  DropdownMenuItem(
-                                    value: veiculoProvider.veiculo?.placa,
-                                    child: Text(
-                                        veiculoProvider.veiculo?.placa ??
-                                            'Selecione um veículo'),
-                                  ),
-                                ],
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedVehicle = newValue.toString();
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: Icon(
-                                Icons.paid,
-                              ),
-                              title: Text(
-                                'Valor total',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Text('R\$ ${valorTotal}'),
-                            ),
-                          ],
-                        ),
-                        ElevatedButton(
-                            onPressed: () {}, child: Text('CONFIRMAR')),
-                      ],
+    return ChangeNotifierProvider<VeiculoProvider>(
+        create: (context) => VeiculoProvider(service: VeiculoService()),
+        child: Builder(
+          builder: (context) {
+            final data = Provider.of<VeiculoProvider>(context);
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Resumo do pedido'),
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 16,
                     ),
-            ),
-          ],
-        ),
-      ),
-    );
+                    Center(
+                      child: isLoading
+                          ? CircularProgressIndicator()
+                          : Column(
+                              children: [
+                                Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(
+                                        Icons.location_on_sharp,
+                                      ),
+                                      title: Text(
+                                        '${lavacarNome}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        'Endereço: ${lavacarRua}, ${lavacarNumero} - ${lavacarBairro}, ${lavacarCidade}',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(
+                                        Icons.timer,
+                                      ),
+                                      title: Text(
+                                        'Tempo de espera',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        '${tempoDeEspera} Min.',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(
+                                        Icons.local_car_wash_sharp,
+                                      ),
+                                      title: Text(
+                                        'Serviço',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text('${servicoSelecionado}'),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    ListTile(
+                                        leading: Icon(
+                                          Icons.directions_car_filled_sharp,
+                                        ),
+                                        title: Text(
+                                          'Veículo',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        subtitle:
+                                            DropdownButtonFormField<Veiculo>(
+                                          items: data.veiculos
+                                              .map((Veiculo value) {
+                                            return DropdownMenuItem<Veiculo>(
+                                              value: value,
+                                              child: Text('${value.placa}'),
+                                            );
+                                          }).toList(),
+                                          onChanged: (Veiculo? value) {
+                                            _selectedOption = value;
+                                           
+                                          },
+                                          decoration: InputDecoration(
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.always,
+                                            hintText: 'Selecione o veículo',
+                                            border: null,
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(
+                                        Icons.paid,
+                                      ),
+                                      title: Text(
+                                        'Valor total',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Text('R\$ ${valorTotal}'),
+                                    ),
+                                  ],
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {}, child: Text('CONFIRMAR')),
+                              ],
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ));
   }
 }
