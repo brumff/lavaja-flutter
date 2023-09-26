@@ -39,7 +39,7 @@ class ContratarServico {
         dataServico: map['dataServico'],
         donoCarro: map['donoCarro'],
         servico: Servico.fromMap(map['servicoId']),
-        veiculo: Veiculo.fromMap(map['veiculoId']),
+        veiculo: map['veiculoId'] != null ? Veiculo.fromMap(map['veiculoId']) : null,
         tempFila: map['tempFila'],
         placaCarro: map['placaCarro'],
         telefone:map['telefone']);

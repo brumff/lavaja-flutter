@@ -44,4 +44,19 @@ class ContratarServicoService {
       },
     );
   }
+
+    Future<void> createContratarServicoDonoCarro(
+      String? origem,  int? servicoId, int? veiculo) async {
+    dio.options.headers = {'authorization': AuthService.token};
+    await dio.post(
+      'http://192.168.1.20:8080/api/v1/contratarservico',
+      data: {
+        'origem': origem,
+        'servico': {'id': servicoId},
+        'veiculo': {'id': veiculo},
+
+
+      },
+    );
+  }
 }

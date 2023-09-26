@@ -148,6 +148,7 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
                                 arguments: {
                                   'tempoDeEspera': lavacarTempoFila,
                                   'servicoSelecionado': item.nome,
+                                  'idServico': item.id,
                                   'valorTotal': item.valor.toString(),
                                   'id': widget.id
                                 },

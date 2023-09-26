@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:lavaja/data/veiculo_service.dart';
 import 'package:lavaja/provider/veiculo_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:lavaja/models/veiculo.dart';
 
+import '../data/prefs_service.dart';
+import '../provider/contratarservico_provider.dart';
 import '../provider/lavacar_provider.dart';
+import '../routes/app_routes.dart';
 
 class ContratarServDonocarro extends StatefulWidget {
   @override
@@ -14,11 +20,13 @@ class ContratarServDonocarro extends StatefulWidget {
   final double? tempoDeEspera;
   final String? servicoSelecionado;
   final double? valorTotal;
+  final int? idServico;
 
   ContratarServDonocarro({
     this.lavacarId,
     this.tempoDeEspera,
     this.servicoSelecionado,
+    this.idServico,
     this.valorTotal,
   });
 }
@@ -27,6 +35,8 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
   String selectedVehicle = '';
   double? tempoDeEspera;
   String? servicoSelecionado;
+  int? idServico;
+
   double? valorTotal;
   String? lavacarNome;
   String? lavacarRua;
@@ -44,9 +54,12 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
   @override
   void initState() {
     super.initState();
+    _getToken();
     final args = Modular.args;
     tempoDeEspera = args.data['tempoDeEspera'];
     servicoSelecionado = args.data['servicoSelecionado'];
+    idServico = args.data['idServico'];
+    //print(idServico);
     valorTotal = double.parse(args.data['valorTotal']);
     Provider.of<LavacarProvider>(context, listen: false)
         .LavacaId(widget.lavacarId!)
@@ -67,16 +80,27 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
     final veiculoProvider =
         Provider.of<VeiculoProvider>(context, listen: false);
     veiculoProvider.loadVeiculo();
+  }
 
-    print(veiculoProvider.veiculos);
+  _getToken() async {
+    final token = await PrefsService.getToken();
+    if (token != null) {
+      final parts = token.split('Bearer ');
+      if (parts.length == 2) {
+        final encodedToken = parts[1];
+        final decodedToken = JwtDecoder.decode(encodedToken);
+        final userId = decodedToken['userId'];
 
-    for (var veiculo in veiculoProvider.veiculos) {
-      print('ID: ${veiculo.id}');
-      print('Marca: ${veiculo.marca}');
-      print('Modelo: ${veiculo.modelo}');
-      print('Placa: ${veiculo.placa}');
-      // Adicione mais campos aqui, se necessário
-      print('---'); // Separador entre os veículos
+        if (userId != null) {
+          print('ID do usuário: $userId');
+        } else {
+          print('ID do usuário não encontrado no token.');
+        }
+      } else {
+        print('Token inválido.');
+      }
+    } else {
+      print('Token não encontrado.');
     }
   }
 
@@ -179,7 +203,7 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
                                           }).toList(),
                                           onChanged: (Veiculo? value) {
                                             _selectedOption = value;
-                                           
+                                            _formData['veiculo'] = value?.id;
                                           },
                                           decoration: InputDecoration(
                                             floatingLabelBehavior:
@@ -207,7 +231,21 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
                                   ],
                                 ),
                                 ElevatedButton(
-                                    onPressed: () {}, child: Text('CONFIRMAR')),
+                                    onPressed: () {
+                                      _formData['origem'] = 'APP';
+                                      _formData['idServico'] = idServico;
+                                      Provider.of<ContratarServicoProvider>(
+                                              context,
+                                              listen: false)
+                                          .createContratarServicoDonocarro(
+                                              _formData['origem'] ?? '',
+                                              _formData['idServico'] ?? '',
+                                              _formData['veiculo'] ?? '');
+
+                                      Modular.to.navigate(AppRoutes.SUCESSOCONTRATARSERV);
+                                      _cadastroRealizado(context);
+                                    },
+                                    child: Text('CONFIRMAR')),
                               ],
                             ),
                     ),
@@ -218,4 +256,14 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
           },
         ));
   }
+}
+
+void _cadastroRealizado(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Serviço contratado com sucesso'),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green,
+    ),
+  );
 }

@@ -16,6 +16,7 @@ import 'package:lavaja/view/listaservico_form.dart';
 import 'package:lavaja/view/login_form.dart';
 import 'package:lavaja/view/servico_form.dart';
 import 'package:lavaja/view/splash.dart';
+import 'package:lavaja/view/sucessocontratarserv_form.dart';
 import 'package:lavaja/view/teste.dart';
 import 'package:lavaja/view/veiculo_form.dart';
 import 'package:lavaja/view/veiculo_lista.dart';
@@ -108,5 +109,8 @@ class AppModule extends Module {
           ),
           transition: TransitionType.leftToRight,
         ),
+         ChildRoute(AppRoutes.SUCESSOCONTRATARSERV,
+            child: (context, args) => SucessoContratarServ(),
+            transition: TransitionType.leftToRight),
       ];
 }

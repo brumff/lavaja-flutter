@@ -40,6 +40,13 @@ class ContratarServicoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void createContratarServicoDonocarro(
+      String? origem, int? servicoId, int? veiculo) async {
+    final contratarServLavacar =
+        await service.createContratarServicoDonoCarro(origem, servicoId, veiculo);
+    notifyListeners();
+  }
+
    List<String> calculateTempoEspera() {
     List<String> tempos = [];
 

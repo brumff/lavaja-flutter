@@ -4,10 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefsService {
   static String _key = 'key';
-  static save(String token) async {
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString(_key, jsonEncode({"token": token, "isAuth": true}));
-  }
+
+      static save(String token, int userId) async {
+        var prefs = await SharedPreferences.getInstance();
+        prefs.setString(_key, jsonEncode({"token": token, "isAuth": true, "userId": userId}));
+      }
 
   static Future<bool> isAuth() async {
     var prefs = await SharedPreferences.getInstance();

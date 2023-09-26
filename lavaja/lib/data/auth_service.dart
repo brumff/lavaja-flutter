@@ -9,6 +9,7 @@ class AuthService {
   static String? authority;
   static String? aberto;
   static String? emailUsuario;
+  static int?  userId;
 
 
   Future<dynamic> login(String email, String senha) async {
@@ -22,7 +23,8 @@ class AuthService {
         final data = response.data;
         authority = data['perfil'][0]['authority'];
         emailUsuario = data['email'];
-        await PrefsService.save(token!);
+        userId = data['id'];
+        await PrefsService.save(token!, userId!);
         return true;
       } else {
         return false;
