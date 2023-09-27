@@ -8,6 +8,7 @@ import 'package:lavaja/view/contratarservlavacar_form.dart';
 import 'package:lavaja/view/detalheslavacar_form.dart';
 import 'package:lavaja/view/donocarro_form.dart';
 import 'package:lavaja/view/filavacar_form.dart';
+import 'package:lavaja/view/historicoservico_donocarro.dart';
 import 'package:lavaja/view/historicoservico_lavacar.dart';
 import 'package:lavaja/view/home_donocarro.dart';
 import 'package:lavaja/view/home_lavacar.dart';
@@ -112,5 +113,8 @@ class AppModule extends Module {
          ChildRoute(AppRoutes.SUCESSOCONTRATARSERV,
             child: (context, args) => SucessoContratarServ(),
             transition: TransitionType.leftToRight),
+         ChildRoute(AppRoutes.HISTORICODONOCARRO,
+            child: (context, args) => HistoricoServicoDonoCarro(),
+            transition: TransitionType.leftToRight),   
       ];
 }

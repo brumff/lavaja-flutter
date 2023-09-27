@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:lavaja/components/menu_donocarro_component.dart';
+import 'package:lavaja/data/contratarservico_service.dart';
+import 'package:lavaja/models/contratarservico.dart';
+import 'package:lavaja/provider/contratarservico_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../components/menu_lavacar_component.dart';
-import '../data/contratarservico_service.dart';
 import '../provider/contratarservicodonocarro_provider.dart';
-import 'historicoservico_donocarro.dart';
+
+class HistoricoServicoDonoCarro extends StatefulWidget {
+  @override
+  State<HistoricoServicoDonoCarro> createState() =>
+      _HistoricoServicoDonoCarroState();
+}
 
 class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
   @override
@@ -18,7 +28,8 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
           service: ContratarServicoService(),
         ),
         builder: (context, _) {
-          final itemProvider = Provider.of<ContratarServicoDonocarroProvider>(context);
+          final itemProvider =
+              Provider.of<ContratarServicoDonocarroProvider>(context);
           final itemList = itemProvider.contratarServico;
           if (itemList.isEmpty) {
             return Center(
@@ -36,50 +47,35 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
               },
               children: itemList.map((item) {
                 final itemIndex = itemList.indexOf(item);
-                Color statusColor;
                 IconData statusIcon;
 
-                if (item.statusServico == 'Aguardando') {
-                  statusColor = Colors.yellow; // Cor para o status "Aguardando"
-                  statusIcon = Icons.access_time; // Ícone para o status "Aguardando"
+                if (item.statusServico == 'AGUARDANDO') {
+                  statusIcon = Icons.access_time;
                 } else {
-                  statusColor = Colors.green; // Cor para o status "Concluído"
-                  statusIcon = Icons.check_circle; // Ícone para o status "Concluído"
+                  statusIcon = Icons.check_circle;
                 }
-
-                final statusText = 'Status: ${item.statusServico}';
-                final textSplit = statusText.split(': ');
-                final labelText = textSplit[0] + ': ';
-                final highlightedText = textSplit[1];
-
                 return ExpansionPanel(
                   headerBuilder: (context, isExpanded) {
                     return ListTile(
                       title: Row(
                         children: [
-                          Icon(
-                            statusIcon,
-                            color: statusColor,
-                          ),
+                          Icon(statusIcon),
                           SizedBox(width: 10.0),
                           RichText(
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: labelText,
-                                  style: TextStyle(
-                                    color: statusColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  text: 'Carro: ${item.placaCarro} - Status: ',
                                 ),
                                 TextSpan(
-                                  text: highlightedText,
-                                  style: TextStyle(
-                                    color: Colors.black, // Cor preta
-                                    backgroundColor: Colors.yellow, // Cor de marca-texto
-                                  ),
-                                ),
+                                    text: item.statusServico,
+                                    style: TextStyle(
+                                    
+                                      backgroundColor:
+                                          getStatusColor(item.statusServico ?? ''),
+                                    )),
                               ],
+                              style: DefaultTextStyle.of(context).style,
                             ),
                           ),
                         ],
@@ -88,8 +84,7 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                   },
                   body: ListTile(
                     title: Text(
-                      'Serviço: ${item.servico?.nome} - Valor: ${item.servico?.valor}',
-                    ),
+                        'Serviço: ${item.servico?.nome} - Valor: ${item.servico?.valor}'),
                   ),
                   isExpanded: item.isExpanded ?? false,
                 );
@@ -98,7 +93,21 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
           );
         },
       ),
-      drawer: MenuLavacarComponent(),
+      drawer: MenuDonoCarroComponent(),
     );
+  }
+}
+
+Color getStatusColor(String status) {
+  switch (status) {
+    case 'AGUARDANDO':
+      return Colors.yellow;
+    case 'CONCLUPIDO':
+      return Colors.green;
+    case 'CANCELADO':
+      return Colors.red;
+    // Adicione mais casos conforme necessário para outros status
+    default:
+      return Colors.black; // Cor padrão se o status não for reconhecido
   }
 }

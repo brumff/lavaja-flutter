@@ -15,6 +15,14 @@ class ContratarServicoService {
     return data.map((json) => ContratarServico.fromMap(json)).toList();
   }
 
+  Future<List<ContratarServico>> getListarServicosDonocarro() async {
+    dio.options.headers = {'authorization': AuthService.token};
+    final response = await dio.get(
+        'http://192.168.1.20:8080/api/v1/contratarservico/donocarro-servicos');
+    final data = response.data as List<dynamic>;
+    return data.map((json) => ContratarServico.fromMap(json)).toList();
+  }
+
   Future<void> patchContratarServico(int? id, String? statusServico) async {
     dio.options.headers = {'authorization': AuthService.token};
 

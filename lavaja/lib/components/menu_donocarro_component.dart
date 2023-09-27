@@ -72,7 +72,9 @@ class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
           CustomDrawerTile(
               title: 'Historico de serviços',
               icon: Icons.arrow_forward_ios_sharp,
-              onTap: () {}),
+              onTap: () {
+                 Modular.to.navigate('/historico-donocarro');
+              }),
           CustomDrawerTile(
             title: 'Sair',
             icon: Icons.exit_to_app,
