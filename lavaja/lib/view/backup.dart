@@ -40,11 +40,11 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                 IconData statusIcon;
 
                 if (item.statusServico == 'Aguardando') {
-                  statusColor = Colors.yellow; // Cor para o status "Aguardando"
-                  statusIcon = Icons.access_time; // Ícone para o status "Aguardando"
+                  statusColor = Colors.yellow;
+                  statusIcon = Icons.access_time;
                 } else {
-                  statusColor = Colors.green; // Cor para o status "Concluído"
-                  statusIcon = Icons.check_circle; // Ícone para o status "Concluído"
+                  statusColor = Colors.green; 
+                  statusIcon = Icons.check_circle; 
                 }
 
                 final statusText = 'Status: ${item.statusServico}';

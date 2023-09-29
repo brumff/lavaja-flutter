@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
+import 'package:lavaja/data/firebase_api.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +22,9 @@ class _FilalavacarState extends State<Filalavacar> {
   @override
   void initState() {
     super.initState();
-    //   Timer.periodic(Duration(minutes: 2), (timer) {
-    //  setState(() {});
-    //});
+       Timer.periodic(Duration(minutes: 1), (timer) {
+      setState(() {});
+    });
   }
 
   //abre a pop para finalizar o serviço após o tempo ser zerado
@@ -207,12 +208,14 @@ class _FilalavacarState extends State<Filalavacar> {
                                       minutes:
                                           item.servico!.tempServico!.toInt()));
                                   mostrarPopup(
-                                    () {
-                                      // Enviar dados para o backend usando o provider
+                                    () async {
+                                     
                                       data.patchContratarServico(
                                         item.id,
                                         item.statusServico = 'FINALIZADO',
                                       );
+
+                                      
 
                                       Navigator.of(context).pop();
                                     },

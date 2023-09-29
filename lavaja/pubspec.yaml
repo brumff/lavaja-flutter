@@ -55,6 +55,7 @@ dependencies:
   timezone:
   firebase_core: ^2.15.1
   firebase_messaging: ^14.6.7
+  intl: ^0.17.0
 
 
 

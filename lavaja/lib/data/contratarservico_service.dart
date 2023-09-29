@@ -39,8 +39,8 @@ class ContratarServicoService {
     await dio.delete('http://192.168.1.20:8080/api/v1/contratarservico/$id');
   }
 
-  Future<void> createContratarServico(
-      String? origem, String? placaCarro, int? servicoId, String? telefone) async {
+  Future<void> createContratarServico(String? origem, String? placaCarro,
+      int? servicoId, String? telefone) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.post(
       'http://192.168.1.20:8080/api/v1/contratarservico',
@@ -53,8 +53,8 @@ class ContratarServicoService {
     );
   }
 
-    Future<void> createContratarServicoDonoCarro(
-      String? origem,  int? servicoId, int? veiculo) async {
+  Future<void> createContratarServicoDonoCarro(
+      String? origem, int? servicoId, int? veiculo) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.post(
       'http://192.168.1.20:8080/api/v1/contratarservico',
@@ -62,9 +62,15 @@ class ContratarServicoService {
         'origem': origem,
         'servico': {'id': servicoId},
         'veiculo': {'id': veiculo},
-
-
       },
     );
+  }
+
+  Future<String> getTokenFirebase(String id) async {
+     final response =
+        await dio.get('http://192.168.1.20:8080/api/v1/servico/$id');
+    final data = response.data;
+    final token = data as String; 
+    return token;
   }
 }

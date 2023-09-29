@@ -8,6 +8,7 @@ import 'package:lavaja/models/servico.dart';
 class ContratarServicoProvider with ChangeNotifier {
   final ContratarServicoService service;
   List<ContratarServico> contratarServico = [];
+  String? token;
 
   ContratarServicoProvider({required this.service}) {
     loadContratarServico();
@@ -33,21 +34,21 @@ class ContratarServicoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createContratarServico(
-      String? origem, String? placaCarro, int? servicoId, String? telefone) async {
-    final contratarServLavacar =
-        await service.createContratarServico(origem, placaCarro, servicoId, telefone);
+  void createContratarServico(String? origem, String? placaCarro,
+      int? servicoId, String? telefone) async {
+    final contratarServLavacar = await service.createContratarServico(
+        origem, placaCarro, servicoId, telefone);
     notifyListeners();
   }
 
   void createContratarServicoDonocarro(
       String? origem, int? servicoId, int? veiculo) async {
-    final contratarServLavacar =
-        await service.createContratarServicoDonoCarro(origem, servicoId, veiculo);
+    final contratarServLavacar = await service.createContratarServicoDonoCarro(
+        origem, servicoId, veiculo);
     notifyListeners();
   }
 
-   List<String> calculateTempoEspera() {
+  List<String> calculateTempoEspera() {
     List<String> tempos = [];
 
     for (var item in contratarServico) {
@@ -68,5 +69,9 @@ class ContratarServicoProvider with ChangeNotifier {
 
     return tempos;
   }
-}
 
+  Future<String?> getTokenFirebase(String id) async {
+    token = await service.getTokenFirebase(id);
+    return token;
+  }
+}
