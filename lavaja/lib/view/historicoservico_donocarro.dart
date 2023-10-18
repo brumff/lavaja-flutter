@@ -43,7 +43,7 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
               child: Text('Nenhum histórico encontrado.'),
             );
           }
-
+          
           return SingleChildScrollView(
             child: ExpansionPanelList(
               dividerColor: Colors.grey,
@@ -57,52 +57,158 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
               children: itemList.map((item) {
                 final itemIndex = itemList.indexOf(item);
                 IconData statusIcon;
-
                 if (item.statusServico == 'AGUARDANDO') {
                   statusIcon = Icons.access_time;
+                } else if (item.statusServico == 'FINALIZADO') {
+                  statusIcon = Icons.check_circle;
+                } else if (item.statusServico == 'EM_LAVAGEM') {
+                  statusIcon = Icons.bubble_chart_outlined;
                 } else {
                   statusIcon = Icons.check_circle;
                 }
-                
+
                 return ExpansionPanel(
                   headerBuilder: (context, isExpanded) {
-                    
                     return ListTile(
                       title: Row(
                         children: [
                           Icon(statusIcon),
                           SizedBox(width: 10.0),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Carro: ${item.placaCarro} - Status: ',
-                                  style: textStyle,
-                                ),
-                                TextSpan(
-                                  text: item.statusServico,
-                                  style: TextStyle(
-                                    backgroundColor: getStatusColor(
-                                        item.statusServico ?? ''),
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Carro: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                              ],
-                              style: textStyle,
+                                  TextSpan(
+                                    text: item.veiculo?.placa ?? '',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' - Status: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: item.statusServico,
+                                    style: TextStyle(
+                                      backgroundColor: getStatusColor(
+                                          item.statusServico ?? ''),
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     );
                   },
-                  
                   body: ListTile(
                     title: Row(
                       children: [
                         SizedBox(width: 30.0),
                         Expanded(
-                          child: Text(
-                            'Serviço: ${item.servico?.nome} - Valor: R\$ ${item.servico?.valor} - Data: 11/09/2023 - Lavacar: Bruna Lavacar',
-                            style: textStyle,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Serviço: ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            16,
+                                        color: Colors
+                                            .black, 
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${item.servico?.nome} -',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' Valor: ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            16,
+                                        color: Colors
+                                            .black, 
+                                      ),
+                                    ),
+                                     TextSpan(
+                                      text:
+                                          'R\$ ${item.servico?.valor}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Data: ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${formatarData(item.dataServico ?? '')} - ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                     TextSpan(
+                                      text: 'Lavacar:',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          'Nome do lavacar',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                            ],
                           ),
                         ),
                       ],
@@ -120,15 +226,24 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
   }
 }
 
-Color getStatusColor(String status) {
+Color? getStatusColor(String status) {
   switch (status) {
     case 'AGUARDANDO':
-      return Colors.yellow;
-    case 'CONCLUÍDO':
-      return Colors.green;
+      return Colors.yellow[200];
+    case 'FINALIZADO':
+      return Colors.green[200];
     case 'CANCELADO':
-      return Colors.red;
+      return Colors.red[200];
+    case 'EM_LAVAGEM':
+      return Colors.blue[200];
     default:
-      return Colors.black;
+      return Colors.black12;
   }
+}
+
+String formatarData(String dataString) {
+  final inputFormat = DateFormat('yyyy-MM-ddTHH:mm:ss');
+  final outputFormat = DateFormat('dd/MM/yyyy');
+  final date = inputFormat.parse(dataString);
+  return outputFormat.format(date);
 }
