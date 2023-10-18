@@ -124,8 +124,7 @@ class _LoginFormState extends State<LoginForm> {
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.network(
-                    'https://images.vexels.com/media/users/3/146245/isolated/preview/056a110c18e9cf64b16b0dabb87926df-icone-de-carro-com-bolhas.png'),
+                child: Image.asset('assets/images/icone_carro.png'),
               ),
               Container(
                 width: double.infinity,
