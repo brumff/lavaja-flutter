@@ -8,7 +8,7 @@ class DonoCarroProvider with ChangeNotifier {
   DonoCarro? usuario;
 
   DonoCarroProvider({required this.service}) {
-    loadDonoCarro();
+    //loadDonoCarro();
   }
 
   Future<void> getDonoCarro() async {
@@ -23,12 +23,12 @@ class DonoCarroProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createDonoCarro(String nome, String cpf, String telefone, String genero,
+  createDonoCarro(String nome, String cpf, String telefone, String genero,
       String email, String senha, String confSenha) async {
     final donocarro = await service.createDonoCarro(
         nome, cpf, telefone, genero, email, senha, confSenha);
-    await loadDonoCarro();
-    notifyListeners();
+    return donocarro;
+    //notifyListeners();
   }
 
   void updateDonoCarro(
@@ -44,8 +44,7 @@ class DonoCarroProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void tokenFirebase
-      (String? tokenFirebase) async {
+  void tokenFirebase(String? tokenFirebase) async {
     await service.tokenFirebase(tokenFirebase);
     notifyListeners();
   }

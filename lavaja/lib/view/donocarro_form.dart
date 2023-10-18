@@ -22,6 +22,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
   String? _selectedOption;
   String? _senhaError;
   bool _senhaVisivel = false;
+  bool _senhaVisivel2 = false;
 
   List<String> _genero = [
     'Feminino',
@@ -152,7 +153,8 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
     }
     return Scaffold(
       appBar: AppBar(
-        title:Text(AuthService.token == null ? 'DONO DO CARRO' : 'EDITAR PERFIL'),
+        title:
+            Text(AuthService.token == null ? 'DONO DO CARRO' : 'EDITAR PERFIL'),
         leading: IconButton(
             onPressed: () {
               if (AuthService.token == null) {
@@ -290,17 +292,17 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                 Visibility(
                   visible: AuthService.token == null,
                   child: TextFormField(
-                      obscureText: true,
+                      obscureText:  !_senhaVisivel2,
                       decoration: InputDecoration(
                           labelText: 'Confirmação da senha',
                           suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
-                                _senhaVisivel = !_senhaVisivel;
+                                _senhaVisivel2 = !_senhaVisivel2;
                               });
                             },
                             icon: Icon(
-                              _senhaVisivel
+                              _senhaVisivel2
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                             ),
@@ -345,43 +347,50 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                    onPressed: () {
-                      final isValid = _form.currentState?.validate();
+                  onPressed: () async {
+                    final isValid = _form.currentState?.validate();
 
-                      if (isValid!) {
-                        _form.currentState!.save();
-                        if (AuthService.token != null) {
-                          Provider.of<DonoCarroProvider>(context, listen: false)
-                              .updateDonoCarro(
+                    if (isValid!) {
+                      _form.currentState!.save();
+                      if (AuthService.token != null) {
+                        Provider.of<DonoCarroProvider>(context, listen: false)
+                            .updateDonoCarro(
+                          _formData['nome'] ?? '',
+                          _formData['cpf'] ?? '',
+                          _formData['telefone'] ?? '',
+                          _formData['genero'] ?? '',
+                        );
+                        _edicaoRealizada(context);
+                      } else {
+                        if (_aceitouTermo == true) {
+                          final donocarroMessage =
+                              await Provider.of<DonoCarroProvider>(context,
+                                      listen: false)
+                                  .createDonoCarro(
                             _formData['nome'] ?? '',
                             _formData['cpf'] ?? '',
                             _formData['telefone'] ?? '',
+                            _formData['email'] ?? '',
                             _formData['genero'] ?? '',
+                            _formData['senha'] ?? '',
+                            _formData['confSenha'] ?? '',
                           );
-                          _edicaoRealizada(context);
-                        } else {
-                          if (_aceitouTermo == true) {
-                            Provider.of<DonoCarroProvider>(context,
-                                    listen: false)
-                                .createDonoCarro(
-                              _formData['nome'] ?? '',
-                              _formData['cpf'] ?? '',
-                              _formData['telefone'] ?? '',
-                              _formData['email'] ?? '',
-                              _formData['genero'] ?? '',
-                              _formData['senha'] ?? '',
-                              _formData['confSenha'] ?? '',
-                            );
-                            
+
+                          if (donocarroMessage ==
+                              'Cadastro realizado com sucesso!') {
+                            _cadastroRealizado(context, donocarroMessage);
                             Modular.to.navigate(AppRoutes.LOGIN);
-                            _cadastroRealizado(context);
                           } else {
-                            _erroTermo(context);
+                            _erro(context, donocarroMessage);
                           }
+                        } else {
+                          _erroTermo(context);
                         }
                       }
-                    },
-                    child: Text('Salvar'))
+                    }
+                  },
+                  child: Text('Salvar'),
+                )
               ],
             )),
       ),
@@ -389,12 +398,22 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
   }
 }
 
-void _cadastroRealizado(BuildContext context) {
+void _cadastroRealizado(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text('Cdastro realizado com sucesso'),
+      content: Text(message),
       duration: Duration(seconds: 2),
       backgroundColor: Colors.green,
+    ),
+  );
+}
+
+void _erro(BuildContext context, String errorMessage) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(errorMessage),
+      duration: Duration(seconds: 5),
+      backgroundColor: Colors.red,
     ),
   );
 }
@@ -410,7 +429,6 @@ void _edicaoRealizada(BuildContext context) {
 }
 
 void _erroTermo(BuildContext context) {
-
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('É obrigatório aceitar os termos de uso para continuar.'),
@@ -419,4 +437,3 @@ void _erroTermo(BuildContext context) {
     ),
   );
 }
-

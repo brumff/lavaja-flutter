@@ -7,7 +7,8 @@ class DonoCarroService {
 
   Future<List<DonoCarro>> getDonoCarro() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get('http://192.168.1.20:8080/api/v1/donocarro/');
+    final response =
+        await dio.get('http://192.168.1.20:8080/api/v1/donocarro/');
     final data = response.data as List<dynamic>;
     return data.map((json) => DonoCarro.fromMap(json)).toList();
   }
@@ -20,32 +21,37 @@ class DonoCarroService {
     return DonoCarro.fromMap(data);
   }
 
-  Future<String> createDonoCarro(String? nome, String? cpf, String? telefone,
+Future<String> createDonoCarro(String? nome, String? cpf, String? telefone,
       String? email, String? genero, String? senha, String? confSenha) async {
-    try {
-      final response =
-          await dio.post('http://192.168.1.20:8080/api/v1/donocarro', data: {
-        'nome': nome,
-        'cpf': cpf,
-        'telefone': telefone,
-        'email': email,
-        'genero': genero,
-        'senha': senha,
-        'confSenha': confSenha
-      });
+  try {
+    final response = await dio.post('http://192.168.1.20:8080/api/v1/donocarro', data: {
+      'nome': nome,
+      'cpf': cpf,
+      'telefone': telefone,
+      'email': email,
+      'genero': genero,
+      'senha': senha,
+      'confSenha': confSenha
+    });
 
-      if (response.statusCode == 200) {
-        return 'Cadastro realizado com sucesso!';
-      } else {
-        return 'Erro ao cadastrar: ${response.data}';
-      }
-    } on DioError catch (e) {
-      if (e.response != null) {
-        return 'Erro no backend: ${e.response!.data}';
-      }
-      return 'Erro no Dio: $e';
+    if (response.statusCode == 200) {
+      return 'Cadastro realizado com sucesso!';
+    } else {
+      return 'Erro ao cadastrar: ${response.data}';
     }
+  } on DioError catch (e) {
+    if (e.response != null) {
+      Map<String, dynamic> errorResponse = e.response!.data;
+      if (errorResponse.containsKey("message")) {
+        String errorMessage = errorResponse["message"];
+        print(errorMessage);
+        return '$errorMessage';
+      }
+    }
+
+    return 'Erro no Dio: $e';
   }
+}
 
   Future<void> updateDonoCarro(
       String? nome, String? cpf, String? telefone, String? genero) async {
@@ -69,9 +75,7 @@ class DonoCarroService {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.put(
       'http://192.168.1.20:8080/api/v1/donocarro/tokenfirebase',
-      data: {
-        'tokenFirebase': tokenFirebase
-      },
+      data: {'tokenFirebase': tokenFirebase},
     );
   }
 }
