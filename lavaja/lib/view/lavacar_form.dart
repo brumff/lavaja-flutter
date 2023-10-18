@@ -98,25 +98,31 @@ class _LavaCarFormState extends State<LavaCarForm> {
     );
   }
 
-  _getCoordinates() async {
-    GeoCode geoCode = GeoCode();
+_getCoordinates() async {
+  GeoCode geoCode = GeoCode();
+  final endereco =
+      '${_formData['numero'] ?? ''} ${_formData['rua'] ?? ''}, ${_formData['cidade'] ?? ''}';
 
+  if (endereco.isEmpty) {
+    print('Endereço incompleto. Preencha todos os campos.');
+    return;
+  }
+
+  Coordinates? coordinates;
+
+  while (coordinates == null) {
     try {
-      Coordinates coordinates = await geoCode.forwardGeocoding(
-          address: _enderecoController.text =
-              '${_formData['numero'] ?? ''} ${_formData['rua'] ?? ''}, ${_formData['cidade'] ?? ''}');
-
-      // Verifique se o widget foi descartado antes de atualizar o estado
-      setState(() {
-        _formData['longitude'] = coordinates.latitude.toString();
-        _formData['latitude'] = coordinates.longitude.toString();
-        print(_formData['longitude']);
-        print(_formData['latitude']);
-      });
+      coordinates = await geoCode.forwardGeocoding(address: endereco);
     } catch (e) {
-      print(e);
+      print('Erro ao obter coordenadas: $e');
     }
   }
+
+  _formData['latitude'] = coordinates.latitude.toString();
+  _formData['longitude'] = coordinates.longitude.toString();
+  print(_formData['latitude']);
+  print(_formData['longitude']);
+}
 
   @override
   void dispose() {
@@ -451,6 +457,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                       final isValid = _form.currentState?.validate();
                       if (isValid!) {
                         _form.currentState!.save();
+                        
                         if (AuthService.token != null) {
                           Provider.of<LavacarProvider>(context, listen: false)
                               .updateLavacar(
