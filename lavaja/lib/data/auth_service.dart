@@ -9,6 +9,7 @@ class AuthService {
   static String? authority;
   static String? aberto;
   static String? emailUsuario;
+  static String? nomeUsuario;
   static int?  userId;
 
 
@@ -23,6 +24,7 @@ class AuthService {
         final data = response.data;
         authority = data['perfil'][0]['authority'];
         emailUsuario = data['email'];
+        nomeUsuario = data['nome'];
         userId = data['id'];
         await PrefsService.save(token!, userId!);
         return true;
@@ -36,7 +38,7 @@ class AuthService {
 
 
   static Map<String, String> getUsuario() {
-    return {'email': emailUsuario ?? ''};
+    return {'email': emailUsuario ?? '', 'nome': nomeUsuario ?? ''};
   }
 
   String? getAuthority() {

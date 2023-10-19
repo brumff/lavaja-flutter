@@ -14,6 +14,7 @@ class MenuDonoCarroComponent extends StatefulWidget {
 
 class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
   String? emailUsuario;
+  String? nomeUsuario;
 
    @override
   void initState() {
@@ -24,6 +25,7 @@ class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
       var usuario = AuthService.getUsuario();
 
       emailUsuario = usuario['email'] ?? '';
+      nomeUsuario = usuario['nome'] ?? '';
     }
   }
 
@@ -37,7 +39,7 @@ class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
           Container(
             height: 110,
             child: UserAccountsDrawerHeader(
-              accountName: Text('teste'),
+              accountName: Text('${nomeUsuario}'),
               accountEmail: Text('${emailUsuario}'),
             ),
           ),

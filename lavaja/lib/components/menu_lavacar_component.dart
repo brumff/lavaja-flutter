@@ -15,6 +15,7 @@ class MenuLavacarComponent extends StatefulWidget {
 
 class _MenuLavacarComponentState extends State<MenuLavacarComponent> {
   String? emailUsuario;
+  String? nomeUsuario;
 
   @override
   void initState() {
@@ -24,6 +25,7 @@ class _MenuLavacarComponentState extends State<MenuLavacarComponent> {
       var usuario = AuthService.getUsuario();
 
       emailUsuario = usuario['email'] ?? '';
+      nomeUsuario = usuario['nome'] ?? '';
     }
   }
 
@@ -35,7 +37,7 @@ class _MenuLavacarComponentState extends State<MenuLavacarComponent> {
         children: [
           Container(
             height: 110,
-            child: UserAccountsDrawerHeader(accountName: Text('teste'), accountEmail:  Text('${emailUsuario}')),
+            child: UserAccountsDrawerHeader(accountName: Text('${nomeUsuario}'), accountEmail:  Text('${emailUsuario}')),
             color: Colors.blue,
           ),
           CustomDrawerTile(
