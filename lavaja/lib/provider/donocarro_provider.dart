@@ -23,13 +23,15 @@ class DonoCarroProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  createDonoCarro(String nome, String cpf, String telefone, String genero,
-      String email, String senha, String confSenha) async {
-    final donocarro = await service.createDonoCarro(
+  Future<String> createDonoCarro(String nome, String cpf, String telefone,
+      String genero, String email, String senha, String confSenha) async {
+    final donoCarro = await service.createDonoCarro(
         nome, cpf, telefone, genero, email, senha, confSenha);
-    return donocarro;
-    //notifyListeners();
-  }
+
+    notifyListeners();
+
+    return donoCarro;
+  } 
 
   void updateDonoCarro(
       String nome, String cpf, String telefone, String genero) async {

@@ -38,7 +38,7 @@ class LavacarService {
     return Lavacar.fromMap(data);
   }
 
-  Future<void> createLavacar(
+  Future<String> createLavacar(
       String? cnpj,
       String? nome,
       String? rua,
@@ -54,23 +54,42 @@ class LavacarService {
       String? email,
       String? senha,
       String? confSenha) async {
-    await dio.post('http://192.168.1.20:8080/api/v1/lavacar', data: {
-      'cnpj': cnpj,
-      'nome': nome,
-      'rua': rua,
-      'numero': numero,
-      'complemento': complemento,
-      'bairro': bairro,
-      'cidade': cidade,
-      'cep': cep,
-      'longitude': longitude,
-      'latitude': latitude,
-      'telefone1': telefone1,
-      'telefone2': telefone2,
-      'email': email,
-      'senha': senha,
-      'confSenha': confSenha,
-    });
+    try {
+      final response =
+          await dio.post('http://192.168.1.20:8080/api/v1/lavacar', data: {
+        'cnpj': cnpj,
+        'nome': nome,
+        'rua': rua,
+        'numero': numero,
+        'complemento': complemento,
+        'bairro': bairro,
+        'cidade': cidade,
+        'cep': cep,
+        'latitude': latitude,
+        'longitude': longitude,
+        'telefone1': telefone1,
+        'telefone2': telefone2,
+        'email': email,
+        'senha': senha,
+        'confSenha': confSenha,
+      });
+
+      if (response.statusCode == 200) {
+        return 'Cadastro realizado com sucesso!';
+      } else {
+        return 'Erro ao cadastrar: ${response.data}';
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        Map<String, dynamic> errorResponse = e.response!.data;
+        if (errorResponse.containsKey("message")) {
+          String errorMessage = errorResponse["message"];
+          print(errorMessage);
+          return '$errorMessage';
+        }
+      }
+      return 'Erro no Dio: $e';
+    }
   }
 
   Future<void> updateLavacar(

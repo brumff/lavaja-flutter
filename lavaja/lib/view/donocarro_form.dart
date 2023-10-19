@@ -378,10 +378,10 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
 
                           if (donocarroMessage ==
                               'Cadastro realizado com sucesso!') {
-                            _cadastroRealizado(context, donocarroMessage);
+                            _cadastroRealizado(context, donocarroMessage ?? '');
                             Modular.to.navigate(AppRoutes.LOGIN);
                           } else {
-                            _erro(context, donocarroMessage);
+                            _erro(context, donocarroMessage ?? '');
                           }
                         } else {
                           _erroTermo(context);

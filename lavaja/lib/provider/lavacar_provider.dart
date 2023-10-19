@@ -64,7 +64,7 @@ class LavacarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createLavacar(
+   Future<String>  createLavacar(
       String cnpj,
       String nome,
       String rua,
@@ -96,8 +96,9 @@ class LavacarProvider with ChangeNotifier {
         email,
         senha,
         confSenha);
-    await loadLavacar();
+   
     notifyListeners();
+    return lavacar;
   }
 
   void updateLavacar(

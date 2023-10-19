@@ -25,6 +25,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
   String? _senhaError;
   //final provider = LavacarProvider(service: LavacarService());
   bool _senhaVisivel = false;
+  bool _senhaVisivel2 = false;
   bool _aceitouTermo = false;
   final TextEditingController _enderecoController = TextEditingController();
 
@@ -98,31 +99,31 @@ class _LavaCarFormState extends State<LavaCarForm> {
     );
   }
 
-_getCoordinates() async {
-  GeoCode geoCode = GeoCode();
-  final endereco =
-      '${_formData['numero'] ?? ''} ${_formData['rua'] ?? ''}, ${_formData['cidade'] ?? ''}';
+  _getCoordinates() async {
+    GeoCode geoCode = GeoCode();
+    final endereco =
+        '${_formData['numero'] ?? ''} ${_formData['rua'] ?? ''}, ${_formData['cidade'] ?? ''}';
 
-  if (endereco.isEmpty) {
-    print('Endereço incompleto. Preencha todos os campos.');
-    return;
-  }
-
-  Coordinates? coordinates;
-
-  while (coordinates == null) {
-    try {
-      coordinates = await geoCode.forwardGeocoding(address: endereco);
-    } catch (e) {
-      print('Erro ao obter coordenadas: $e');
+    if (endereco.isEmpty) {
+      print('Endereço incompleto. Preencha todos os campos.');
+      return;
     }
-  }
 
-  _formData['latitude'] = coordinates.latitude.toString();
-  _formData['longitude'] = coordinates.longitude.toString();
-  print(_formData['latitude']);
-  print(_formData['longitude']);
-}
+    Coordinates? coordinates;
+
+    while (coordinates == null) {
+      try {
+        coordinates = await geoCode.forwardGeocoding(address: endereco);
+      } catch (e) {
+        print('Erro ao obter coordenadas: $e');
+      }
+    }
+
+    _formData['latitude'] = coordinates.latitude.toString();
+    _formData['longitude'] = coordinates.longitude.toString();
+    print(_formData['latitude']);
+    print(_formData['longitude']);
+  }
 
   @override
   void dispose() {
@@ -201,7 +202,7 @@ _getCoordinates() async {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lava Car'),
+        title: Text('LAVA-CAR'),
         leading: IconButton(
             onPressed: () {
               if (AuthService.token == null) {
@@ -397,17 +398,17 @@ _getCoordinates() async {
                 Visibility(
                   visible: AuthService.token == null,
                   child: TextFormField(
-                      obscureText: true,
+                      obscureText: !_senhaVisivel2,
                       decoration: InputDecoration(
                           labelText: 'Confirmação da senha',
                           suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
-                                _senhaVisivel = !_senhaVisivel;
+                                _senhaVisivel2 = !_senhaVisivel2;
                               });
                             },
                             icon: Icon(
-                              _senhaVisivel
+                              _senhaVisivel2
                                   ? Icons.visibility
                                   : Icons.visibility_off,
                             ),
@@ -457,7 +458,7 @@ _getCoordinates() async {
                       final isValid = _form.currentState?.validate();
                       if (isValid!) {
                         _form.currentState!.save();
-                        
+
                         if (AuthService.token != null) {
                           Provider.of<LavacarProvider>(context, listen: false)
                               .updateLavacar(
@@ -477,25 +478,34 @@ _getCoordinates() async {
                           _edicaoRealizada(context);
                         } else {
                           if (_aceitouTermo == true) {
-                            Provider.of<LavacarProvider>(context, listen: false)
-                                .createLavacar(
-                                    _formData['cnpj'] ?? '',
-                                    _formData['nome'] ?? '',
-                                    _formData['rua'] ?? '',
-                                    _formData['numero'] ?? '',
-                                    _formData['complemento'] ?? '',
-                                    _formData['bairro'] ?? '',
-                                    _formData['cidade'] ?? '',
-                                    _formData['cep'] ?? '',
-                                    _formData['longitude'] ?? '',
-                                    _formData['latitude'] ?? '',
-                                    _formData['telefone1'] ?? '',
-                                    _formData['telefone2'] ?? '',
-                                    _formData['email'] ?? '',
-                                    _formData['senha'] ?? '',
-                                    _formData['confSenha'] ?? '');
-                            Modular.to.navigate(AppRoutes.LOGIN);
-                            _cadastroRealizado(context);
+                            final lavacarMessage =
+                                await Provider.of<LavacarProvider>(context,
+                                        listen: false)
+                                    .createLavacar(
+                                        _formData['cnpj'] ?? '',
+                                        _formData['nome'] ?? '',
+                                        _formData['rua'] ?? '',
+                                        _formData['numero'] ?? '',
+                                        _formData['complemento'] ?? '',
+                                        _formData['bairro'] ?? '',
+                                        _formData['cidade'] ?? '',
+                                        _formData['cep'] ?? '',
+                                        _formData['longitude'] ?? '',
+                                        _formData['latitude'] ?? '',
+                                        _formData['telefone1'] ?? '',
+                                        _formData['telefone2'] ?? '',
+                                        _formData['email'] ?? '',
+                                        _formData['senha'] ?? '',
+                                        _formData['confSenha'] ?? '');
+
+                            if (lavacarMessage ==
+                                'Cadastro realizado com sucesso!') {
+                              _cadastroRealizado(
+                                  context, lavacarMessage ?? '');
+                              Modular.to.navigate(AppRoutes.LOGIN);
+                            } else {
+                              _erro(context, lavacarMessage ?? '');
+                            }
                           } else {
                             _erroTermo(context);
                           }
@@ -510,38 +520,42 @@ _getCoordinates() async {
   }
 }
 
-void _cadastroRealizado(BuildContext context) {
-  // Aqui você pode salvar o cadastro e exibir o snackbar
+void _cadastroRealizado(BuildContext context,  String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('Cadastro realizado com sucesso!'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
-      //contentTextStyle: TextStyle(color: Colors.white),
+      backgroundColor: Colors.green,
+    ),
+  );
+}
+
+void _erro(BuildContext context, String errorMessage) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(errorMessage),
+      duration: Duration(seconds: 5),
+      backgroundColor: Colors.red,
     ),
   );
 }
 
 void _edicaoRealizada(BuildContext context) {
-  // Aqui você pode salvar o cadastro e exibir o snackbar
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('Edição realizada com sucesso!'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.green, // Definindo a cor de fundo do SnackBar
-      //contentTextStyle: TextStyle(color: Colors.white),
+      backgroundColor: Colors.green,
     ),
   );
 }
 
 void _erroTermo(BuildContext context) {
-  // Aqui você pode salvar o cadastro e exibir o snackbar
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text('É obrigatório aceitar os termos de uso para continuar.'),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.red, // Definindo a cor de fundo do SnackBar
-      //contentTextStyle: TextStyle(color: Colors.white),
+      backgroundColor: Colors.red,
     ),
   );
 }
