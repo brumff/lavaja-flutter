@@ -22,7 +22,6 @@ import 'package:lavaja/view/lavacar_form.dart';
 import 'package:lavaja/view/login_form.dart';
 import 'package:lavaja/view/servico_form.dart';
 
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,17 +30,17 @@ import 'app_widget.dart';
 import 'data/donocarro_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseApi().iniNotification();
-    await initializeDateFormatting('pt_BR', null);
+  await initializeDateFormatting('pt_BR', null);
   return runApp(ModularApp(module: AppModule(), child: AppWidget()));
-  
 }
 
 class MyApp extends StatelessWidget {
+  static String ip = 'http://192.168.100.112:8080';
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

@@ -59,9 +59,9 @@ class _BuscarLavacarState extends State<BuscarLavacar> {
       filteredLavacarList = lavacarList
           .where((lavacar) =>
               lavacar.tempoFila != null &&
-                  lavacar.tempoFila! <= _maxTempoEsperaController ||
+              lavacar.tempoFila! <= _maxTempoEsperaController ||
               lavacar.distanceInKm != null &&
-                  lavacar.distanceInKm! <= _maxDistanceController)
+              lavacar.distanceInKm! <= _maxDistanceController)
           .toList();
     });
     print(filteredLavacarList);
@@ -81,6 +81,7 @@ class _BuscarLavacarState extends State<BuscarLavacar> {
 
       await _listarLavacars();
       await _calcularDistancia();
+      
     } else {
       setState(() {
         buscaEnd = false;
@@ -320,54 +321,39 @@ class _BuscarLavacarState extends State<BuscarLavacar> {
                     primary: Colors.white, backgroundColor: Colors.blue),
               )),
           Expanded(
-            child: buscaEnd
-                ? distancias.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Nenhum lava-car encontrado.',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            SizedBox(height: 16),
-                            Image.asset(
-                              'assets/images/busca.png',
-                              height: 400,
-                            )
-                          ],
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: filteredLavacarList.length,
-                        itemBuilder: (context, index) {
-                          final lavacar = filteredLavacarList[index];
-                          final distancia = distancias[index];
-                          final parts = distancia.split(':');
-                          final nome = parts[0];
-                          final distanciaText = parts[1];
-                          final tempoEspera = lavacar.tempoFila;
-                          int tempoFormatado = tempoEspera?.toInt() ?? 0;
+              child: buscaEnd
+                  ? distancias.length > 0
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          itemCount: filteredLavacarList.length,
+                          itemBuilder: (context, index) {
+                            final lavacar = filteredLavacarList[index];
+                            final distancia = distancias[index];
+                            final parts = distancia.split(':');
+                            final nome = parts[0];
+                            final distanciaText = parts[1];
+                            final tempoEspera = lavacar.tempoFila;
+                            int tempoFormatado = tempoEspera?.toInt() ?? 0;
 
-                          return GestureDetector(
-                            onTap: () {
-                              Modular.to
-                                  .pushNamed('/detalhes-lavacar/${lavacar.id}');
-                            },
-                            child: ListTile(
-                              title: Text(nome),
-                              subtitle: Text(
-                                'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                            return GestureDetector(
+                              onTap: () {
+                                Modular.to.pushNamed('/detalhes-lavacar/${lavacar.id}');
+                              },
+                              child: ListTile(
+                                title: Text(nome),
+                                subtitle: Text(
+                                  'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                                ),
+                                trailing: Icon(Icons.arrow_forward_ios),
                               ),
-                              trailing: Icon(Icons.arrow_forward_ios),
-                            ),
-                          );
-                        },
-                      )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
-          )
+                            );
+                          },
+                        )
+                  : Center(
+                      child: Text('Nenhum registro'),
+                    )),
         ],
       ),
       drawer: MenuDonoCarroComponent(),

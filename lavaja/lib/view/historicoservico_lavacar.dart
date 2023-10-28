@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:lavaja/components/menu_donocarro_component.dart';
+import 'package:lavaja/components/menu_lavacar_component.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/models/contratarservico.dart';
 import 'package:lavaja/provider/contratarservico_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
-
-
 
 class HistoricoServicoLavacar extends StatefulWidget {
   @override
@@ -35,15 +33,27 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
           service: ContratarServicoService(),
         ),
         builder: (context, _) {
-          final itemProvider =
-              Provider.of<ContratarServicoProvider>(context);
+          final itemProvider = Provider.of<ContratarServicoProvider>(context);
           final itemList = itemProvider.contratarServico;
           if (itemList.isEmpty) {
             return Center(
-              child: Text('Nenhum histórico encontrado.'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Não há itens no histórico.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 16),
+                  Image.asset(
+                    'assets/images/historico.png',
+                    height: 400,
+                  )
+                ],
+              ),
             );
           }
-          
+
           return SingleChildScrollView(
             child: ExpansionPanelList(
               dividerColor: Colors.grey,
@@ -133,15 +143,12 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                       text: 'Serviço: ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            16,
-                                        color: Colors
-                                            .black, 
+                                        fontSize: 16,
+                                        color: Colors.black,
                                       ),
                                     ),
                                     TextSpan(
-                                      text:
-                                          '${item.servico?.nome} -',
+                                      text: '${item.servico?.nome} -',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -151,15 +158,12 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                       text: ' Valor: ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            16,
-                                        color: Colors
-                                            .black, 
+                                        fontSize: 16,
+                                        color: Colors.black,
                                       ),
                                     ),
-                                     TextSpan(
-                                      text:
-                                          'R\$ ${item.servico?.valor}',
+                                    TextSpan(
+                                      text: 'R\$ ${item.servico?.valor}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -188,7 +192,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                     TextSpan(
+                                    TextSpan(
                                       text: 'Cliente:',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -197,8 +201,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text:
-                                          'Nome do cliente',
+                                      text: 'Nome do cliente',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -221,7 +224,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
           );
         },
       ),
-      drawer: MenuDonoCarroComponent(),
+      drawer: MenuLavacarComponent(),
     );
   }
 }

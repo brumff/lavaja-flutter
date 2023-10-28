@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/routes/app_routes.dart';
+import 'package:lavaja/view/abrir_lavacar.dart';
 import 'package:lavaja/view/buscaendereco.dart';
 import 'package:lavaja/view/buscar_lavacar.dart';
 import 'package:lavaja/view/card_home_donocarro.dart';
@@ -49,7 +50,10 @@ class AppModule extends Module {
             child: (context, args) => BuscarLavacar(),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.HOMELAVACAR,
-            child: (context, args) => HomeLavaCar(),
+            child: (context, args) => HomeLavacar(),
+            transition: TransitionType.leftToRight),
+        ChildRoute(AppRoutes.ABRIRLAVACAR,
+            child: (context, args) => AbrirLavaCar(),
             transition: TransitionType.leftToRight),
         ChildRoute(AppRoutes.EDITDONOCARRO,
             child: (context, args) => DonoCarroForm(),
@@ -103,18 +107,17 @@ class AppModule extends Module {
         ChildRoute(
           AppRoutes.CONTRATARSERVDONOCARRO,
           child: (context, args) => ContratarServDonocarro(
-            tempoDeEspera: args.params['tempoDeEspera'],
-            servicoSelecionado: args.params['servicoSelecionado'],
-            valorTotal: args.params['valorTotal'],
-            lavacarId: args.data['id']
-          ),
+              tempoDeEspera: args.params['tempoDeEspera'],
+              servicoSelecionado: args.params['servicoSelecionado'],
+              valorTotal: args.params['valorTotal'],
+              lavacarId: args.data['id']),
           transition: TransitionType.leftToRight,
         ),
-         ChildRoute(AppRoutes.SUCESSOCONTRATARSERV,
+        ChildRoute(AppRoutes.SUCESSOCONTRATARSERV,
             child: (context, args) => SucessoContratarServ(),
             transition: TransitionType.leftToRight),
-         ChildRoute(AppRoutes.HISTORICODONOCARRO,
+        ChildRoute(AppRoutes.HISTORICODONOCARRO,
             child: (context, args) => HistoricoServicoDonoCarro(),
-            transition: TransitionType.leftToRight),   
+            transition: TransitionType.leftToRight),
       ];
 }

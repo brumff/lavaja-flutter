@@ -40,7 +40,19 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
           final itemList = itemProvider.contratarServico;
           if (itemList.isEmpty) {
             return Center(
-              child: Text('Nenhum histórico encontrado.'),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Não há itens no histórico.',
+                  style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 16),
+                  Image.asset('assets/images/historico.png',
+                  height: 400,
+                  )
+                ],
+              ),
             );
           }
           

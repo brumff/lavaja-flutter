@@ -14,16 +14,38 @@ class VeiculoLista extends StatelessWidget {
         title: Text('MEUS VEÍCULOS'),
         actions: [
           IconButton(
-              onPressed: () {
-                Modular.to.navigate(AppRoutes.CREATEVEICULO);
-              },
-              icon: Icon(Icons.add))
+            onPressed: () {
+              Modular.to.navigate(AppRoutes.CREATEVEICULO);
+            },
+            icon: Icon(Icons.add),
+          ),
         ],
       ),
       body: Consumer<VeiculoProvider>(builder: (_, data, __) {
         if (data.veiculos.isEmpty) {
           return Center(
-            child: Text('Nenhum veículo cadastrado'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Você não possui nenhum veículo cadastrado.',
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(height: 16),
+                Image.asset(
+                  'assets/images/veiculos.png', 
+                  height: 400, 
+                ),
+                SizedBox(height: 16), 
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Modular.to.navigate(AppRoutes.CREATEVEICULO);
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text('Cadastrar Veículo'),
+                ),
+              ],
+            ),
           );
         } else {
           return ListView.builder(
@@ -42,7 +64,6 @@ class VeiculoLista extends StatelessWidget {
                   ),
                   Divider(
                     height: 0,
-
                   ), // Adicione um Divider entre os itens
                 ],
               );

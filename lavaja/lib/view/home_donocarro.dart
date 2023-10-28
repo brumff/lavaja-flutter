@@ -51,7 +51,7 @@ class HomeDonoCarro extends StatelessWidget {
             title: 'Historico de serviços',
             icon: Icons.history,
             onTap: () {
-             
+              Modular.to.navigate('/historico-donocarro');
             },
           ),
           CustomDrawerCard(
@@ -77,6 +77,7 @@ class CustomDrawerCard extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
   final Color? textColor;
+  final double iconSize;
   final VoidCallback onTap;
 
   const CustomDrawerCard({
@@ -84,6 +85,7 @@ class CustomDrawerCard extends StatelessWidget {
     required this.icon,
     this.iconColor,
     this.textColor,
+    this.iconSize = 55.0,
     required this.onTap,
   });
 
@@ -98,6 +100,7 @@ class CustomDrawerCard extends StatelessWidget {
             Icon(
               icon,
               color: iconColor,
+              size: iconSize, // Use o tamanho do ícone definido
             ),
             SizedBox(height: 8),
             Text(
@@ -110,6 +113,5 @@ class CustomDrawerCard extends StatelessWidget {
     );
   }
 }
-
 
 

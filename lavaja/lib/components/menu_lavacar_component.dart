@@ -41,6 +41,13 @@ class _MenuLavacarComponentState extends State<MenuLavacarComponent> {
             color: Colors.blue,
           ),
           CustomDrawerTile(
+            title: 'Menu',
+            icon: Icons.arrow_forward_ios_sharp,
+            onTap: () {
+              Modular.to.navigate('/home-lavacar');
+            },
+          ),
+          CustomDrawerTile(
             title: 'Editar perfil',
             icon: Icons.arrow_forward_ios_sharp,
             onTap: () {
@@ -62,21 +69,16 @@ class _MenuLavacarComponentState extends State<MenuLavacarComponent> {
             },
           ),
           CustomDrawerTile(
-            title: 'Alterar senha',
-            icon: Icons.arrow_forward_ios_sharp,
-            onTap: () {},
-          ),
-          CustomDrawerTile(
               title: 'Historico de serviços',
               icon: Icons.arrow_forward_ios_sharp,
               onTap: () {
                 Modular.to.navigate('/historico-lavacar');
               }),
           CustomDrawerTile(
-              title: 'Fechar lavacar',
+              title: 'Disponibilidade lavacar',
               icon: Icons.arrow_forward_ios_sharp,
               onTap: () {
-                Modular.to.navigate('/home-lavacar');
+                Modular.to.navigate('/abrir-lavacar');
               }),
           CustomDrawerTile(
             title: 'Sair',

@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lavaja/data/prefs_service.dart';
+import 'package:lavaja/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class AuthService {
   final Dio dio = Dio();
@@ -11,11 +13,14 @@ class AuthService {
   static String? emailUsuario;
   static String? nomeUsuario;
   static int?  userId;
+  String ip = MyApp.ip;
 
 
   Future<dynamic> login(String email, String senha) async {
     try {
-      final response = await dio.post('http://192.168.1.20:8080/login', data: {
+      print(ip);
+      final response = await dio.post('${ip}/login', data: {
+        
         'email': email,
         'senha': senha,
       });
