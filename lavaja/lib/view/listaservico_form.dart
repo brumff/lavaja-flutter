@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-       /* leading: IconButton(
+        /* leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Modular.to.navigate(AppRoutes.HOMELAVACAR);
@@ -58,7 +58,18 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (_, data, __) {
           if (data.meusServicos.isEmpty) {
             return Center(
-              child: Text('Nenhum serviço cadastrado.'),
+              child: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Nenhum serviço cadastrado.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(height: 16),
+                  Image.asset('assets/images/servicos.png', 
+                  height: 400, )
+                ],
+              ),
             );
           } else {
             return ListView.builder(
@@ -82,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         },
       ),
-       drawer: MenuLavacarComponent(),
+      drawer: MenuLavacarComponent(),
     );
   }
 }

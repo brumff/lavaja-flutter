@@ -39,7 +39,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static String ip = 'http://192.168.100.112:8080';
+  static String ip = 'http://192.168.1.20:8080';
 
   @override
   Widget build(BuildContext context) {
