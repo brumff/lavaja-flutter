@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   SizedBox(height: 16),
                   Image.asset('assets/images/servicos.png', 
-                  height: 400, )
+                  height: 300, )
                 ],
               ),
             );

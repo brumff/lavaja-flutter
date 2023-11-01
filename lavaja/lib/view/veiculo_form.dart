@@ -183,9 +183,17 @@ class _VeiculoFormState extends State<VeiculoForm> {
                     if (widget.id != null) {
                       int? veiculoId = int.tryParse(widget.id!);
                       if (veiculoId != null) {
-                        await Provider.of<VeiculoProvider>(context,
-                                listen: false)
-                            .deletar(veiculoId);
+                        final veiculoMessage =
+                            await Provider.of<VeiculoProvider>(context,
+                                    listen: false)
+                                .deletar(veiculoId);
+
+                        if (veiculoMessage == 'Veículo excluido com sucesso!') {
+                          _sucesso(context, veiculoMessage ?? '');
+                          Modular.to.navigate(AppRoutes.LISTAVEICULOS);
+                        } else {
+                          _erro(context, veiculoMessage ?? '');
+                        }
                       }
                     }
                   },
@@ -201,4 +209,24 @@ class _VeiculoFormState extends State<VeiculoForm> {
       ),
     );
   }
+}
+
+void _erro(BuildContext context, String errorMessage) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(errorMessage),
+      duration: Duration(seconds: 5),
+      backgroundColor: Colors.red,
+    ),
+  );
+}
+
+void _sucesso(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 2),
+      backgroundColor: Colors.green,
+    ),
+  );
 }
