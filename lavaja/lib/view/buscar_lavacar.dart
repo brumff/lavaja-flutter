@@ -58,9 +58,9 @@ class _BuscarLavacarState extends State<BuscarLavacar> {
     setState(() {
       filteredLavacarList = lavacarList
           .where((lavacar) =>
-              lavacar.tempoFila != null &&
+              lavacar.tempoFila != 0 &&
                   lavacar.tempoFila! <= _maxTempoEsperaController ||
-              lavacar.distanceInKm != null &&
+              lavacar.distanceInKm != 0 &&
                   lavacar.distanceInKm! <= _maxDistanceController)
           .toList();
     });
