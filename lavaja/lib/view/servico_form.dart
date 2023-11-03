@@ -54,7 +54,7 @@ class _ServicoFormState extends State<ServicoForm> {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text(widget.id == null ? 'Cadastro de serviço' : 'Editar serviço'),
+            Text(widget.id == null ? 'CADASTRO DE SERVIÇO' : 'EDITAR SERVIÇO'),
         leading: IconButton(
             onPressed: () {
               Modular.to.navigate(AppRoutes.LISTASERVICO);

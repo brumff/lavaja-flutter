@@ -201,7 +201,7 @@ class _BuscarLavacarState extends State<BuscarLavacar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('LOCALIZAR LAVACAR')),
+      appBar: AppBar(title: Text('LOCALIZAR LAVA-CAR')),
       body: Column(
         children: [
           SizedBox(

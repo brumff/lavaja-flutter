@@ -40,7 +40,7 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
           final data = Provider.of<ServicoProvider>(context);
           return Scaffold(
             appBar: AppBar(
-              title: Text('Incluir veículo na fila'),
+              title: Text('INCLUIR VEÍCULO NA FILA'),
               leading: IconButton(onPressed: () {
                   Modular.to.navigate(AppRoutes.CREATEFILA);
               }, icon: Icon(Icons.arrow_back)),

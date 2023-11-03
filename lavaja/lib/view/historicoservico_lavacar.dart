@@ -26,7 +26,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Histórico de serviços'),
+        title: Text('HISTÓRICO DE SERVIÇO'),
       ),
       body: ChangeNotifierProvider<ContratarServicoProvider>(
         create: (context) => ContratarServicoProvider(

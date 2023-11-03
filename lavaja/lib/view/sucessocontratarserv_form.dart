@@ -12,7 +12,7 @@ class __SucessoContratarServState extends State<SucessoContratarServ> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Serviço contratado'),
+        title: Text('SERVIÇO CONTRATADO'),
       ),
       body: Center(
         child: Column(

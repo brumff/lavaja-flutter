@@ -7,7 +7,7 @@ import '../provider/servico_provider.dart';
 import '../routes/app_routes.dart';
 
 class ListaServicoForm extends StatelessWidget {
-  static const appTitle = 'Lista de Serviços';
+  static const appTitle = 'LISTA DE SERVIÇO';
 
   @override
   Widget build(BuildContext context) {

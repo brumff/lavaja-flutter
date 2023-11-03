@@ -37,7 +37,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Termo de Uso'),
+          title: Text('TERMO DE USO'),
           content: SingleChildScrollView(
             child: RichText(
               text: TextSpan(

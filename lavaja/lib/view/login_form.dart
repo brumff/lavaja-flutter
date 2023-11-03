@@ -69,11 +69,7 @@ class _LoginFormState extends State<LoginForm> {
                       ?.aberto ??
                   false;
               print(aberto);
-              if (aberto == true) {
-                Modular.to.navigate(AppRoutes.CREATEFILA);
-              } else {
-                Modular.to.navigate(AppRoutes.HOMELAVACAR);
-              }
+              Modular.to.navigate(AppRoutes.HOMELAVACAR);
             });
           } catch (error) {
             ScaffoldMessenger.of(context).showSnackBar(

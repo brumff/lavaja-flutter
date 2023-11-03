@@ -27,7 +27,7 @@ class _AbrirLavaCarState extends State<AbrirLavaCar> {
       setState(() {
         _value = usuarioAberto;
         _switchColor = usuarioAberto ? Colors.green : Colors.red;
-        textoLavacar = usuarioAberto ? "Deseja fechar lava-car" : "Deseja abrir lava-car";
+        textoLavacar = usuarioAberto ? "Deseja fechar lava-car?" : "Deseja abrir lava-car?";
       });
     });
   }
@@ -36,7 +36,7 @@ class _AbrirLavaCarState extends State<AbrirLavaCar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(textoLavacar), // Use a variável textoLavacar aqui
+        title: Text("DISPONIBILIDADE LAVA-CAR"), // Use a variável textoLavacar aqui
       ),
       body: Center(
         child: Column(

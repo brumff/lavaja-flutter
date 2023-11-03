@@ -115,7 +115,7 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
             final data = Provider.of<VeiculoProvider>(context);
             return Scaffold(
               appBar: AppBar(
-                title: Text('Resumo do pedido'),
+                title: Text('RESUMO PEDIDO'),
               ),
               body: SingleChildScrollView(
                 child: Column(
