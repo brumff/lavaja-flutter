@@ -138,7 +138,7 @@ class _DetalhesLavacarFormState extends State<DetalhesLavacarForm> {
                             ),
                           ),
                           subtitle: Text(
-                            'R\$ ${item.valor.toString() ?? ''}',
+                            'R\$ ${(item.valor! * 1.3).toStringAsFixed(2)}',
                           ),
                           trailing: GestureDetector(
                             onTap: () {

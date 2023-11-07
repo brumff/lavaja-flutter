@@ -226,7 +226,7 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      subtitle: Text('R\$ ${valorTotal}'),
+                                      subtitle: Text( 'R\$ ${(valorTotal! * 1.3).toStringAsFixed(2)}',),
                                     ),
                                   ],
                                 ),
