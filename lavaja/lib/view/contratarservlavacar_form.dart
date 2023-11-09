@@ -41,9 +41,11 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
           return Scaffold(
             appBar: AppBar(
               title: Text('INCLUIR VEÍCULO NA FILA'),
-              leading: IconButton(onPressed: () {
-                  Modular.to.navigate(AppRoutes.CREATEFILA);
-              }, icon: Icon(Icons.arrow_back)),
+              leading: IconButton(
+                  onPressed: () {
+                    Modular.to.navigate(AppRoutes.CREATEFILA);
+                  },
+                  icon: Icon(Icons.arrow_back)),
             ),
             body: SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
@@ -53,7 +55,8 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                   children: <Widget>[
                     TextFormField(
                       enabled: false,
-                      controller: _origemController, // Usar o controller para exibir o valor
+                      controller:
+                          _origemController, // Usar o controller para exibir o valor
                       decoration: InputDecoration(labelText: 'Origem'),
                     ),
                     TextFormField(
@@ -71,7 +74,6 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                       onChanged: (value) => _formData['telefone'] = value,
                       keyboardType: TextInputType.phone,
                       inputFormatters: [phoneMaskFormatter],
-                      
                     ),
                     DropdownButtonFormField<Servico>(
                       items: data.meusServicos.map((Servico value) {
@@ -93,21 +95,25 @@ class _ContratarServLavacarState extends State<ContratarServLavacar> {
                     SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () {
-                        
                         final isValid = _form.currentState?.validate();
                         if (isValid!) {
                           _form.currentState!.save();
-                          _formData['origem'] = 'LOCAL'; 
-                          Provider.of<ContratarServicoProvider>(context, listen: false).createContratarServico(
-                            _formData['origem'] ?? '',
-                            _formData['placaCarro'] ?? '',
-                             _formData['servico'] ?? '',
-                             _formData['telefone'] ?? ''
-                          );
+                          _formData['origem'] = 'LOCAL';
+                          Provider.of<ContratarServicoProvider>(context,
+                                  listen: false)
+                              .createContratarServico(
+                                  _formData['origem'] ?? '',
+                                  _formData['placaCarro'] ?? '',
+                                  _formData['servico'] ?? '',
+                                  _formData['telefone'] ?? '');
 
-                          Modular.to.navigate(AppRoutes.CREATEFILA);
                           _cadastroRealizado(context);
-
+                          Provider.of<ContratarServicoProvider>(context,
+                                  listen: false)
+                              .loadContratarServico()
+                              .then((_) {
+                            Modular.to.navigate(AppRoutes.CREATEFILA);
+                          });
                         }
                       },
                       child: Text('Salvar'),

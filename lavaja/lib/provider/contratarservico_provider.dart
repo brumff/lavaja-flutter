@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/models/contratarservico.dart';
 import 'package:lavaja/models/servico.dart';
+import 'package:lavaja/view/buscaendereco.dart';
 
 class ContratarServicoProvider with ChangeNotifier {
   final ContratarServicoService service;
   List<ContratarServico> contratarServico = [];
   String? token;
+  String? teste;
 
   ContratarServicoProvider({required this.service}) {
     loadContratarServico();
@@ -16,6 +18,7 @@ class ContratarServicoProvider with ChangeNotifier {
 
   Future<void> loadContratarServico() async {
     contratarServico = await service.getListarServicosLavacar();
+
     notifyListeners();
   }
 
@@ -24,8 +27,9 @@ class ContratarServicoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void patchContratarServico(int? id, String? statusServico) async {
-    await service.patchContratarServico(id, statusServico);
+  void patchContratarServico(
+      int? id, String? statusServico, int? minutosAdicionais) async {
+    await service.patchContratarServico(id, statusServico, minutosAdicionais);
     notifyListeners();
   }
 
@@ -48,30 +52,36 @@ class ContratarServicoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> calculateTempoEspera() {
-    List<String> tempos = [];
+  // List<String> calculateTempoEspera() {
+  //   List<String> tempos = [];
 
-    for (var item in contratarServico) {
-      if (item.statusServico == 'EM_LAVAGEM') {
-        var tempoEspera =
-            item.fimLavagem?.difference(DateTime.now()).inMinutes.toString() ??
-                '';
-        tempos.add(tempoEspera);
-      } else {
-        var tempoEspera = DateTime.parse(item.dataServico!)
-            .add(Duration(minutes: item.tempFila!))
-            .difference(DateTime.now())
-            .inMinutes
-            .toString();
-        tempos.add(tempoEspera);
-      }
-    }
+  //   for (var item in contratarServico) {
+  //     if (item.statusServico == 'EM_LAVAGEM') {
+  //       var tempoEspera =
+  //           item.fimLavagem?.difference(DateTime.now()).inMinutes.toString() ??
+  //               '';
+  //       tempos.add(tempoEspera);
+  //     } else {
+  //       var tempoEspera = DateTime.parse(item.dataContratacaoServico!)
+  //           .add(Duration(minutes: item.tempFila!))
+  //           .difference(DateTime.now())
+  //           .inMinutes
+  //           .toString();
+  //       tempos.add(tempoEspera);
+  //     }
+  //   }
 
-    return tempos;
-  }
+  //   return tempos;
+  // }
 
   Future<String?> getTokenFirebase(String id) async {
     token = await service.getTokenFirebase(id);
     return token;
+  }
+
+  Future<String?> getShedule() async {
+    teste = await service.getShedule();
+    notifyListeners();
+    return teste;
   }
 }

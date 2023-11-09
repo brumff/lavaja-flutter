@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
-import 'package:lavaja/data/firebase_api.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -18,51 +17,35 @@ class Filalavacar extends StatefulWidget {
 
 class _FilalavacarState extends State<Filalavacar> {
   List<int?> selectedItems = [];
-//atualiza o tempo a cada 1 minuto
+  bool serviceStarted = false;
+  late Timer timer;
+
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(minutes: 1), (timer) {
+    Provider.of<ContratarServicoProvider>(context, listen: false)
+        .loadContratarServico();
+    timer = Timer.periodic(Duration(seconds: 15), (timer) {
+      Provider.of<ContratarServicoProvider>(context, listen: false)
+          .loadContratarServico();
       setState(() {});
     });
   }
 
-  //abre a pop para finalizar o serviço após o tempo ser zerado
-  void mostrarPopup(VoidCallback onPressed, String placaCarro) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Confirmação'),
-          content: Text('Deseja finalizar lavagem? Carro: $placaCarro'),
-          actions: [
-            TextButton(
-              onPressed: onPressed,
-              child: Text('Confirmar'),
-            ),
-            TextButton(
-              onPressed: () {
-                Future.delayed(Duration(minutes: 1)).whenComplete(() {
-                  mostrarPopup(onPressed, placaCarro);
-                });
-                Navigator.of(context).pop(); // Fechar o popup
-              },
-              child: Text('Cancelar'),
-            ),
-          ],
-        );
-      },
-    );
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextBuild) {
     return ChangeNotifierProvider<ContratarServicoProvider>(
-      create: (context) =>
+      create: (contextProvider) =>
           ContratarServicoProvider(service: ContratarServicoService()),
       child: Builder(
-        builder: (context) {
+        builder: (contextBuilder) {
           final data = Provider.of<ContratarServicoProvider>(context);
+
           final lavacarProvider = Provider.of<LavacarProvider>(context);
           return Scaffold(
             appBar: AppBar(
@@ -83,22 +66,18 @@ class _FilalavacarState extends State<Filalavacar> {
                         children: [
                           Row(
                             children: [
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  iconTheme: IconThemeData(color: Colors.grey),
-                                ),
-                                child: Icon(Icons.circle),
+                              Icon(
+                                Icons.circle,
+                                color: Colors.grey,
                               ),
                               Text('Aguardando      ')
                             ],
                           ),
                           Row(
                             children: [
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  iconTheme: IconThemeData(color: Colors.green),
-                                ),
-                                child: Icon(Icons.circle),
+                              Icon(
+                                Icons.circle,
+                                color: Colors.green,
                               ),
                               Text('Em andamento ')
                             ],
@@ -114,10 +93,9 @@ class _FilalavacarState extends State<Filalavacar> {
                               (item) => item.statusServico == 'FINALIZADO')
                       ? Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                'Não há carros na fila de espera neste momento.',
+                                'Não há veículos na fila',
                                 style: TextStyle(fontSize: 14),
                               ),
                               SizedBox(
@@ -125,8 +103,8 @@ class _FilalavacarState extends State<Filalavacar> {
                               ),
                               Image.asset(
                                 'assets/images/fila.png',
-                                height: 400,
-                              )
+                                height: 50,
+                              ),
                             ],
                           ),
                         )
@@ -134,8 +112,85 @@ class _FilalavacarState extends State<Filalavacar> {
                           itemCount: data.contratarServico.length,
                           itemBuilder: (context, index) {
                             final item = data.contratarServico[index];
+                            print(item.id);
+                            if (item.statusServico == 'FINALIZADO') {
+                              return SizedBox.shrink();
+                            }
+                            bool isSelected = selectedItems.contains(item.id);
+                            bool isEmLavagem =
+                                item.statusServico == 'EM_LAVAGEM';
 
-                            return ListTile(title: Text('${item.placaCarro} - ${item.tempFila}') );
+                            return ListTile(
+                              title: InkWell(
+                                onTap: () async {
+                                  if (item.statusServico == 'AGUARDANDO' ||
+                                      item.statusServico == 'EM_LAVAGEM') {
+                                    mostrarPopup(() async {
+                                      data.patchContratarServico(
+                                          item.id,
+                                          item.statusServico = 'FINALIZADO',
+                                          item.minutosAdicionais = 0);
+                                    },
+                                        item.placaCarro ?? '',
+                                        item.id ?? 0,
+                                        item.statusServico ?? '',
+                                        item.minutosAdicionais ?? 0);
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (context) {
+                                    //     return AlertDialog(
+                                    //       title: Text('Confirmação'),
+                                    //       content: Text(
+                                    //           'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
+                                    //       actions: [
+                                    //         TextButton(
+                                    //           onPressed: () {
+                                    //             data.patchContratarServico(
+                                    //                 item.id,
+                                    //                 item.statusServico =
+                                    //                     'EM_LAVAGEM',
+                                    //                 item.minutosAdicionais = 0);
+
+                                    //             Navigator.of(context).pop();
+                                    //           },
+                                    //           child: Text('Confirmar'),
+                                    //         ),
+                                    //         TextButton(
+                                    //           onPressed: () {
+                                    //             Navigator.of(context).pop();
+                                    //           },
+                                    //           child: Text('Cancelar'),
+                                    //         ),
+                                    //       ],
+                                    //     );
+                                    //   },
+                                    // );
+                                  }
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.local_car_wash_outlined,
+                                          color: isEmLavagem
+                                              ? Colors.green
+                                              : (isSelected
+                                                  ? Colors.green
+                                                  : Colors.grey),
+                                          size: 70,
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                        'Placa: ${item.placaCarro}, Status: ${item.statusServico} - Data contratação: ${item.dataContratacaoServico} -  Data atraso: ${item.atrasado} -  data previsão: ${item.dataPrevisaoServico}'),
+                                  ],
+                                ),
+                              ),
+                            );
                           },
                         ),
                 ),
@@ -145,6 +200,62 @@ class _FilalavacarState extends State<Filalavacar> {
           );
         },
       ),
+    );
+  }
+
+  void mostrarPopup(VoidCallback onPressed, String placaCarro, int id,
+      String statusServico, int minutosAdicionais) {
+    TextEditingController atrasoController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        final data = Provider.of<ContratarServicoProvider>(context);
+        return AlertDialog(
+          title: Text('Deseja finalizar serviço? Carro:  $placaCarro'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () {
+                  data.patchContratarServico(
+                      id, statusServico = 'FINALIZADO', minutosAdicionais = 0);
+
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue, primary: Colors.white),
+                child: Text('Finalizar serviço'),
+              ),
+              Divider(),
+              SizedBox(height: 10),
+              Text('Caso tenha atraso, informe abaixo em min:'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: atrasoController,
+                      decoration: InputDecoration(labelText: 'Min.'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      minutosAdicionais =
+                          int.tryParse(atrasoController.text) ?? 0;
+                      data.patchContratarServico(
+                          id,
+                          statusServico = 'EM_LAVAGEM',
+                          minutosAdicionais = minutosAdicionais);
+                    },
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue, primary: Colors.white),
+                    child: Text('Informar atraso'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -11,27 +11,30 @@ class ContratarServicoService {
 
   Future<List<ContratarServico>> getListarServicosLavacar() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get(
-        '${ip}/api/v1/contratarservico/lavacar-servicos');
+    final response =
+        await dio.get('${ip}/api/v1/contratarservico/lavacar-servicos');
     final data = response.data as List<dynamic>;
+
     return data.map((json) => ContratarServico.fromMap(json)).toList();
+  
   }
 
   Future<List<ContratarServico>> getListarServicosDonocarro() async {
     dio.options.headers = {'authorization': AuthService.token};
-    final response = await dio.get(
-        '${ip}/api/v1/contratarservico/donocarro-servicos');
+    final response =
+        await dio.get('${ip}/api/v1/contratarservico/donocarro-servicos');
     final data = response.data as List<dynamic>;
     return data.map((json) => ContratarServico.fromMap(json)).toList();
   }
 
-  Future<void> patchContratarServico(int? id, String? statusServico) async {
+  Future<void> patchContratarServico(
+      int? id, String? statusServico, int? minutosAdicionais) async {
     dio.options.headers = {'authorization': AuthService.token};
-
     await dio.patch(
       '${ip}/api/v1/contratarservico/$id',
       data: {
         'statusServico': statusServico,
+        'minutosAdicionais': minutosAdicionais,
       },
     );
   }
@@ -59,7 +62,7 @@ class ContratarServicoService {
       String? origem, int? servicoId, int? veiculo) async {
     dio.options.headers = {'authorization': AuthService.token};
     await dio.post(
-      'http://192.168.1.20:8080/api/v1/contratarservico',
+      '${ip}/api/v1/contratarservico',
       data: {
         'origem': origem,
         'servico': {'id': servicoId},
@@ -69,10 +72,17 @@ class ContratarServicoService {
   }
 
   Future<String> getTokenFirebase(String id) async {
-    final response =
-        await dio.get('http://192.168.1.20:8080/api/v1/servico/$id');
+    final response = await dio.get('${ip}/api/v1/servico/$id');
     final data = response.data;
     final token = data as String;
     return token;
+  }
+
+  Future<String> getShedule() async {
+    final response =
+        await dio.get('${ip}/api/v1/contratarservico/atualizar-tempo-espera');
+    final data = response.data;
+
+    return data;
   }
 }

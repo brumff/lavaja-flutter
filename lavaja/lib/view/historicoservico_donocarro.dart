@@ -99,7 +99,7 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: item.veiculo?.placa ?? '',
+                                    text: item.veiculoId?.placa ?? '',
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black,
@@ -153,7 +153,7 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${item.servico?.nome} -',
+                                          '${item.servicoId?.nome} -',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -171,7 +171,7 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                                     ),
                                      TextSpan(
                                       text:
-                                          'R\$ ${item.servico?.valor}',
+                                          'R\$ ${item.servicoId?.valor}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -194,7 +194,7 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${formatarData(item.dataServico ?? '')} - ',
+                                         '${formatarData(item.dataContratacaoServico?.toString() ?? '0')} - ',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,

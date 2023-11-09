@@ -87,9 +87,9 @@ class _HistoricoServicoDonoCarroState extends State<HistoricoServicoDonoCarro> {
                     );
                   },
                   body: ListTile(
-                    title: Text(
-                      'Serviço: ${item.servico?.nome} - Valor: ${item.servico?.valor}',
-                    ),
+                    // title: Text(
+                    //   'Serviço: ${item.servicoId?.nome} - Valor: ${item.servicoId?.valor}',
+                    // ),
                   ),
                   isExpanded: item.isExpanded ?? false,
                 );

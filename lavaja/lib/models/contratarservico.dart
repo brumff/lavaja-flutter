@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:lavaja/models/donocarro.dart';
 import 'package:lavaja/models/servico.dart';
 import 'package:lavaja/models/veiculo.dart';
 
@@ -7,43 +9,57 @@ class ContratarServico {
   int? id;
   String? origem;
   String? statusServico;
-  String? dataServico;
-  int? donoCarro;
-  Servico? servico;
-  Veiculo? veiculo;
-  int? tempFila;
+  String? dataContratacaoServico;
+  String? dataPrevisaoServico;
+  String? atrasado;
+  String? dataFinalServico;
+  int? donoCarroId;
+  Servico? servicoId;
+  Veiculo? veiculoId;
   String? placaCarro;
-  DateTime? fimLavagem;
-  bool? isExpanded;
+  bool? deleted;
   String? telefone;
+  double? tempFila;
+  int? minutosAdicionais;
+  bool? isExpanded;
 
-  ContratarServico(
-      {this.id,
-      this.origem,
-      this.statusServico,
-      this.dataServico,
-      this.donoCarro,
-      this.servico,
-      this.veiculo,
-      this.tempFila,
-      this.placaCarro,
-      this.fimLavagem, 
-      this.isExpanded,
-      this.telefone});
+  ContratarServico({
+    this.id,
+    this.origem,
+    this.statusServico,
+    this.dataContratacaoServico,
+    this.dataPrevisaoServico,
+    this.atrasado,
+    this.dataFinalServico,
+    this.donoCarroId,
+    this.servicoId,
+    this.veiculoId,
+    this.placaCarro,
+    this.deleted,
+    this.telefone,
+    this.tempFila,
+    this.minutosAdicionais,
+    this.isExpanded
+  });
 
   factory ContratarServico.fromMap(Map<String, dynamic> map) {
     return ContratarServico(
-        id: map['id'],
-        origem: map['origem'],
-        statusServico: map['statusServico'],
-        dataServico: map['dataServico'],
-        donoCarro: map['donoCarro'],
-        servico: Servico.fromMap(map['servicoId']),
-        veiculo: map['veiculoId'] != null ? Veiculo.fromMap(map['veiculoId']) : null,
-        tempFila: map['tempFila'],
-        placaCarro: map['placaCarro'],
-        telefone:map['telefone']);
-        
+      id: map['id'],
+      origem: map['origem'],
+      statusServico: map['statusServico'],
+      dataContratacaoServico: map['dataContratacaoServico'],
+      dataPrevisaoServico: map['dataPrevisaoServico'],
+      atrasado: map['atrasado'],
+      dataFinalServico: map['dataFinalServico'],
+      donoCarroId: map['donoCarroId'],
+      servicoId:Servico.fromMap(map['servicoId']), 
+      veiculoId: map['veiculoId'] != null ? Veiculo.fromMap(map['veiculoId']) : null,
+      placaCarro: map['placaCarro'],
+      deleted: map['deleted'],
+      telefone: map['telefone'],
+      tempFila: map['tempFila'], 
+      minutosAdicionais: map['minutosAdicionais'],
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -51,13 +67,18 @@ class ContratarServico {
       'id': id,
       'origem': origem,
       'statusServico': statusServico,
-      'dataServico': dataServico,
-      'donoCarro': dataServico,
-      'servico': servico,
-      'veiculo': veiculo,
-      'tempFila': tempFila,
+      'dataContratacaoServico': dataContratacaoServico,
+      'dataPrevisaoServico': dataPrevisaoServico,
+      'atrasado': atrasado,
+      'dataFinalServico': dataFinalServico,
+      'donoCarroId': donoCarroId,
+      'servicoId': servicoId, 
+      'veiculoId': veiculoId, 
       'placaCarro': placaCarro,
-      'telefone': telefone
+      'deleted': deleted,
+      'telefone': telefone,
+      'tempFila': tempFila,
+      'minutosAdicionais': minutosAdicionais,
     };
   }
 

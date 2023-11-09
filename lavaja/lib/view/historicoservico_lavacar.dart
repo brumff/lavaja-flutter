@@ -97,7 +97,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: item.veiculo?.placa ?? '',
+                                    text: item.veiculoId?.placa ?? '',
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.black,
@@ -148,7 +148,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: '${item.servico?.nome} -',
+                                      text: '${item.servicoId?.nome} -',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -163,7 +163,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: 'R\$ ${item.servico?.valor}',
+                                      text: 'R\$ ${item.servicoId?.valor}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
@@ -186,7 +186,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${formatarData(item.dataServico ?? '')} - ',
+                                          '${formatarData(item.dataContratacaoServico?.toString() ?? '0')} - ',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
