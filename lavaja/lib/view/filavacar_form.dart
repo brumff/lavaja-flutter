@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
@@ -19,15 +20,17 @@ class _FilalavacarState extends State<Filalavacar> {
   List<int?> selectedItems = [];
   bool serviceStarted = false;
   late Timer timer;
+  int? diferencaEmMinutos;
 
   @override
   void initState() {
     super.initState();
     Provider.of<ContratarServicoProvider>(context, listen: false)
         .loadContratarServico();
-    timer = Timer.periodic(Duration(seconds: 15), (timer) {
+    timer = Timer.periodic(Duration(minutes: 1), (timer) {
       Provider.of<ContratarServicoProvider>(context, listen: false)
           .loadContratarServico();
+
       setState(() {});
     });
   }
@@ -45,7 +48,6 @@ class _FilalavacarState extends State<Filalavacar> {
       child: Builder(
         builder: (contextBuilder) {
           final data = Provider.of<ContratarServicoProvider>(context);
-
           final lavacarProvider = Provider.of<LavacarProvider>(context);
           return Scaffold(
             appBar: AppBar(
@@ -113,6 +115,36 @@ class _FilalavacarState extends State<Filalavacar> {
                           itemBuilder: (context, index) {
                             final item = data.contratarServico[index];
                             print(item.id);
+                            if (item.statusServico == 'EM_LAVAGEM') {
+                              DateTime agora = DateTime.now();
+                              String? dataPrevisao = item.dataPrevisaoServico;
+                              var dataPrevisaoData =
+                                  DateTime.tryParse(dataPrevisao!);
+                              Duration diferenca =
+                                  dataPrevisaoData!.difference(agora);
+                              int diferencaEmMinutos = diferenca.inMinutes;
+
+                              print('Data Atual: $agora');
+                              print('Data Específica: $dataPrevisaoData');
+                              print(
+                                  'Diferença em Minutos: $diferencaEmMinutos minutos');
+
+                              if (diferencaEmMinutos == 0) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  mostrarPopup(
+                                    () {
+                                      // Ação a ser executada quando o botão for pressionado
+                                    },
+                                    item.placaCarro ?? '',
+                                    item.id ?? 0,
+                                    item.statusServico ?? '',
+                                    item.minutosAdicionais ?? 0,
+                                  );
+                                });
+                              }
+                            }
+
                             if (item.statusServico == 'FINALIZADO') {
                               return SizedBox.shrink();
                             }
@@ -123,49 +155,38 @@ class _FilalavacarState extends State<Filalavacar> {
                             return ListTile(
                               title: InkWell(
                                 onTap: () async {
-                                  if (item.statusServico == 'AGUARDANDO' ||
-                                      item.statusServico == 'EM_LAVAGEM') {
-                                    mostrarPopup(() async {
-                                      data.patchContratarServico(
-                                          item.id,
-                                          item.statusServico = 'FINALIZADO',
-                                          item.minutosAdicionais = 0);
-                                    },
-                                        item.placaCarro ?? '',
-                                        item.id ?? 0,
-                                        item.statusServico ?? '',
-                                        item.minutosAdicionais ?? 0);
-                                    // showDialog(
-                                    //   context: context,
-                                    //   builder: (context) {
-                                    //     return AlertDialog(
-                                    //       title: Text('Confirmação'),
-                                    //       content: Text(
-                                    //           'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
-                                    //       actions: [
-                                    //         TextButton(
-                                    //           onPressed: () {
-                                    //             data.patchContratarServico(
-                                    //                 item.id,
-                                    //                 item.statusServico =
-                                    //                     'EM_LAVAGEM',
-                                    //                 item.minutosAdicionais = 0);
+                                  if (item.statusServico == 'AGUARDANDO') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Confirmação'),
+                                          content: Text(
+                                              'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                data.patchContratarServico(
+                                                    item.id,
+                                                    item.statusServico =
+                                                        'EM_LAVAGEM',
+                                                    item.minutosAdicionais = 0);
 
-                                    //             Navigator.of(context).pop();
-                                    //           },
-                                    //           child: Text('Confirmar'),
-                                    //         ),
-                                    //         TextButton(
-                                    //           onPressed: () {
-                                    //             Navigator.of(context).pop();
-                                    //           },
-                                    //           child: Text('Cancelar'),
-                                    //         ),
-                                    //       ],
-                                    //     );
-                                    //   },
-                                    // );
-                                  }
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Confirmar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Cancelar'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {}
                                 },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -203,8 +224,8 @@ class _FilalavacarState extends State<Filalavacar> {
     );
   }
 
-  void mostrarPopup(VoidCallback onPressed, String placaCarro, int id,
-      String statusServico, int minutosAdicionais) {
+  Future<void> mostrarPopup(VoidCallback onPressed, String placaCarro, int id,
+      String statusServico, int minutosAdicionais) async {
     TextEditingController atrasoController = TextEditingController();
     showDialog(
       context: context,
@@ -245,6 +266,8 @@ class _FilalavacarState extends State<Filalavacar> {
                           id,
                           statusServico = 'EM_LAVAGEM',
                           minutosAdicionais = minutosAdicionais);
+
+                      Navigator.of(context).pop();
                     },
                     style: TextButton.styleFrom(
                         backgroundColor: Colors.blue, primary: Colors.white),
