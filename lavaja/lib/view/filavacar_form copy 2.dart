@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:lavaja/data/contratarservico_service.dart';
-import 'package:lavaja/data/firebase_api.dart';
 import 'package:lavaja/provider/lavacar_provider.dart';
 import 'package:lavaja/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -18,21 +18,39 @@ class Filalavacar extends StatefulWidget {
 
 class _FilalavacarState extends State<Filalavacar> {
   List<int?> selectedItems = [];
+  bool serviceStarted = false;
+  late Timer timer;
+  int? diferencaEmMinutos;
+  bool? mostrarPopupAberta = false;
+  bool? mostrarPopupAtraso = false;
 
   @override
   void initState() {
-    Provider.of<ContratarServicoProvider>(context, listen: false).loadContratarServico;
- 
+    super.initState();
+    Provider.of<ContratarServicoProvider>(context, listen: false)
+        .loadContratarServico();
+    timer = Timer.periodic(Duration(seconds: 15), (timer) {
+      Provider.of<ContratarServicoProvider>(context, listen: false)
+          .loadContratarServico();
+
+      setState(() {});
+    });
+  }
+
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextBuild) {
     return ChangeNotifierProvider<ContratarServicoProvider>(
-      create: (context) =>
+      create: (contextProvider) =>
           ContratarServicoProvider(service: ContratarServicoService()),
       child: Builder(
-        builder: (context) {
-            final data = Provider.of<ContratarServicoProvider>(context);
+        builder: (contextBuilder) {
+          final data = Provider.of<ContratarServicoProvider>(context);
+          final lavacarProvider = Provider.of<LavacarProvider>(context);
           return Scaffold(
             appBar: AppBar(
               title: Text('FILA'),
@@ -43,11 +61,10 @@ class _FilalavacarState extends State<Filalavacar> {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: () {
-                          Modular.to.navigate(AppRoutes.CONTRATARSERVLAVACAR);
-                        },
-                        icon: Icon(Icons.add),
-                      ),
+                          onPressed: () {
+                            Modular.to.navigate(AppRoutes.CONTRATARSERVLAVACAR);
+                          },
+                          icon: Icon(Icons.add)),
                       Spacer(),
                       Column(
                         children: [
@@ -55,18 +72,18 @@ class _FilalavacarState extends State<Filalavacar> {
                             children: [
                               Icon(
                                 Icons.circle,
-                                color: Colors.green,
+                                color: Colors.grey,
                               ),
-                              Text('Aguardando      '),
+                              Text('Aguardando      ')
                             ],
                           ),
                           Row(
                             children: [
                               Icon(
                                 Icons.circle,
-                                color: Colors.grey,
+                                color: Colors.green,
                               ),
-                              Text('Em andamento '),
+                              Text('Em andamento ')
                             ],
                           ),
                         ],
@@ -74,106 +91,215 @@ class _FilalavacarState extends State<Filalavacar> {
                     ],
                   ),
                 ),
-                Consumer<ContratarServicoProvider>(
-                  builder: (context, data, child) {
-                    return Expanded(
-                      child: data.contratarServico.isEmpty ||
-                              data.contratarServico.every(
-                                (item) => item.statusServico == 'FINALIZADO',
-                              )
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Não há carros na fila de espera neste momento.',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Image.asset(
-                                    'assets/images/fila.png',
-                                    height: 50,
-                                  ),
-                                ],
+                Expanded(
+                  child: data.contratarServico.isEmpty ||
+                          data.contratarServico.every(
+                              (item) => item.statusServico == 'FINALIZADO')
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                'Não há veículos na fila',
+                                style: TextStyle(fontSize: 14),
                               ),
-                            )
-                          : ListView.builder(
-                              itemCount: data.contratarServico.length,
-                              itemBuilder: (context, index) {
-                                final item = data.contratarServico[index];
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Image.asset(
+                                'assets/images/fila.png',
+                                height: 50,
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: data.contratarServico.length,
+                          itemBuilder: (context, index) {
+                            final item = data.contratarServico[index];
+                            print(item.id);
+                            print(mostrarPopupAberta);
+                            if (item.statusServico == 'EM_LAVAGEM') {
+                              //calculo previsão data atual
+                              DateTime agora = DateTime.now();
+                              String? dataPrevisao = item.dataPrevisaoServico;
+                              var dataPrevisaoData =
+                                  DateTime.tryParse(dataPrevisao!);
+                              Duration diferencaPrevisao =
+                                  dataPrevisaoData!.difference(agora);
+                              int difEmMinutosPrev =
+                                  diferencaPrevisao.inMinutes;
+                              //calculo atraso data atual
 
-                                return ListTile(
-                                  title: InkWell(
-                                    onTap:  () async {
-                                      mostrarPopupIniciar(
-                                        item.id,
-                                        item.statusServico,
-                                        item.placaCarro ?? '',
-                                        item.minutosAdicionais,
-                                      );
+                              String? dataAtraso = item.atrasado;
+                              var dataAtrasoData =
+                                  DateTime.tryParse(dataAtraso ?? '');
+                              Duration? diferencaAtraso =
+                                  dataAtrasoData?.difference(agora);
+                              int? difEmMinutosAtraso =
+                                  diferencaAtraso?.inMinutes;
+                              if (difEmMinutosAtraso == null) {
+                                difEmMinutosAtraso = 5;
+                              }
+
+                              print('Data Atual: $agora');
+                              print('Data Específica: $dataAtrasoData');
+                              print(
+                                  'Diferença em Minutos : $difEmMinutosAtraso minutos');
+
+                              if ((difEmMinutosPrev == 0 ||
+                                  difEmMinutosAtraso == 0)) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  mostrarPopup(
+                                    () {
+                                     
                                     },
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.local_car_wash_outlined,
-                                              size: 70,
+                                    item.placaCarro ?? '',
+                                    item.id ?? 0,
+                                    item.statusServico ?? '',
+                                    item.minutosAdicionais ?? 0,
+                                  );
+                                });
+                              }
+                            }
+
+                            if (item.statusServico == 'FINALIZADO') {
+                              return SizedBox.shrink();
+                            }
+                            bool isSelected = selectedItems.contains(item.id);
+                            bool isEmLavagem =
+                                item.statusServico == 'EM_LAVAGEM';
+
+                            return ListTile(
+                              title: InkWell(
+                                onTap: () async {
+                                  if (item.statusServico == 'AGUARDANDO') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Confirmação'),
+                                          content: Text(
+                                              'Deseja iniciar lavagem? Carro: ${item.placaCarro}'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                data.patchContratarServico(
+                                                    item.id,
+                                                    item.statusServico =
+                                                        'EM_LAVAGEM',
+                                                    item.minutosAdicionais = 0);
+
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Confirmar'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('Cancelar'),
                                             ),
                                           ],
-                                        ),
-                                        Text(
-                                          'Placa: ${item.placaCarro} - Status: ${item.statusServico}',
+                                        );
+                                      },
+                                    );
+                                  } else {}
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.local_car_wash_outlined,
+                                          color: isEmLavagem
+                                              ? Colors.green
+                                              : (isSelected
+                                                  ? Colors.green
+                                                  : Colors.grey),
+                                          size: 70,
                                         ),
                                       ],
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                    );
-                  },
+                                    Text(
+                                        'Placa: ${item.placaCarro}, Status: ${item.statusServico} - Data contratação: ${item.dataContratacaoServico} -  Data atraso: ${item.atrasado} -  data previsão: ${item.dataPrevisaoServico}'),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                 ),
               ],
             ),
             drawer: MenuLavacarComponent(),
           );
-        }
+        },
       ),
     );
   }
 
-  void mostrarPopupIniciar(int? id, String? statusServico, String? placaCarro,
-      int? minutosAdicionais) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        final data = Provider.of<ContratarServicoProvider>(context);
-        return AlertDialog(
-          title: Text('Confirmação'),
-          content: Text('Deseja iniciar lavagem? Carro: $placaCarro'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                data.patchContratarServico(id, 'EM_LAVAGEM', 0);
-                Navigator.of(context).pop();
-              },
-              child: Text('Confirmar'),
+  Future<void> mostrarPopup(VoidCallback onPressed, String placaCarro, int id,
+      String statusServico, int minutosAdicionais) async {
+    TextEditingController atrasoController = TextEditingController();
+    if (!mostrarPopupAberta!) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          final data = Provider.of<ContratarServicoProvider>(context);
+
+          return AlertDialog(
+            title: Text('Deseja finalizar serviço? Carro:  $placaCarro'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    data.patchContratarServico(id, statusServico = 'FINALIZADO',
+                        minutosAdicionais = 0);
+
+                    Navigator.of(context).pop();
+                  },
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue, primary: Colors.white),
+                  child: Text('Finalizar serviço'),
+                ),
+                Divider(),
+                SizedBox(height: 10),
+                Text('Caso tenha atraso, informe abaixo em min:'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: atrasoController,
+                        decoration: InputDecoration(labelText: 'Min.'),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        minutosAdicionais =
+                            int.tryParse(atrasoController.text) ?? 0;
+                        data.patchContratarServico(
+                            id,
+                            statusServico = 'EM_LAVAGEM',
+                            minutosAdicionais = minutosAdicionais);
+
+                        Navigator.of(context).pop();
+                      },
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blue, primary: Colors.white),
+                      child: Text('Informar atraso'),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
-            ),
-          ],
-        );
-      },
-    );
+          );
+        },
+      );
+    }
   }
 }

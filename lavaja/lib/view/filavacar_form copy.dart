@@ -127,14 +127,6 @@
 //                             bool isEmLavagem =
 //                                 item.statusServico == 'EM_LAVAGEM';
 
-//                             //calculo do tempo de espera
-//                             var tempoEspera = DateTime.parse(item.dataContratacaoServico!)
-//                                 .add(Duration(minutes: item.tempFila!))
-//                                 .difference(DateTime.now())
-//                                 .inMinutes
-//                                 .toString();
-
-//                             print(tempoEspera);
 
 //                             if (item.statusServico == 'EM_LAVAGEM') {
                               
@@ -180,8 +172,8 @@
 //                                             ),
 //                                             TextButton(
 //                                               onPressed: () {
-//                                                 Navigator.of(context)
-//                                                     .pop(); // Fechar o popup
+  //                                                 Navigator.of(context)
+  //                                                     .pop(); // Fechar o popup
 //                                               },
 //                                               child: Text('Cancelar'),
 //                                             ),
