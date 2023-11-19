@@ -198,7 +198,7 @@ class _ContratarServDonocarroState extends State<ContratarServDonocarro> {
                                               .map((Veiculo value) {
                                             return DropdownMenuItem<Veiculo>(
                                               value: value,
-                                              child: Text('${value.placa}'),
+                                              child: Text('${value.placa} - ${value.modelo}'),
                                             );
                                           }).toList(),
                                           onChanged: (Veiculo? value) {

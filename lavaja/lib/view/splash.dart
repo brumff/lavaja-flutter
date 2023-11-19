@@ -20,16 +20,20 @@ class __SplashState extends State<Splash> {
     redirecionar();
   }
 
-
-
   Future<void> redirecionar() async {
-    bool auth = await PrefsService.isAuth();
+    // bool auth = false;
+    // try {
+    //   bool auth = (await PrefsService.isAuth()) ?? false;
+    //   print(auth);
+    // } catch (e) {}
 
-    if (auth == true) {
+    // if (auth == true) {
+      
       var token = await PrefsService.getToken();
+     
       if (token != null) {
         var decodedToken = JwtDecoder.decode(token);
-        if (decodedToken != null && decodedToken.containsKey('profile')) {
+        if (decodedToken.containsKey('profile')) {
           var userProfile = decodedToken['profile'];
           if (userProfile == 'ROLE_LAVACAR') {
             Modular.to.pushReplacementNamed(AppRoutes.HOMELAVACAR);
@@ -42,9 +46,9 @@ class __SplashState extends State<Splash> {
       } else {
         Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
       }
-    } else {
-      Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
-    }
+    // } else {
+    //   Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+    // }
   }
 
   @override

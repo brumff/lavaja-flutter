@@ -35,7 +35,7 @@ class _ServicoFormState extends State<ServicoForm> {
         _formData['nome'] = e?.nome ?? '';
         _formData['tempServico'] = e?.tempServico.toString() ?? '';
         _formData['valor'] = e?.valor!.toStringAsFixed(2) ?? '';
-        _formData['tamCarro'] = e?.tamCarro ?? '';
+        // _formData['tamCarro'] = e?.tamCarro ?? '';
         _formData['ativo'] = e?.ativo?.toString() ?? 'false';
         setState(() {
           isLoading = false;
@@ -89,15 +89,16 @@ class _ServicoFormState extends State<ServicoForm> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  initialValue: _formData['tamCarro'],
-                  decoration: InputDecoration(labelText: 'Tamanho do veículo'),
-                  onChanged: (value) => _formData['tamCarro'] = value,
-                ),
+                // TextFormField(
+                //   initialValue: _formData['tamCarro'],
+                //   decoration: InputDecoration(labelText: 'Tamanho do veículo'),
+                //   onChanged: (value) => _formData['tamCarro'] = value,
+                // ),
                 TextFormField(
                   initialValue: _formData['tempServico'],
                   decoration: InputDecoration(labelText: 'Tempo serviço'),
                   onChanged: (value) => _formData['tempServico'] = value,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Campo obrigatório';
@@ -126,7 +127,7 @@ class _ServicoFormState extends State<ServicoForm> {
                                 _formData['nome'] ?? '',
                                 double.tryParse(_formData['valor'] ?? '') ??
                                     0.0,
-                                _formData['tamCarro'] ?? '',
+                                // _formData['tamCarro'] ?? '',
                                 double.tryParse(
                                         _formData['tempServico'] ?? '') ??
                                     0.0,
@@ -143,7 +144,7 @@ class _ServicoFormState extends State<ServicoForm> {
                                 _formData['nome'] ?? '',
                                 double.tryParse(_formData['valor'] ?? '') ??
                                     0.0,
-                                _formData['tamCarro'] ?? '',
+                                // _formData['tamCarro'] ?? '',
                                 double.tryParse(
                                         _formData['tempServico'] ?? '') ??
                                     0.0,

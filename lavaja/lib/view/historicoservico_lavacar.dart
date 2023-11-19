@@ -201,7 +201,7 @@ class _HistoricoServicoLavacarState extends State<HistoricoServicoLavacar> {
                                       ),
                                     ),
                                     TextSpan(
-                                      text: 'Nome do cliente',
+                                      text: '${item.placaCarro}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,

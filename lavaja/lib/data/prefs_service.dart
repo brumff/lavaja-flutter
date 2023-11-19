@@ -5,20 +5,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PrefsService {
   static String _key = 'key';
 
-      static save(String token, int userId) async {
-        var prefs = await SharedPreferences.getInstance();
-        prefs.setString(_key, jsonEncode({"token": token, "isAuth": true, "userId": userId}));
-      }
-
-  static Future<bool> isAuth() async {
+  static save(String token, int userId) async {
     var prefs = await SharedPreferences.getInstance();
-    var jsonResult = prefs.getString(_key);
-    if (jsonResult != null) {
-      var mapUser = jsonDecode(jsonResult);
-      return mapUser['isAuth'];
-    }
-    return false;
+    prefs.setString(
+        _key, jsonEncode({"token": token}));
+        print(_key);
   }
+
+  // static Future<bool> isAuth() async {
+  //   var prefs = await SharedPreferences.getInstance();
+  //   var jsonResult = prefs.getString(_key);
+  //   if (jsonResult != null) {
+  //     var mapUser = jsonDecode(jsonResult);
+  //     return mapUser['isAuth'];
+  //   }
+  //   return false;
+  // }
 
   static logout() async {
     var prefs = await SharedPreferences.getInstance();

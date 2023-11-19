@@ -357,7 +357,7 @@ class _BuscarLavacarState extends State<BuscarLavacar> {
                             child: ListTile(
                               title: Text(nome),
                               subtitle: Text(
-                                'Distância: $distanciaText km - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
+                                'Distância: $distanciaText - Tempo de Espera: ${tempoFormatado ?? "N/A"} minutos',
                               ),
                               trailing: Icon(Icons.arrow_forward_ios),
                             ),

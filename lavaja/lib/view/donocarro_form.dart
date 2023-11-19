@@ -78,7 +78,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                   ),
                   TextSpan(
                     text:
-                        '7. Lei Aplicável: Estes Termos de Uso serão regidos e interpretados de acordo com as leis do Brail sem levar em consideração os conflitos de princípios legais. Se você tiver alguma dúvida ou preocupação sobre estes Termos de Uso, entre em contato conosco em brunameiraf@gmail.com.\n\n',
+                        '7. Lei Aplicável: Estes Termos de Uso serão regidos e interpretados de acordo com as leis do Brasil sem levar em consideração os conflitos de princípios legais. Se você tiver alguma dúvida ou preocupação sobre estes Termos de Uso, entre em contato conosco em brunameiraf@gmail.com.\n\n',
                     style: TextStyle(fontSize: 14),
                   ),
                   TextSpan(
@@ -220,7 +220,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                 ),
                 TextFormField(
                   initialValue: _formData['telefone'],
-                  decoration: InputDecoration(labelText: 'Telefone'),
+                  decoration: InputDecoration(labelText: 'Celular'),
                   keyboardType: TextInputType.phone,
                   inputFormatters: [phoneMaskFormatter],
                   onChanged: (value) => _formData['telefone'] = value,
@@ -233,6 +233,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                 ),
                 TextFormField(
                   initialValue: _formData['email'],
+                  enabled: AuthService.token != null ,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(labelText: 'Email'),
                   onChanged: (value) => _formData['email'] = value,
@@ -246,6 +247,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                     }
                     return null;
                   },
+                  
                 ),
                 Visibility(
                   visible: AuthService.token == null,

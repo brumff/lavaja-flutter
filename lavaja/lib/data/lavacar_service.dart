@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lavaja/data/prefs_service.dart';
 import 'package:lavaja/main.dart';
 
 import '../models/lavacar.dart';
@@ -9,32 +10,58 @@ class LavacarService {
   String ip = MyApp.ip;
 
   Future<List<Lavacar>> getLavacar() async {
-    dio.options.headers = {'authorization': AuthService.token};
-    final response =
-        await dio.get('${ip}0/api/v1/lavacar/todos');
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
+    final response = await dio.get('${ip}0/api/v1/lavacar/todos');
     final data = response.data as List<dynamic>;
     return data.map((json) => Lavacar.fromMap(json)).toList();
   }
 
   Future<List<Lavacar>> getLavacarAberto() async {
-    dio.options.headers = {'authorization': AuthService.token};
-    final response =
-        await dio.get('${ip}/api/v1/lavacar/abertos');
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
+    final response = await dio.get('${ip}/api/v1/lavacar/abertos');
     final data = response.data as List<dynamic>;
     return data.map((json) => Lavacar.fromMap(json)).toList();
   }
 
   Future<Lavacar> getLavacarByToken() async {
-    dio.options.headers = {'authorization': AuthService.token};
-    final response =
-        await dio.get('${ip}/api/v1/lavacar/meu-lavacar');
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
+    final response = await dio.get('${ip}/api/v1/lavacar/meu-lavacar');
     final data = response.data;
     return Lavacar.fromMap(data);
   }
 
   Future<Lavacar> getLavacarById(String id) async {
-    final response =
-        await dio.get('${ip}/api/v1/lavacar/$id');
+    final response = await dio.get('${ip}/api/v1/lavacar/$id');
     final data = response.data;
     print(data);
     return Lavacar.fromMap(data);
@@ -57,8 +84,7 @@ class LavacarService {
       String? senha,
       String? confSenha) async {
     try {
-      final response =
-          await dio.post('${ip}/api/v1/lavacar', data: {
+      final response = await dio.post('${ip}/api/v1/lavacar', data: {
         'cnpj': cnpj,
         'nome': nome,
         'rua': rua,
@@ -109,7 +135,17 @@ class LavacarService {
     String? telefone2,
     String? email,
   ) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     await dio.put('${ip}/api/v1/lavacar/meu-lavacar', data: {
       'cnpj': cnpj,
       'nome': nome,
@@ -128,9 +164,18 @@ class LavacarService {
   }
 
   Future<void> abrirLavacar(bool? aberto) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     dio.options.contentType = 'application/json';
-    await dio.post('${ip}/api/v1/lavacar/abrir',
-        data: aberto ?? false);
+    await dio.post('${ip}/api/v1/lavacar/abrir', data: aberto ?? false);
   }
 }

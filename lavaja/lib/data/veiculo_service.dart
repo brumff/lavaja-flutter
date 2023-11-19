@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lavaja/data/prefs_service.dart';
 import 'package:lavaja/main.dart';
 import 'package:lavaja/models/veiculo.dart';
 
@@ -9,7 +10,17 @@ class VeiculoService {
   String ip = MyApp.ip;
 
   Future<List<Veiculo>> getListarVeiculos() async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     final response = await dio.get('${ip}/api/v1/veiculo');
     final data = response.data as List<dynamic>;
     return data.map((json) => Veiculo.fromMap(json)).toList();
@@ -42,7 +53,18 @@ class VeiculoService {
   }
 
   Future<String> deletarVeiculo(int? id) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+
+    dio.options.headers = {'authorization': tokenAuth};
     try {
       final response = await dio.delete('${ip}/api/v1/veiculo/$id');
 

@@ -34,7 +34,7 @@ dependencies:
   dio: ^5.3.2
   mask_text_input_formatter: ^2.4.0
   flutter_modular: ^5.0.3
-  shared_preferences: ^2.0.8
+
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -56,6 +56,7 @@ dependencies:
   firebase_core: ^2.15.1
   firebase_messaging: ^14.6.7
   intl: ^0.17.0
+  shared_preferences: ^2.2.2
 
 
 

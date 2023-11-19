@@ -23,13 +23,14 @@ class _FilalavacarState extends State<Filalavacar> {
   int? diferencaEmMinutos;
   bool? mostrarPopupAberta = false;
   int contadorPopup = 0;
+  Map<int, bool> popUpAbertaMap = {};
 
   @override
   void initState() {
     super.initState();
     Provider.of<ContratarServicoProvider>(context, listen: false)
         .loadContratarServico();
-    timer = Timer.periodic(Duration(minutes: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 15), (timer) {
       Provider.of<ContratarServicoProvider>(context, listen: false)
           .loadContratarServico();
 
@@ -72,7 +73,7 @@ class _FilalavacarState extends State<Filalavacar> {
                             children: [
                               Icon(
                                 Icons.circle,
-                                color: Colors.grey,
+                                color: Colors.yellow,
                               ),
                               Text('Aguardando      ')
                             ],
@@ -116,7 +117,9 @@ class _FilalavacarState extends State<Filalavacar> {
                           itemCount: data.contratarServico.length,
                           itemBuilder: (context, index) {
                             final item = data.contratarServico[index];
+
                             print(item.id);
+
                             print(mostrarPopupAberta);
                             print(item.dataPrevisaoServico);
 
@@ -124,12 +127,13 @@ class _FilalavacarState extends State<Filalavacar> {
                             DateTime agora = DateTime.now();
                             String? dataPrevisao = item.dataPrevisaoServico;
                             var dataPrevisaoData =
-                                DateTime.tryParse(dataPrevisao!);
-                            Duration diferencaPrevisao =
-                                dataPrevisaoData!.difference(agora);
-                            int difEmMinutosPrev = diferencaPrevisao.inMinutes;
+                                DateTime.tryParse(dataPrevisao ?? '');
+                            Duration? diferencaPrevisao =
+                                dataPrevisaoData?.difference(agora);
+                            int? difEmMinutosPrev = diferencaPrevisao?.inMinutes ?? 0;
+
                             //calculo atraso data atual
-                            print(difEmMinutosPrev);
+
                             String? dataAtraso = item.atrasado;
                             var dataAtrasoData =
                                 DateTime.tryParse(dataAtraso ?? '');
@@ -137,106 +141,42 @@ class _FilalavacarState extends State<Filalavacar> {
                                 dataAtrasoData?.difference(agora);
                             int? difEmMinutosAtraso =
                                 diferencaAtraso?.inMinutes;
+                            print('diferençaaa atrasasdo $difEmMinutosAtraso');
+
                             if (difEmMinutosAtraso == null) {
-                              difEmMinutosAtraso = 5;
+                              difEmMinutosAtraso = 100000;
                             }
+
                             if (item.statusServico == 'EM_LAVAGEM') {
                               if ((difEmMinutosPrev == 0 &&
-                                      contadorPopup == 0) ||
-                                  difEmMinutosAtraso == 0 &&
-                                      mostrarPopupAberta == false) {
-                                if ((difEmMinutosPrev == 0 ||
-                                        difEmMinutosAtraso == 0) &&
-                                    mostrarPopupAberta == false) {
+                                      contadorPopup == 0) &&
+                                  mostrarPopupAberta == false) {
+                                {
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
-                                    TextEditingController atrasoController =
-                                        TextEditingController();
-                                    mostrarPopupAberta = true;
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        final data = Provider.of<
-                                            ContratarServicoProvider>(context);
-
-                                        return AlertDialog(
-                                          title: Text(
-                                              'Deseja finalizar serviço? Carro:  $item.placaCarro'),
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  print(
-                                                      'popup aberta: ${mostrarPopupAberta} ');
-                                                  data.patchContratarServico(
-                                                      item.id,
-                                                      item.statusServico =
-                                                          'FINALIZADO',
-                                                      item.minutosAdicionais =
-                                                          0);
-
-                                                  Navigator.of(context).pop();
-                                                },
-                                                style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.blue,
-                                                    primary: Colors.white),
-                                                child:
-                                                    Text('Finalizar serviço'),
-                                              ),
-                                              Divider(),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                  'Caso tenha atraso, informe abaixo em min:'),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: TextFormField(
-                                                      controller:
-                                                          atrasoController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              labelText:
-                                                                  'Min.'),
-                                                    ),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      item.minutosAdicionais =
-                                                          int.tryParse(
-                                                                  atrasoController
-                                                                      .text) ??
-                                                              0;
-                                                      data.patchContratarServico(
-                                                          item.id,
-                                                          item.statusServico =
-                                                              'EM_LAVAGEM',
-                                                          item.minutosAdicionais =
-                                                              item.minutosAdicionais);
-
-                                                      contadorPopup += 1;
-                                                      mostrarPopupAberta =
-                                                          false;
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    style: TextButton.styleFrom(
-                                                        backgroundColor:
-                                                            Colors.blue,
-                                                        primary: Colors.white),
-                                                    child:
-                                                        Text('Informar atraso'),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
+                                    _mostrarPopup(
+                                        context,
+                                        data,
+                                        index,
+                                        item.placaCarro ?? '',
+                                        item.id ?? 0,
+                                        item.statusServico ?? '',
+                                        item.minutosAdicionais ?? 0);
                                   });
                                 }
+                              } else if ((difEmMinutosAtraso == 0) &&
+                                  mostrarPopupAberta == false) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  _mostrarPopup(
+                                      context,
+                                      data,
+                                      index,
+                                      item.placaCarro ?? '',
+                                      item.id ?? 0,
+                                      item.statusServico ?? '',
+                                      item.minutosAdicionais ?? 0);
+                                });
                               }
                             }
 
@@ -281,7 +221,20 @@ class _FilalavacarState extends State<Filalavacar> {
                                         );
                                       },
                                     );
-                                  } else {}
+                                  } else if (item.statusServico ==
+                                      'EM_LAVAGEM') {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _mostrarPopup(
+                                          context,
+                                          data,
+                                          index,
+                                          item.placaCarro ?? '',
+                                          item.id ?? 0,
+                                          item.statusServico ?? '',
+                                          item.minutosAdicionais ?? 0);
+                                    });
+                                  }
                                 },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -296,13 +249,24 @@ class _FilalavacarState extends State<Filalavacar> {
                                               ? Colors.green
                                               : (isSelected
                                                   ? Colors.green
-                                                  : Colors.grey),
+                                                  : Colors.yellow),
                                           size: 70,
                                         ),
                                       ],
                                     ),
-                                    Text(
-                                        'Placa: ${item.placaCarro}, Status: ${item.statusServico} - Tempo: ${difEmMinutosPrev}  - Atrasado: '),
+                                    Column(
+                                      
+                                      children: [
+                                        
+                                        Text(
+                                            'Placa: ${item.placaCarro} -  Status: ${item.statusServico?.replaceAll('_', ' ')}'),
+                                        Text(
+                                            'Tempo de Lavagem: ${difEmMinutosPrev < 0 ? 0 : difEmMinutosPrev} min.'),
+                                        if (difEmMinutosAtraso != 100000)
+                                          Text(
+                                              'Tempo de Atraso: ${difEmMinutosAtraso} min.', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),)
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -319,64 +283,91 @@ class _FilalavacarState extends State<Filalavacar> {
     );
   }
 
-//   Future<void> mostrarPopup(VoidCallback onPressed, String placaCarro, int id,
-//       String statusServico, int minutosAdicionais) async {
-//     TextEditingController atrasoController = TextEditingController();
-//     if (!mostrarPopupAberta!) {
-//       showDialog(
-//         context: context,
-//         builder: (context) {
-//           final data = Provider.of<ContratarServicoProvider>(context);
-
-//           return AlertDialog(
-//             title: Text('Deseja finalizar serviço? Carro:  $placaCarro'),
-//             content: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 TextButton(
-//                   onPressed: () {
-//                     data.patchContratarServico(id, statusServico = 'FINALIZADO',
-//                         minutosAdicionais = 0);
-
-//                     Navigator.of(context).pop();
-//                   },
-//                   style: TextButton.styleFrom(
-//                       backgroundColor: Colors.blue, primary: Colors.white),
-//                   child: Text('Finalizar serviço'),
-//                 ),
-//                 Divider(),
-//                 SizedBox(height: 10),
-//                 Text('Caso tenha atraso, informe abaixo em min:'),
-//                 Row(
-//                   children: [
-//                     Expanded(
-//                       child: TextFormField(
-//                         controller: atrasoController,
-//                         decoration: InputDecoration(labelText: 'Min.'),
-//                       ),
-//                     ),
-//                     TextButton(
-//                       onPressed: () {
-//                         minutosAdicionais =
-//                             int.tryParse(atrasoController.text) ?? 0;
-//                         data.patchContratarServico(
-//                             id,
-//                             statusServico = 'EM_LAVAGEM',
-//                             minutosAdicionais = minutosAdicionais);
-
-//                         Navigator.of(context).pop();
-//                       },
-//                       style: TextButton.styleFrom(
-//                           backgroundColor: Colors.blue, primary: Colors.white),
-//                       child: Text('Informar atraso'),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           );
-//         },
-//       );
-//     }
-//   }
+  void _mostrarPopup(
+      BuildContext context,
+      ContratarServicoProvider data,
+      int index,
+      String placaCarro,
+      int id,
+      String statusServico,
+      int minutosAdicionais) {
+    TextEditingController atrasoController = TextEditingController();
+    mostrarPopupAberta = true;
+    contadorPopup += 1;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: Text('Deseja finalizar serviço? Carro: ${placaCarro}')),
+              IconButton(
+                icon: Icon(Icons.close, size: 15,), // Adicionando um ícone "X" para fechar
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () {
+                  print('popup aberta: ${mostrarPopupAberta}');
+                  data.patchContratarServico(
+                    id,
+                    statusServico = 'FINALIZADO',
+                    minutosAdicionais = 0,
+                  );
+                  mostrarPopupAberta = false;
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  primary: Colors.white,
+                ),
+                child: Text('Finalizar serviço'),
+              ),
+              Divider(),
+              SizedBox(height: 10),
+              Text('Caso tenha atraso, informe abaixo em min:'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: atrasoController,
+                      decoration: InputDecoration(labelText: 'Min.'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      minutosAdicionais =
+                          int.tryParse(atrasoController.text) ?? 0;
+                      data.patchContratarServico(
+                        id,
+                        statusServico = 'EM_LAVAGEM',
+                        minutosAdicionais = minutosAdicionais,
+                      );
+                      contadorPopup += 1;
+                      mostrarPopupAberta = false;
+                      Navigator.of(context).pop();
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      primary: Colors.white,
+                    ),
+                    child: Text('Informar atraso'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

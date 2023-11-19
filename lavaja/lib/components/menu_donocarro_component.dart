@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:lavaja/data/donocarro_service.dart';
+import 'package:lavaja/data/lavacar_service.dart';
 import 'package:provider/provider.dart';
 
 import '../data/auth_service.dart';
@@ -16,16 +19,45 @@ class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
   String? emailUsuario;
   String? nomeUsuario;
 
-   @override
+  @override
   void initState() {
     super.initState();
 
     if (AuthService.token != null) {
-
       var usuario = AuthService.getUsuario();
 
       emailUsuario = usuario['email'] ?? '';
       nomeUsuario = usuario['nome'] ?? '';
+    } else {
+      usuarioLogado();
+    }
+  }
+
+  Future<void> usuarioLogado() async {
+    var token = await PrefsService.getToken();
+
+    if (token != null) {
+      var decodedToken = JwtDecoder.decode(token);
+      if (decodedToken.containsKey('profile')) {
+        var userProfile = decodedToken['profile'];
+        if (userProfile == 'ROLE_LAVACAR') {
+          LavacarService lavaCarService = LavacarService();
+          var lavaCar = await lavaCarService.getLavacarByToken();
+          nomeUsuario = lavaCar.nome;
+
+          emailUsuario = lavaCar.email;
+        } else if (userProfile == 'ROLE_DONOCARRO') {
+          DonoCarroService donoCarroService = DonoCarroService();
+          var donoCarro = await donoCarroService.getDonoCarroByToken();
+          nomeUsuario = donoCarro.nome;
+          print(nomeUsuario);
+          emailUsuario = donoCarro.email;
+        } else {
+          Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
+        }
+      }
+    } else {
+      Modular.to.pushReplacementNamed(AppRoutes.LOGIN);
     }
   }
 
@@ -75,7 +107,7 @@ class _MenuDonoCarroComponentState extends State<MenuDonoCarroComponent> {
               title: 'Historico de serviços',
               icon: Icons.arrow_forward_ios_sharp,
               onTap: () {
-                 Modular.to.navigate('/historico-donocarro');
+                Modular.to.navigate('/historico-donocarro');
               }),
           CustomDrawerTile(
             title: 'Sair',

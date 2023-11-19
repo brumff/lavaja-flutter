@@ -30,18 +30,18 @@ class ServicoProvider with ChangeNotifier {
   }
 
 
-  void createServico(String nome, double valor, String tamCarro,
+  void createServico(String nome, double valor, 
       double tempServico, bool ativo) async {
     final servico =
-        await service.createServico(nome, valor, tamCarro, tempServico, ativo);
+        await service.createServico(nome, valor, tempServico, ativo);
     await loadServico();
     notifyListeners();
   }
 
-  void updateServico(String id, String nome, double valor, String tamCarro,
+  void updateServico(String id, String nome, double valor, 
       double tempServico, bool ativo) async {
     final servico = await service.updateServico(
-        id, nome, valor, tamCarro, tempServico, ativo);
+        id, nome, valor, tempServico, ativo);
     await loadServico();
     notifyListeners();
   }

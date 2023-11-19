@@ -1,6 +1,7 @@
 // import 'dart:async';
 
 // import 'package:flutter/material.dart';
+// import 'package:flutter/scheduler.dart';
 // import 'package:flutter_modular/flutter_modular.dart';
 // import 'package:lavaja/data/contratarservico_service.dart';
 // import 'package:lavaja/provider/lavacar_provider.dart';
@@ -18,55 +19,43 @@
 // class _FilalavacarState extends State<Filalavacar> {
 //   List<int?> selectedItems = [];
 //   bool serviceStarted = false;
-// //atualiza o tempo a cada 1 minuto
+//   late Timer timer;
+//   int? diferencaEmMinutos;
+
 //   @override
 //   void initState() {
 //     super.initState();
-//        Timer.periodic(Duration(minutes: 1), (timer) {
+//     Provider.of<ContratarServicoProvider>(context, listen: false)
+//         .loadContratarServico();
+//     timer = Timer.periodic(Duration(seconds: 15), (timer) {
+//       Provider.of<ContratarServicoProvider>(context, listen: false)
+//           .loadContratarServico();
+
 //       setState(() {});
 //     });
 //   }
 
-
-//   void mostrarPopup(VoidCallback onPressed, String placaCarro) {
-//     showDialog(
-//       context: context,
-//       builder: (context) {
-//         return AlertDialog(
-//           title: Text('Confirmação'),
-//           content: Text('Deseja finalizar lavagem? Carro: $placaCarro'),
-//           actions: [
-//             TextButton(
-//               onPressed: onPressed,
-//               child: Text('Confirmar'),
-//             ),
-//             TextButton(
-//               onPressed: () {
-//                 Future.delayed(Duration(minutes: 1)).whenComplete(() {
-//                   mostrarPopup(onPressed, placaCarro);
-//                 });
-//                 Navigator.of(context).pop(); // Fechar o popup
-//               },
-//               child: Text('Cancelar'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
+//   void dispose() {
+//     timer.cancel();
+//     super.dispose();
 //   }
 
 //   @override
-//   Widget build(BuildContext context) {
+//   Widget build(BuildContext contextBuild) {
+//     bool? mostrarPopupAberta = false;
+//     int contadorPopup = 0;
+//     Map<int, bool> popUpAbertaMap = {};
+
 //     return ChangeNotifierProvider<ContratarServicoProvider>(
-//       create: (context) =>
+//       create: (contextProvider) =>
 //           ContratarServicoProvider(service: ContratarServicoService()),
 //       child: Builder(
-//         builder: (context) {
+//         builder: (contextBuilder) {
 //           final data = Provider.of<ContratarServicoProvider>(context);
 //           final lavacarProvider = Provider.of<LavacarProvider>(context);
 //           return Scaffold(
 //             appBar: AppBar(
-//               title: Text('Fila'),
+//               title: Text('FILA'),
 //             ),
 //             body: Column(
 //               children: [
@@ -83,22 +72,18 @@
 //                         children: [
 //                           Row(
 //                             children: [
-//                               Theme(
-//                                 data: Theme.of(context).copyWith(
-//                                   iconTheme: IconThemeData(color: Colors.grey),
-//                                 ),
-//                                 child: Icon(Icons.circle),
+//                               Icon(
+//                                 Icons.circle,
+//                                 color: Colors.grey,
 //                               ),
 //                               Text('Aguardando      ')
 //                             ],
 //                           ),
 //                           Row(
 //                             children: [
-//                               Theme(
-//                                 data: Theme.of(context).copyWith(
-//                                   iconTheme: IconThemeData(color: Colors.green),
-//                                 ),
-//                                 child: Icon(Icons.circle),
+//                               Icon(
+//                                 Icons.circle,
+//                                 color: Colors.green,
 //                               ),
 //                               Text('Em andamento ')
 //                             ],
@@ -113,32 +98,161 @@
 //                           data.contratarServico.every(
 //                               (item) => item.statusServico == 'FINALIZADO')
 //                       ? Center(
-//                           child: Text('Não há veículos na fila'),
+//                           child: Column(
+//                             children: [
+//                               Text(
+//                                 'Não há veículos na fila',
+//                                 style: TextStyle(fontSize: 14),
+//                               ),
+//                               SizedBox(
+//                                 height: 16,
+//                               ),
+//                               Image.asset(
+//                                 'assets/images/fila.png',
+//                                 height: 300,
+//                               ),
+//                             ],
+//                           ),
 //                         )
 //                       : ListView.builder(
 //                           itemCount: data.contratarServico.length,
 //                           itemBuilder: (context, index) {
 //                             final item = data.contratarServico[index];
+
+//                             print(item.id);
+
+//                             print(mostrarPopupAberta);
+//                             print(item.dataPrevisaoServico);
+
+//                             //calculo previsão data atual
+//                             DateTime agora = DateTime.now();
+//                             String? dataPrevisao = item.dataPrevisaoServico;
+//                             var dataPrevisaoData =
+//                                 DateTime.tryParse(dataPrevisao ?? '');
+//                             Duration diferencaPrevisao =
+//                                 dataPrevisaoData!.difference(agora);
+//                             int difEmMinutosPrev = diferencaPrevisao.inMinutes;
+
+//                             //calculo atraso data atual
+//                             print(difEmMinutosPrev);
+//                             String? dataAtraso = item.atrasado;
+//                             var dataAtrasoData =
+//                                 DateTime.tryParse(dataAtraso ?? '');
+//                             Duration? diferencaAtraso =
+//                                 dataAtrasoData?.difference(agora);
+//                             int? difEmMinutosAtraso =
+//                                 diferencaAtraso?.inMinutes;
+//                             if (difEmMinutosAtraso == null) {
+//                               difEmMinutosAtraso = 5;
+//                             }
+
+//                             if (item.statusServico == 'EM_LAVAGEM') {
+//                               if ((difEmMinutosPrev == 0 &&
+//                                       contadorPopup == 0) &&
+//                                       mostrarPopupAberta == false) {
+//                                  {
+//                                   WidgetsBinding.instance
+//                                       .addPostFrameCallback((_) {
+//                                     TextEditingController atrasoController =
+//                                         TextEditingController();
+//                                     mostrarPopupAberta = true;
+//                                     contadorPopup += 1;
+//                                     showDialog(
+//                                       context: context,
+//                                       builder: (context) {
+//                                         final data = Provider.of<
+//                                             ContratarServicoProvider>(context);
+
+//                                         return AlertDialog(
+//                                           title: Text(
+//                                               'Deseja finalizar serviço? Carro:  ${item.placaCarro} '),
+//                                           content: Column(
+//                                             mainAxisSize: MainAxisSize.min,
+//                                             children: [
+//                                               TextButton(
+//                                                 onPressed: () {
+//                                                   print(
+//                                                       'popup aberta: ${mostrarPopupAberta} ');
+//                                                   data.patchContratarServico(
+//                                                       item.id,
+//                                                       item.statusServico =
+//                                                           'FINALIZADO',
+//                                                       item.minutosAdicionais =
+//                                                           0);
+//                                                   mostrarPopupAberta = false;
+//                                                   if (index == 0) {
+//                                                     contadorPopup = 0;
+//                                                   }
+//                                                   Navigator.of(context).pop();
+//                                                 },
+//                                                 style: TextButton.styleFrom(
+//                                                     backgroundColor:
+//                                                         Colors.blue,
+//                                                     primary: Colors.white),
+//                                                 child:
+//                                                     Text('Finalizar serviço'),
+//                                               ),
+//                                               Divider(),
+//                                               SizedBox(height: 10),
+//                                               Text(
+//                                                   'Caso tenha atraso, informe abaixo em min:'),
+//                                               Row(
+//                                                 children: [
+//                                                   Expanded(
+//                                                     child: TextFormField(
+//                                                       controller:
+//                                                           atrasoController,
+//                                                       decoration:
+//                                                           InputDecoration(
+//                                                               labelText:
+//                                                                   'Min.'),
+//                                                     ),
+//                                                   ),
+//                                                   TextButton(
+//                                                     onPressed: () {
+//                                                       item.minutosAdicionais =
+//                                                           int.tryParse(
+//                                                                   atrasoController
+//                                                                       .text) ??
+//                                                               0;
+//                                                       data.patchContratarServico(
+//                                                           item.id,
+//                                                           item.statusServico =
+//                                                               'EM_LAVAGEM',
+//                                                           item.minutosAdicionais =
+//                                                               item.minutosAdicionais);
+
+//                                                       contadorPopup += 1;
+//                                                       mostrarPopupAberta =
+//                                                           false;
+//                                                       Navigator.of(context)
+//                                                           .pop();
+//                                                     },
+//                                                     style: TextButton.styleFrom(
+//                                                         backgroundColor:
+//                                                             Colors.blue,
+//                                                         primary: Colors.white),
+//                                                     child:
+//                                                         Text('Informar atraso'),
+//                                                   ),
+//                                                 ],
+//                                               ),
+//                                             ],
+//                                           ),
+//                                         );
+//                                       },
+//                                     );
+//                                   });
+//                                 }
+//                               }
+//                             }
+
 //                             if (item.statusServico == 'FINALIZADO') {
 //                               return SizedBox.shrink();
 //                             }
-
 //                             bool isSelected = selectedItems.contains(item.id);
 //                             bool isEmLavagem =
 //                                 item.statusServico == 'EM_LAVAGEM';
-
-
-//                             if (item.statusServico == 'EM_LAVAGEM') {
-                              
-//                               tempoEspera = item.fimLavagem
-//                                       ?.difference(DateTime.now())
-//                                       .inMinutes
-//                                       .toString() ??
-//                                   '';
-//                                   print(item.fimLavagem);
-//                                   print(tempoEspera);
-                                  
-//                             }
 
 //                             return ListTile(
 //                               title: InkWell(
@@ -155,16 +269,10 @@
 //                                             TextButton(
 //                                               onPressed: () {
 //                                                 data.patchContratarServico(
-//                                                   item.id,
-//                                                   item.statusServico =
-//                                                       'EM_LAVAGEM',
-//                                                 );
-
-//                                                 item.fimLavagem = DateTime.now()
-//                                                     .add(Duration(
-//                                                         minutes: item.servico!
-//                                                             .tempServico!
-//                                                             .toInt()));
+//                                                     item.id,
+//                                                     item.statusServico =
+//                                                         'EM_LAVAGEM',
+//                                                     item.minutosAdicionais = 0);
 
 //                                                 Navigator.of(context).pop();
 //                                               },
@@ -172,8 +280,7 @@
 //                                             ),
 //                                             TextButton(
 //                                               onPressed: () {
-  //                                                 Navigator.of(context)
-  //                                                     .pop(); // Fechar o popup
+//                                                 Navigator.of(context).pop();
 //                                               },
 //                                               child: Text('Cancelar'),
 //                                             ),
@@ -181,43 +288,7 @@
 //                                         );
 //                                       },
 //                                     );
-//                                   } else {
-//                                     showDialog(
-//                                       context: context,
-//                                       builder: (context) {
-//                                         return AlertDialog(
-//                                           content: Text('Carro em lavagem'),
-//                                           actions: [
-//                                             TextButton(
-//                                               onPressed: () {
-//                                                 Navigator.of(context)
-//                                                     .pop(); // Fechar o popup
-//                                               },
-//                                               child: Text('Voltar'),
-//                                             ),
-//                                           ],
-//                                         );
-//                                       },
-//                                     );
-//                                   }
-
-//                                   await Future.delayed(Duration(
-//                                       minutes:
-//                                           item.servico!.tempServico!.toInt()));
-//                                   mostrarPopup(
-//                                     () async {
-                                     
-//                                       data.patchContratarServico(
-//                                         item.id,
-//                                         item.statusServico = 'FINALIZADO',
-//                                       );
-
-                                      
-
-//                                       Navigator.of(context).pop();
-//                                     },
-//                                     item.placaCarro ?? '',
-//                                   );
+//                                   } else {}
 //                                 },
 //                                 child: Column(
 //                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -227,7 +298,7 @@
 //                                           MainAxisAlignment.center,
 //                                       children: [
 //                                         Icon(
-//                                           Icons.car_crash,
+//                                           Icons.local_car_wash_outlined,
 //                                           color: isEmLavagem
 //                                               ? Colors.green
 //                                               : (isSelected
@@ -238,10 +309,7 @@
 //                                       ],
 //                                     ),
 //                                     Text(
-//                                       'Placa: ${item.placaCarro}, Status: ${item.statusServico}, Tempo ${tempoEspera}',
-//                                       textAlign: TextAlign.center,
-//                                       style: TextStyle(fontSize: 10),
-//                                     ),
+//                                         'Placa: ${item.placaCarro}, Status: ${item.statusServico} - Tempo: ${difEmMinutosPrev}  - Atrasado: ${difEmMinutosAtraso}'),
 //                                   ],
 //                                 ),
 //                               ),
@@ -257,4 +325,65 @@
 //       ),
 //     );
 //   }
+
+//   // Future<void> mostrarPopup(VoidCallback onPressed, String placaCarro, int id,
+//   //     String statusServico, int minutosAdicionais) async {
+//   //   TextEditingController atrasoController = TextEditingController();
+//   //   if (!mostrarPopupAberta!) {
+//   //     showDialog(
+//   //       context: context,
+//   //       builder: (context) {
+//   //         final data = Provider.of<ContratarServicoProvider>(context);
+
+//   //         return AlertDialog(
+//   //           title: Text('Deseja finalizar serviço? Carro:  $placaCarro'),
+//   //           content: Column(
+//   //             mainAxisSize: MainAxisSize.min,
+//   //             children: [
+//   //               TextButton(
+//   //                 onPressed: () {
+//   //                   data.patchContratarServico(id, statusServico = 'FINALIZADO',
+//   //                       minutosAdicionais = 0);
+
+//   //                   Navigator.of(context).pop();
+//   //                 },
+//   //                 style: TextButton.styleFrom(
+//   //                     backgroundColor: Colors.blue, primary: Colors.white),
+//   //                 child: Text('Finalizar serviço'),
+//   //               ),
+//   //               Divider(),
+//   //               SizedBox(height: 10),
+//   //               Text('Caso tenha atraso, informe abaixo em min:'),
+//   //               Row(
+//   //                 children: [
+//   //                   Expanded(
+//   //                     child: TextFormField(
+//   //                       controller: atrasoController,
+//   //                       decoration: InputDecoration(labelText: 'Min.'),
+//   //                     ),
+//   //                   ),
+//   //                   TextButton(
+//   //                     onPressed: () {
+//   //                       minutosAdicionais =
+//   //                           int.tryParse(atrasoController.text) ?? 0;
+//   //                       data.patchContratarServico(
+//   //                           id,
+//   //                           statusServico = 'EM_LAVAGEM',
+//   //                           minutosAdicionais = minutosAdicionais);
+
+//   //                       Navigator.of(context).pop();
+//   //                     },
+//   //                     style: TextButton.styleFrom(
+//   //                         backgroundColor: Colors.blue, primary: Colors.white),
+//   //                     child: Text('Informar atraso'),
+//   //                   ),
+//   //                 ],
+//   //               ),
+//   //             ],
+//   //           ),
+//   //         );
+//   //       },
+//   //     );
+//   //   }
+//   // }
 // }

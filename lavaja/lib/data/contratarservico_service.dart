@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lavaja/data/prefs_service.dart';
 import 'package:lavaja/main.dart';
 import 'package:lavaja/models/contratarservico.dart';
 import 'package:lavaja/models/servico.dart';
@@ -10,17 +11,36 @@ class ContratarServicoService {
   String ip = MyApp.ip;
 
   Future<List<ContratarServico>> getListarServicosLavacar() async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     final response =
         await dio.get('${ip}/api/v1/contratarservico/lavacar-servicos');
     final data = response.data as List<dynamic>;
 
     return data.map((json) => ContratarServico.fromMap(json)).toList();
-  
   }
 
   Future<List<ContratarServico>> getListarServicosDonocarro() async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     final response =
         await dio.get('${ip}/api/v1/contratarservico/donocarro-servicos');
     final data = response.data as List<dynamic>;
@@ -29,7 +49,17 @@ class ContratarServicoService {
 
   Future<void> patchContratarServico(
       int? id, String? statusServico, int? minutosAdicionais) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     await dio.patch(
       '${ip}/api/v1/contratarservico/$id',
       data: {
@@ -40,13 +70,33 @@ class ContratarServicoService {
   }
 
   Future<void> deletarContratarServico(int? id) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     await dio.delete('${ip}/api/v1/contratarservico/$id');
   }
 
   Future<void> createContratarServico(String? origem, String? placaCarro,
       int? servicoId, String? telefone) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     await dio.post(
       '${ip}/api/v1/contratarservico',
       data: {
@@ -60,9 +110,19 @@ class ContratarServicoService {
 
   Future<void> createContratarServicoDonoCarro(
       String? origem, int? servicoId, int? veiculo) async {
-    dio.options.headers = {'authorization': AuthService.token};
+    String? token = await PrefsService.getToken();
+    String? tokenAuth = '';
+
+    if (token != null) {
+      tokenAuth = token;
+      print('token do shared ${tokenAuth}');
+    } else {
+      tokenAuth = AuthService.token;
+      print('token do shared ${tokenAuth}');
+    }
+    dio.options.headers = {'authorization': tokenAuth};
     await dio.post(
-      '${ip}/api/v1/contratarservico',
+      '${ip}/api/v1/contratarservico/donocarro',
       data: {
         'origem': origem,
         'servico': {'id': servicoId},

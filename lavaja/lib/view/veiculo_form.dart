@@ -69,7 +69,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                initialValue: _formData['marca'],
+                initialValue: _formData['Veículo'],
                 decoration: InputDecoration(labelText: 'Marca'),
                 onChanged: (value) => _formData['marca'] = value,
                 validator: (value) {
@@ -81,7 +81,7 @@ class _VeiculoFormState extends State<VeiculoForm> {
               ),
               TextFormField(
                 initialValue: _formData['modelo'],
-                decoration: InputDecoration(labelText: 'Modelo'),
+                decoration: InputDecoration(labelText: 'Veículo'),
                 onChanged: (value) => _formData['modelo'] = value,
                 validator: (value) {
                   if (value!.isEmpty) {

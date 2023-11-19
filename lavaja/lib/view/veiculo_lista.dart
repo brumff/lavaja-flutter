@@ -55,7 +55,7 @@ class VeiculoLista extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text('Placa: ${item.placa}'),
+                    title: Text('Placa: ${item.placa} - ${item.modelo}'),
                     leading: Icon(Icons.directions_car),
                     trailing: Icon(Icons.edit),
                     onTap: () {

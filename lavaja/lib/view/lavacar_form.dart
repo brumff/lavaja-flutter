@@ -60,7 +60,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   ),
                   TextSpan(
                     text:
-                        '4. Privacidade: Ao utilizar o aplicativo "Lavaja", você concorda com nossa Política de Privacidade [link para a política de privacidade], que descreve como coletamos, usamos e compartilhamos suas informações.\n\n',
+                        '4. Privacidade: Ao utilizar o aplicativo "Lavaja", você concorda com nossa Política de Privacidade, que descreve como coletamos, usamos e compartilhamos suas informações.\n\n',
                     style: TextStyle(fontSize: 14),
                   ),
                   TextSpan(
@@ -75,7 +75,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                   ),
                   TextSpan(
                     text:
-                        '7. Lei Aplicável: Estes Termos de Uso serão regidos e interpretados de acordo com as leis do Brail sem levar em consideração os conflitos de princípios legais. Se você tiver alguma dúvida ou preocupação sobre estes Termos de Uso, entre em contato conosco em brunameiraf@gmail.com.\n\n',
+                        '7. Lei Aplicável: Estes Termos de Uso serão regidos e interpretados de acordo com as leis do Brasil sem levar em consideração os conflitos de princípios legais. Se você tiver alguma dúvida ou preocupação sobre estes Termos de Uso, entre em contato conosco em brunameiraf@gmail.com.\n\n',
                     style: TextStyle(fontSize: 14),
                   ),
                   TextSpan(
@@ -321,7 +321,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 ),*/
                 TextFormField(
                   initialValue: _formData['telefone1'],
-                  decoration: InputDecoration(labelText: 'Telefone'),
+                  decoration: InputDecoration(labelText: 'Celular'),
                   inputFormatters: [phoneMaskFormatter],
                   onChanged: (value) => _formData['telefone1'] = value,
                   validator: (value) {
