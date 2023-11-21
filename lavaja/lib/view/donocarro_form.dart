@@ -184,6 +184,7 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                 TextFormField(
                   initialValue: _formData['cpf'],
                   decoration: InputDecoration(labelText: 'CPF'),
+                  keyboardType: TextInputType.number,
                   inputFormatters: [cpfMaskFormatter],
                   onChanged: (value) => _formData['cpf'] = value,
                   validator: (value) {
@@ -233,7 +234,6 @@ class _DonoCarroFormState extends State<DonoCarroForm> {
                 ),
                 TextFormField(
                   initialValue: _formData['email'],
-                  enabled: AuthService.token != null ,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(labelText: 'Email'),
                   onChanged: (value) => _formData['email'] = value,
