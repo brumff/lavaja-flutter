@@ -222,6 +222,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 TextFormField(
                     initialValue: _formData['cnpj'],
                     decoration: InputDecoration(labelText: 'CNPJ'),
+                    keyboardType: TextInputType.number,
                     inputFormatters: [cnpjMaskFormatter],
                     onChanged: (value) => _formData['cnpj'] = value,
                     validator: (value) {
@@ -322,6 +323,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 TextFormField(
                   initialValue: _formData['telefone1'],
                   decoration: InputDecoration(labelText: 'Celular'),
+                  keyboardType: TextInputType.number,
                   inputFormatters: [phoneMaskFormatter],
                   onChanged: (value) => _formData['telefone1'] = value,
                   validator: (value) {
@@ -333,6 +335,7 @@ class _LavaCarFormState extends State<LavaCarForm> {
                 ),
                 TextFormField(
                   initialValue: _formData['telefone2'],
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: 'Telefone (Opcional)'),
                   inputFormatters: [phoneMaskFormatter],
                   onChanged: (value) => _formData['telefone2'] = value,
